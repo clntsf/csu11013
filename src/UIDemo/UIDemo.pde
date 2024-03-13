@@ -11,7 +11,7 @@ void setup()
 {
     Screen screen1 = new Screen(255);
     screens.add(screen1);
-    
+    size(400, 400);
     table = loadTable("flights2k.csv", "header");
     String tableName = "flights2k";
     dataPoints = new ArrayList();
@@ -27,12 +27,24 @@ Screen getActiveScreen()
     return screens.get(activeScreen);
 }
 
-void printText(){}
+void printText() {
+  fill(0);
+  db.query("SELECT * FROM flights2k LIMIT 1");
+  if (db.next()) { 
+    String flightDate = db.getString("FlightDate");
+    String origin = db.getString("Origin");
+    text("Flight Date: " + flightDate + ", Origin: " + origin, 10, 10);
+  } else {
+    text("No data found.", 10, 10);
+  }
+}
+
 
 void draw()
 {
     getActiveScreen().draw();
     printText();
+
 }
 
 public void createDataPointArray() {
