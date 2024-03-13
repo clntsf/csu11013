@@ -1,6 +1,24 @@
-// Shell functions to allow this file to be run/debugged in Processing
-
 import java.util.Map;
 
-void setup(){}
-void draw(){}
+ArrayList<Screen> screens;
+int activeScreen = 0;
+
+
+void setup()
+{
+    Screen screen1 = new Screen();
+    screens.add(screen);
+}
+
+Screen getActiveScreen()
+{
+    return screens.get(activeScreen);
+}
+
+// void printText(){}
+
+void draw()
+{
+    getActiveScreen().draw();
+
+}
