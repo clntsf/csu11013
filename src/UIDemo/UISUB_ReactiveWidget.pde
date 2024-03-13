@@ -1,5 +1,6 @@
 import java.util.List;
 
+// CSF - Implemented widgets which respond to input by extending Exercise 6 reponse/challenge 12/4/2024 5PM
 class ReactiveWidget extends Widget
 {
     ArrayList<MouseListener> eventListeners;
@@ -105,17 +106,9 @@ class CheckBox extends ReactiveWidget
     {
         getFill();
         stroke(0);
-        if (isRectangular)
-        {
-            rectMode(CENTER);
-            rect(x,y,w,h);
-        }
-        else
-        {
-            ellipseMode(CENTER);
-            ellipse(x,y,w,h);
-        }
-        
+        rectMode(CENTER);
+        rect(x,y,w,h, (isRectangular ? w/4 : w/2));
+
         fill(0);
         textSize(fontSize);
         text(label, x+10, y);
