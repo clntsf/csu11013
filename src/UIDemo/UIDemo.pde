@@ -28,14 +28,19 @@ Screen getActiveScreen()
 }
 
 void printText() {
+  int y = 10;
   fill(0);
-  db.query("SELECT * FROM flights2k LIMIT 1");
-  if (db.next()) { 
-    String flightDate = db.getString("FlightDate");
-    String origin = db.getString("Origin");
-    text("Flight Date: " + flightDate + ", Origin: " + origin, 10, 10);
-  } else {
-    text("No data found.", 10, 10);
+  db.query("SELECT * FROM flights2k LIMIT 10");
+  for (int i = 0; i < 10; i++) {
+    if (db.next()) { 
+      String flightDate = db.getString("FlightDate");
+      String origin = db.getString("Origin");
+      String destination = db.getString("Dest");
+      text("Flight Date: " + flightDate + ", Origin: " + origin + ", Destination: " + destination, 10, y);
+    } else {
+      text("No data found.", 10, y);
+    }
+    y += 15;
   }
 }
 
