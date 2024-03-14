@@ -91,6 +91,7 @@ class Widget
     
     void draw()
     {
+        textFont(font);
         applyStroke();
         applyFill();
         strokeWeight(1);
