@@ -56,7 +56,7 @@ void chartDemo()
     screens.add(screen1);
     
     // demos of the simple widgets, courtesy of the Minecraft Joke Book
-    Widget w1 = new Widget(width/2, 20, 90, 30, color(255,225,225), "I do Nothing!" );
+    Widget w1 = new Widget(width/2, 20, 100, 30, color(255,225,225), "I do Nothing!" );
     w1.setStroke(255);
     screen1.addWidget(w1);
     
@@ -143,16 +143,13 @@ void chartDemo()
         xVals, yVals, new int[] {-1,7}, new int[]{-3,3}
     );
     s1.fontSize = 14;
-    s1.labelFormatStringY = "%.2f";
+    s1.labelFormatStringY = "%.1f";
     s1.labelFormatStringX = "%.0f";
     
     // play around with these to make the chart feel like a line chart or a scatter plot (or a line chart with points drawn)
     s1.connect = true;
     s1.markers = false;
-    
-    // Or just this, for a 1-line solution
-    //s1.makeLinePlot();
-    
+    //s1.makeLinePlot();    // Or just this, for a 1-line solution
     screen3.addWidget(s1);
 }
 
