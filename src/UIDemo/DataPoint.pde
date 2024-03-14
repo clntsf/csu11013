@@ -51,6 +51,7 @@ public class DataPoint {
   }
   
   public LocalDate dateToLocalDate(String stringDate) {
+    // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
     String[] split = stringDate.split("\\s+", 2);
     LocalDate date = null;
     try {
@@ -68,6 +69,7 @@ public class DataPoint {
     String formattedTime = paddedTime.substring(0, 2) + ":" + paddedTime.substring(2, 4);
     return LocalTime.parse(formattedTime, DateTimeFormatter.ofPattern("HH:mm"));
     } catch(NumberFormatException e) {return null;}
+    // Riccardo Riggi - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
   }
 
   public LocalDate getFlightDate() {
