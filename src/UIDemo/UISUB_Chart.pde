@@ -1,9 +1,12 @@
 // CSF - Implemented charts, plots, and their children (Bar, Histogram, Scatter (includes line plots)) - 14/3/2024 5PM
 
-// A Chart only has the minimum standard functionality - a frame and a title.
-// This is to allow for non-plot charts (see below for Plot), such as a pie chart, which
-// do not avail of axis labels, ticks, etc. and instead just need the above. This class is
-// also abstract, as it is not intended to be used directly in code, only its subclasses.
+
+/**
+* A Chart only has the minimum standard functionality - a frame and a title.
+* This is to allow for non-plot charts (see below for Plot), such as a pie chart, which
+* do not avail of axis labels, ticks, etc. and instead just need the above. This class is
+* also abstract, as it is not intended to be used directly in code, only its subclasses.
+*/
 abstract class Chart extends Widget
 {
     String title;
@@ -36,8 +39,10 @@ abstract class Chart extends Widget
     }
 }
 
-// Plots have somewhat more functionality, supporting axis labels and a y-axis limit.
-// Again, Plot is abstract because it should not be used in favor of one of its subclasses
+/*
+Plots have somewhat more functionality, supporting axis labels and a y-axis limit.
+Again, Plot is abstract because it should not be used in favor of one of its subclasses
+*/
 abstract class Plot extends Chart
 {
     String axisLabelX;
