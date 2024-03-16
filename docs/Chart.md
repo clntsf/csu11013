@@ -217,7 +217,7 @@ ScatterPlot(int x,
 )
 ```
 
-Constructor Parameters not inherited from parent (`BarPlot`) constructor(s):
+Constructor Parameters not inherited from parent (`Plot`) constructor(s):
 
 |Name|Type|Description|
 |----|----|-----------|
