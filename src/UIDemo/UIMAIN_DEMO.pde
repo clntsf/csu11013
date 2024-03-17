@@ -5,7 +5,7 @@ void weekOneDemo()
     final int WIDGET_COLOR = #F0F8FF;
     
     Screen screen1 = new Screen(SCREEN_COLOR);
-    screens.add(screen1);
+    screens.addScreen(screen1);
     
     Widget mainFrame = new Widget(width/2, height/2, width-20, height-20, WIDGET_COLOR);
     screen1.addWidget(mainFrame);
@@ -53,7 +53,7 @@ void chartDemo()
     
     Screen screen1 = new Screen(128);
     screen1.addWidget(navButtons);
-    screens.add(screen1);
+    screens.addScreen(screen1);
     
     // demos of the simple widgets, courtesy of the Minecraft Joke Book
     Widget w1 = new Widget(width/2, 20, 100, 30, color(255,225,225), "I do Nothing!" );
@@ -94,7 +94,7 @@ void chartDemo()
     
     Screen screen2 = new Screen(128);
     screen2.addWidget(navButtons);
-    screens.add(screen2);
+    screens.addScreen(screen2);
     
     // Arbitrary shapes can be drawn by supplying a function as so.
     // Coordinates are relative to the first two parameters in the constructor (x,y)
@@ -127,7 +127,7 @@ void chartDemo()
     
     Screen screen3 = new Screen(128);
     screen3.addWidget(navButtons);
-    screens.add(screen3);
+    screens.addScreen(screen3);
     
     // Scatter plot, using example data courtesy of cos()
     int numVals = 30;

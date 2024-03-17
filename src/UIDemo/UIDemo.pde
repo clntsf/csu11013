@@ -1,12 +1,12 @@
 import de.bezier.data.sql.*;
 import java.util.Map;
 
-ArrayList<Screen> screens = new ArrayList<>();
-int activeScreen = 0;
 PFont font;
 
 SQLite db;
 boolean dbPopulated;
+
+ScreenList screens = new ScreenList();
 
 void setup()
 {
@@ -32,26 +32,20 @@ void setup()
     
 }
 
-Screen getActiveScreen()
-{
-    return screens.get(activeScreen);
-}
 
 void draw()
 {
-    getActiveScreen().draw();
+    screens.activeScreen().draw();
     // if(dbPopulated) { printText(); }
 }
 
 // CSF - added functions to pass inputs to the UI elements 13/3/2024 10PM
 void mousePressed(MouseEvent evt)
 {
-    getActiveScreen().handleMouseEvent(evt);
+    screens.activeScreen().handleMouseEvent(evt);
 }
 
 void mouseMoved()
 {
-    getActiveScreen().mouseMoved();
+    screens.activeScreen().mouseMoved();
 }
-
-
