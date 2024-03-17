@@ -38,30 +38,30 @@ They are ordered in the program by their order here.
 
 ### Methods:
 
-#### `void addScreen(Screen s)`
+#### 1. `void addScreen(Screen s)`
 Add `s` to `screens`
 
 Params:
 - s: the screen to add
+<br><br>
 
-
-#### `void addNamedScreen(Screen s, String name)`
+#### 2. `void addNamedScreen(Screen s, String name)`
 Add `s` to `screens`, but also as a value to `namedScreens` with `name` as the key 
 
 Params
 - s: the screen to add
 - name: the name for the screen
+<br><br>
 
-
-####  `Screen getActiveScreen()`
+####  3. `Screen getActiveScreen()`
 Get the currently active screen
 
 Returns:
-- `Screen s`: the current screen
+- s: the current screen
 (synonymous to `screens.get(screens.activeScreen)`)
+<br><br>
 
-
-#### `Screen getNamedScreen(String name)`
+#### 4. `Screen getNamedScreen(String name)`
 Get the screen in `namedScreens` with key `name`  
 
 Params:
@@ -69,15 +69,17 @@ Params:
 
 Returns:
 - Screen 
-    
+<br><br>
 
-#### `void nextScreen()`
+#### 5. `void nextScreen()`
 set the active screen to the next screen in `screens`, wrapping around if necessary
-    
-#### `void prevScreen()`
-set the active screen to the previous screen in `screens`, wrapping around if necessary
+<br><br>
 
-#### `boolean setActiveScreen(int index)`
+#### 6. `void prevScreen()`
+set the active screen to the previous screen in `screens`, wrapping around if necessary
+<br><br>
+
+#### 7. `boolean setActiveScreen(int index)`
 set the active screen to the one at the specified index in `screens`
 
 Params:
@@ -85,8 +87,9 @@ Params:
 
 Returns:
 - successful: whether the operation was successful (i.e. valid index)
+<br><br>
 
-#### `void setActiveScreen(String name)`
+#### 8. `boolean setActiveScreen(String name)`
 same as above, but with the index in `screens` of the screen with name `name` in `namedScreens`
 
 Params:
