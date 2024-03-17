@@ -165,16 +165,16 @@ void navDemo()
     imageMode(CENTER);
     
     Screen screen1 = new Screen(SCREEN_COLOR);
-    screens.add(screen1);
+    screens.addScreen(screen1);
     
     Screen screen2 = new Screen(100);
-    screens.add(screen2);
+    screens.addScreen(screen2);
     
     Widget w1 = new Widget(width/2,height/2,width-2*MARGIN,height-2*MARGIN,WIDGET_COLOR);
     screen1.addWidget(w1);
     
     Container navButtons = initNavButtons();
-    for (Screen s : screens)
+    for (Screen s : screens.screens)
     {
         s.addWidget(navButtons);
     }
@@ -213,7 +213,7 @@ Container initNavButtons()
     navButtons.addChild(forwardButton);
     forwardButton.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) { return; }
-        activeScreen++; activeScreen%=screens.size();
+        screens.nextScreen();
     });
     
     int backwardPad = forwardPad + NAV_SIZE + NAV_PAD;
@@ -229,7 +229,7 @@ Container initNavButtons()
     navButtons.addChild(backwardButton);
     backwardButton.addListener((e, w) -> {
         if (e.getAction() != MouseEvent.PRESS) { return; }
-        activeScreen = (activeScreen == 0 ? screens.size()-1 : activeScreen-1);
+        screens.prevScreen();
     });
     
     return navButtons;

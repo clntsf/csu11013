@@ -15,7 +15,6 @@ class Label extends Widget
     
     void draw()
     {
-        //rectMode(CORNER);
         textAlign(LEFT, CENTER);
         textSize(fontSize);
         fill(textColor);

@@ -35,17 +35,17 @@ void setup()
 
 void draw()
 {
-    screens.activeScreen().draw();
+    screens.getActiveScreen().draw();
     // if(dbPopulated) { printText(); }
 }
 
 // CSF - added functions to pass inputs to the UI elements 13/3/2024 10PM
 void mousePressed(MouseEvent evt)
 {
-    screens.activeScreen().handleMouseEvent(evt);
+    screens.getActiveScreen().handleMouseEvent(evt);
 }
 
 void mouseMoved()
 {
-    screens.activeScreen().mouseMoved();
+    screens.getActiveScreen().mouseMoved();
 }

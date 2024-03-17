@@ -45,64 +45,70 @@ They are ordered in the program by their order here.
 ### Methods:
 
 #### - `void addScreen(Screen s)`
-Add `s` to `screens`
-
-Params:
-- s: the screen to add
-<br><br>
+> Add `s` to `screens`
+> 
+> Params:
+> - s: the screen to add
+<br>
 
 #### - `void addNamedScreen(Screen s, String name)`
-Add `s` to `screens`, but also as a value to `namedScreens` with `name` as the key 
+> Add `s` to `screens`, but also as a value to `namedScreens` with `name` as the key 
+> 
+> Params
+> - s: the screen to add
+> - name: the name for the screen
 
-Params
-- s: the screen to add
-- name: the name for the screen
-<br><br>
+<br>
 
 #### - `Screen getActiveScreen()`
-Get the currently active screen
-
-Returns:
-- s: the current screen
+> Get the currently active screen
+> 
+> Returns:
+> - s: the current screen
 (synonymous with `screens.get(screens.activeScreen)`)
-<br><br>
+
+<br>
 
 #### - `Screen getNamedScreen(String name)`
-Get the screen in `namedScreens` with key `name`  
+> Get the screen in `namedScreens` with key `name`  
+> 
+> Params:
+> - name: the name of the screen
+> 
+> Returns:
+> - Screen 
 
-Params:
-- name: the name of the screen
-
-Returns:
-- Screen 
-<br><br>
+<br>
 
 #### - `void nextScreen()`
-set the active screen to the next screen in `screens`, wrapping around if necessary
-<br><br>
+> set the active screen to the next screen in `screens`, wrapping around if necessary
+
+<br>
 
 #### - `void prevScreen()`
-set the active screen to the previous screen in `screens`, wrapping around if necessary
-<br><br>
+> set the active screen to the previous screen in `screens`, wrapping around if necessary
+
+<br>
 
 #### - `boolean setActiveScreen(int index)`
-set the active screen to the one at the specified index in `screens`
+> set the active screen to the one at the specified index in `screens`
+> 
+> Params:
+> - index: the index to set `activeScreen` to
+> 
+> Returns:
+> - successful: whether the operation was successful (i.e. valid index)
 
-Params:
-- index: the index to set `activeScreen` to
-
-Returns:
-- successful: whether the operation was successful (i.e. valid index)
-<br><br>
+<br>
 
 #### 8. `boolean setActiveScreen(String name)`
-same as above, but with the index in `screens` of the screen with name `name` in `namedScreens`
-
-Params:
-- name: the name of the screen to set as active
-
-Returns:
-- successful: whether the operation was successful (i.e. valid name)
+> same as above, but with the index in `screens` of the screen with name `name` in `namedScreens`
+> 
+> Params:
+> - name: the name of the screen to set as active
+> 
+> Returns:
+> - successful: whether the operation was successful (i.e. valid name)
 
 ## 2. The `Screen` Class
 ```
@@ -169,13 +175,87 @@ btn.addListener((e,w) -> {
 
 ### 3.ii. Static Children
 
+There are several compelling use cases for widgets even without reactive functionality, and so several 'static' (in the english sense, not the java sense) subclasses of `Widget` exist. They are outlined below:
+
+<br>
+
 #### 3.ii.a. Label
+
+```
+class Label
+extends Widget
+implements None
+```
+
+Labels are perhaps the easiest imaginable use case for a widget without mouse functionality. these are simple text displays with few configuration options.
+
+##### Constructor Summary:
+```
+Label(int x, int y, String text)
+Label(int x, int y, String text, color textColor)
+```
+
+`x` and `y` in each case denote the left (x) and center (y) of the label respectively, chosen in an attempt to make placing labels on the screen as intuitive as possible. `text` is whatever text the user wishes to display, and the optional parameter `textColor` is a color value for the text.
+
+It is worth noting that despite their designation as 'static', these widgets' attributes can still be altered at runtime by the program, e.g. through a callback from a `ReactiveWidget`. A common example of this would be a radiobutton/checkbox list that updates a label to display the current selection.
+
+<br>
 
 #### 3.ii.b. Shape
 
+```
+class Shape
+extends Widget
+implements None
+```
+
+Shapes are another simple use case for unreactive widgets, providing the user the ability to draw arbitrary geometry by way of passing in a lambda expression adhering to the `Runnable` interface (no params, no returns) to the constructor
+
+##### Constructor Summary:
+```
+Shape(int x, int y, color backgroundColor, Runnable onDraw)
+```
+
+`x` and `y` represent the origin of the shape (the coordinates relative to which all points in `onDraw()` are drawn), `backgroundColor` is the color with which to `fill` when drawing the `Shape` (though the user can put other calls to `fill` inside `onDraw` which will overwrite as normal), and `onDraw` is the function to execute each time the `Shape` is drawn
+
+<br>
+
 #### 3.ii.c. Image
 
+```
+class Image
+extends Shape
+implements None
+```
+
+Similar to `Shape`, there are many reasons a user might want to draw an image on-screen, and so this class allows such behavior by passing a `PImage` through its constructor. This class subclasses `Shape` to take advantage of its `onDraw` functionality.
+
+##### Constructor Summary:
+```
+Image(int x, int y, PImage image)
+Image(int x, int y, int w, int h, PImage image)
+```
+
+Images can either be drawn at native size, or at a size (in pixels) determined by the optional `w` and `h` parameters.
+
+<br>
+
 #### 3.ii.d. Container
+
+```
+class Container
+extends Widget
+implements None
+```
+
+`Container` strips `Widget` down to the bare-bones, preserving only its functionality as a member of a tree of parent/child widgets. This can be quite useful when the user wants to 'package' a tree of widgets and allow them to be added to mutiple screens (e.g. nav buttons), or just be a reference point as a named child of a screen.
+
+##### Constructor Summary:
+```
+Container()
+```
+
+Container takes no arguments, as it has no relevant features other than being a parent/child object.
 
 [func-inter]: https://www.geeksforgeeks.org/functional-interfaces-java/
 [github-mevent]: https://github.com/processing/processing/blob/master/core/src/processing/event/MouseEvent.java
