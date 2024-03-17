@@ -54,12 +54,12 @@ class ScreenList
 
     public boolean setActiveScreen(String name)
     {
-        Screen newActive = namedScreens.get(name)
+        Screen newActive = namedScreens.get(name);
         if (newActive == null)
         {
             return false;
         } 
-        activeScreen = screens.indexOf(newActive)
+        activeScreen = screens.indexOf(newActive);
         return true;
     }
 }
