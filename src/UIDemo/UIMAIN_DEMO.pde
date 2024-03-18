@@ -72,7 +72,7 @@ void chartDemo()
     screen1.addWidget(r1);
    
     // Histogram demo courtesy of the Knights who say 'Ni'
-    Histogram h1 = new Histogram(width/2, height/2, 300, 300,
+    /*Histogram h1 = new Histogram(width/2, height/2, 300, 300,
         "Utterances of 'Ni' per day reported by the knights who say 'Ni'",
         "Utterances", "Freq. of Occurrence",
         new Integer[] {0,5,10,15,20,25}, new double[] {1,4,9,5,2}, 10
@@ -80,14 +80,14 @@ void chartDemo()
     h1.fontSize = 14;
     h1.labelFormatStringY = "%.0f";
     h1.numAxisTicksY = 6;
-    screen1.addWidget(h1);
+    screen1.addWidget(h1);*/
+    demoHistogram(screen1);
     
     // displaying the capabilty to add named children to a screen so
     // they can be kept track of without putting them in global space
     screen1.addNamedChild(w1, "Base Class Widget");
     screen1.addNamedChild(l1, "Label");
     screen1.addNamedChild(r1, "Button Example");
-    screen1.addNamedChild(h1, "Histogram demo");
     //screen1.displayNamedChildren();
     
     // ---------------------------- SCREEN 2 ---------------------------- //

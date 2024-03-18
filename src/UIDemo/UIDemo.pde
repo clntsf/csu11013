@@ -16,7 +16,7 @@ void setup()
     chartDemo();
     //navDemo();
 
-    // RSR - added SQLite functionality - 12/3/24 7PM
+    // RSR - added SQLite functionality and font - 12/3/24 7PM
     Table table = loadTable("flights2k.csv", "header");
     String tableName = "flights2k";
     db = new SQLite(this, "test.db");

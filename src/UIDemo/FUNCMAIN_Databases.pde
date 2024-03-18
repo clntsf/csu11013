@@ -21,8 +21,8 @@ void printText() {
     }
 }
 
-// RSR - created method to populate the SQLite database. See commented        - 12/3/24 10PM
-//       below for the original methods that used an ArrayList of DataPoints.
+// RSR - created method to populate the SQLite database I made. See commented   - 12/3/24 10PM
+//       below the original methods that used an ArrayList of DataPoints.
 public void populateDatabase(Table table, String databaseTableName)
 {
     db.query("DELETE FROM "+databaseTableName);
@@ -44,24 +44,8 @@ public void populateDatabase(Table table, String databaseTableName)
     dbPopulated = true;
 }
 
-// public void populateDatabase(String tableName) {
-//   DataPoint currentDP;
-//   db.query("DELETE FROM "+tableName);
-//   createDataPointArray();
-//   println("Started to populate database...");
-//   String columns = "\"FlightDate\", \"IATA_Code_Marketing_Airline\", \"Flight_Number_Marketing_Airline\", \"Origin\", \"OriginCityName\", \"OriginState\", \"OriginWac\", \"Dest\", \"DestCityName\", \"DestState\", \"DestWac\", \"CRSDepTime\", \"DepTime\", \"CRSArrTime\", \"ArrTime\", \"Cancelled\", \"Diverted\", \"Distance\"";
-//   for (int i = 0; i < table.getRowCount(); i++) {
-//     currentDP = dataPoints.get(i);
-//     print(i+"\n");
-//     db.query("INSERT INTO "+tableName+" ("+columns+") VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", %d, \"%s\", \"%s\", \"%s\", %d, \"%s\", \"%s\", \"%s\", \"%s\", %d, %d, %d)",
-//                                     currentDP.getFlightDate(), currentDP.getMarketingCarrier(), currentDP.getMarketingCarrierFlightNumber(),
-//                                     currentDP.getOrigin(), currentDP.getOriginCityName(), currentDP.getOriginStateAbr(), currentDP.getOriginWac(),
-//                                     currentDP.getDestination(), currentDP.getDestinationCityName(), currentDP.getDestStateAbr(), currentDP.getDestWac(),
-//                                     currentDP.getCrsDepTime(), currentDP.getDepTime(), currentDP.getCrsArrTime(), currentDP.getArrTime(),
-//                                     currentDP.getCancelled(), currentDP.getDiverted(), currentDP.getDistance());
-//   }
-//   println("Database successfully populated!\n");
-// }
+/* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
+         and to populate the database with that ArrayList.
 
 public void createDataPointArray() {
   TableRow currentRow;
@@ -76,3 +60,23 @@ public void createDataPointArray() {
     dataPoints.add(currentDP);
   }
 }
+
+public void populateDatabase(String tableName) {
+  DataPoint currentDP;
+  db.query("DELETE FROM "+tableName);
+  createDataPointArray();
+  println("Started to populate database...");
+  String columns = "\"FlightDate\", \"IATA_Code_Marketing_Airline\", \"Flight_Number_Marketing_Airline\", \"Origin\", \"OriginCityName\", \"OriginState\", \"OriginWac\", \"Dest\", \"DestCityName\", \"DestState\", \"DestWac\", \"CRSDepTime\", \"DepTime\", \"CRSArrTime\", \"ArrTime\", \"Cancelled\", \"Diverted\", \"Distance\"";
+  for (int i = 0; i < table.getRowCount(); i++) {
+    currentDP = dataPoints.get(i);
+    print(i+"\n");
+    db.query("INSERT INTO "+tableName+" ("+columns+") VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", %d, \"%s\", \"%s\", \"%s\", %d, \"%s\", \"%s\", \"%s\", \"%s\", %d, %d, %d)",
+                                    currentDP.getFlightDate(), currentDP.getMarketingCarrier(), currentDP.getMarketingCarrierFlightNumber(),
+                                    currentDP.getOrigin(), currentDP.getOriginCityName(), currentDP.getOriginStateAbr(), currentDP.getOriginWac(),
+                                    currentDP.getDestination(), currentDP.getDestinationCityName(), currentDP.getDestStateAbr(), currentDP.getDestWac(),
+                                    currentDP.getCrsDepTime(), currentDP.getDepTime(), currentDP.getCrsArrTime(), currentDP.getArrTime(),
+                                    currentDP.getCancelled(), currentDP.getDiverted(), currentDP.getDistance());
+  }
+  println("Database successfully populated!\n");
+}
+*/

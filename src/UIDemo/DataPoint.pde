@@ -69,7 +69,7 @@ public class DataPoint {
     String formattedTime = paddedTime.substring(0, 2) + ":" + paddedTime.substring(2, 4);
     return LocalTime.parse(formattedTime, DateTimeFormatter.ofPattern("HH:mm"));
     } catch(NumberFormatException e) {return null;}
-    // Riccardo Riggi - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
+    // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
   }
 
   public LocalDate getFlightDate() {
