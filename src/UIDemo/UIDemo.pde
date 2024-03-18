@@ -1,8 +1,7 @@
 import de.bezier.data.sql.*;
 import java.util.Map;
 
-ArrayList<Screen> screens = new ArrayList<>();
-int activeScreen = 0;
+ScreenList screens = new ScreenList();
 PFont font;
 
 SQLite db;
@@ -10,11 +9,12 @@ boolean dbPopulated;
 
 void setup()
 {
-    size(600,600);
+    size(750,750);
     font = createFont("Outfit-Regular.ttf", 13);
     
-    chartDemo();
+    //chartDemo();
     //navDemo();
+    chartDemoNew();
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     Table table = loadTable("flights2k.csv", "header");
@@ -32,26 +32,19 @@ void setup()
     
 }
 
-Screen getActiveScreen()
-{
-    return screens.get(activeScreen);
-}
-
 void draw()
 {
-    getActiveScreen().draw();
+    screens.getActiveScreen().draw();
     // if(dbPopulated) { printText(); }
 }
 
 // CSF - added functions to pass inputs to the UI elements 13/3/2024 10PM
 void mousePressed(MouseEvent evt)
 {
-    getActiveScreen().handleMouseEvent(evt);
+    screens.getActiveScreen().handleMouseEvent(evt);
 }
 
 void mouseMoved()
 {
-    getActiveScreen().mouseMoved();
+    screens.getActiveScreen().mouseMoved();
 }
-
-
