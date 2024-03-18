@@ -8,11 +8,11 @@ C. Simon-Fellowes
     1. [`ReactiveWidget`](#3ii-reactivewidget)
         1. [The `MouseEventListener` interface](#3iia-the-mouseeventlistener-interface)
         2. Checkboxes, CheckBoxLists and RadioButtonLists
-    2. Static Children
-        1. Label
-        2. Shape
-        3. Image
-        4. Container
+    2. [Static Children](#3ii-static-children)
+        1. [Label](#3iia-label)
+        2. [Shape](#3iib-shape)
+        3. [Image](#3iic-image)
+        4. [Container](#3iid-container)
     3. [`Chart` (and subclasses)](Chart.md)
 ---
 
@@ -101,7 +101,7 @@ They are ordered in the program by their order here.
 
 <br>
 
-#### 8. `boolean setActiveScreen(String name)`
+#### - `boolean setActiveScreen(String name)`
 > same as above, but with the index in `screens` of the screen with name `name` in `namedScreens`
 > 
 > Params:
@@ -123,13 +123,6 @@ class Widget
 extends None
 implements None
 ```
-
-
-
-1. Label
-        2. Shape
-        3. Image
-        4. Container
 
 ### 3.i. `ReactiveWidget`
 ```

@@ -32,7 +32,6 @@ void setup()
     
 }
 
-
 void draw()
 {
     screens.getActiveScreen().draw();
