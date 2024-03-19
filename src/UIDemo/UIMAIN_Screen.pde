@@ -96,6 +96,11 @@ class Screen
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
+
+    Widget getNamedChild(String name)
+    {
+        return namedChildren.get(name);
+    }
     
     void draw()
     {

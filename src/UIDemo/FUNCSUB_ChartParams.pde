@@ -34,6 +34,18 @@ class NumericalParams extends ChartParams   // scatter plots and histograms
     }
 }
 
+class HistParams
+{
+    Integer[] bins;
+    double[] freqs;
+    
+    HistParams(Integer[] bins, double[] freqs)
+    {
+        this.freqs = freqs;
+        this.bins = bins;
+    }
+}
+
 class BubbleParams extends NumericalParams
 {
     float[] sizes;
@@ -43,9 +55,4 @@ class BubbleParams extends NumericalParams
         super(valuesX, valuesY);
         this.sizes = sizes;
     }
-}
-
-interface ChartParamGenerator<T extends ChartParams>
-{
-    public T generateParams(SQLite db, String tableName);
 }

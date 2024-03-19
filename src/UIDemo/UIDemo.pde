@@ -21,10 +21,12 @@ void setup()
     Table table = loadTable("flights2k.csv", "header");
     String tableName = "flights2k";
     db = new SQLite(this, "test.db");
-
+    
+    //Table delays = loadTable("delaysdemo.csv", "header");
     if (db.connect())
     {
-        new Thread(() -> populateDatabase(table, tableName)).start(); // shouldn't have to do always but we'll add a check later
+        //new Thread(() -> populateDatabase(table, tableName)).start(); // shouldn't have to do always but we'll add a check later
+        //new Thread(() -> populateDelays(delays)).start();
     }
     else
     {
