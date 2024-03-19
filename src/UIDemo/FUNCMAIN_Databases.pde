@@ -52,6 +52,18 @@ public void populateDatabase(Table table, String databaseTableName)
     dbPopulated = true;
 }
 
+// RSR - demo function to populate a delay table in the database - 19/3/24 7PM
+public void populateDelays(Table table)
+{
+    //db.query("DELETE FROM delays");
+    for (int i = 0; i < table.getRowCount(); i++)
+    {
+        TableRow currentRow = table.getRow(i);
+        db.query("INSERT INTO delays (\"Delay\") VALUES(%d)", currentRow.getInt("DEP_DELAY"));
+    }
+    print("done");
+}
+
 public LocalDate dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
     String[] split = stringDate.split("\\s+", 2);

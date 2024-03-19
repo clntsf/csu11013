@@ -168,20 +168,20 @@ boolean loadScreenWithArgs(String screenName)
 
 Histogram demoHistogram()
 {
+    NumericalParams histParams = new NumericalParams(new float[] {0}, new float[] {0});
     Integer[] bins = new Integer[]{-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
     double[] quantities = new double[]{2, 2, 25, 644, 26824, 293591, 84166, 33941, 20416, 13843, 10087, 7712, 6104, 31095};
-    
-    Histogram h1 = new Histogram(width/2, height/2, 480, 480,
+    Histogram h = new Histogram(width/2, height/2, 480, 480,
         "Flight Departure Delay (Minutes, negative delays represent early departures)",
-        "Delay", "Freq. of Occurrence",
+        "Delay", "Frequency",
         bins, quantities, 300000
     );
 
-    h1.fontSize = 12;
-    h1.labelFormatStringY = "%,.0f";
-    h1.numAxisTicksY = 6;
+    h.fontSize = 12;
+    h.labelFormatStringY = "%,.0f";
+    h.numAxisTicksY = 6;
     
-    return h1;
+    return h;
 }
 
 ScatterPlot demoScatterPlot(){
