@@ -2,11 +2,12 @@
 C. Simon-Fellowes
 
 ## Table of Contents:
-1. [`Chart`](#1-Chart-abstract-base-class)
-2. [`Plot`](#2-Plot)
-3. [`BarPlot`](#3-BarPlot)
-4. [`Histogram`](#4-Histogram)
-5. [`ScatterPlot`](#5-ScatterPlot)
+1. [`Chart`](#1-chart-abstract-base-class)
+1. [`PieChart`](#2-piechart)
+1. [`Plot`](#3-plot)
+1. [`BarPlot`](#4-barplot)
+1. [`Histogram`](#5-histogram)
+1. [`ScatterPlot`](#6-scatterplot)
 
 ---
 
@@ -51,6 +52,36 @@ Chart(int x,
 |labelMargin|`int`|margin (in pixels) between the labels of the <br>chart (incl. title) and the chart's frame|15px|
 
 ---
+
+## 2. `PieChart`
+
+```
+class PieChart
+extends Chart
+implements None
+```
+
+> One-line class summary
+
+extended summary, justification
+
+### Constructor Summary:
+```
+literally just paste the params section of the constructor in herer
+```
+
+### Constructor Parameters:
+
+|Name|Type|Description|
+|----|----|-----------|
+||||    fill these (delete this comment) and copy the row downward as needed
+
+
+### Non-Constructor fields:
+
+|Name|Type|Description|Default|
+|----|----|-----------|-------|
+||||| same as above
 
 ## 2. `Plot`
 
