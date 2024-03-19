@@ -313,10 +313,6 @@ class PieChart extends Chart
         super(x,y,w,h,title, valuesY);
         this.valuesY = valuesY;
         angles = new float[valuesY.length];
-    }
-    
-    void calculateAngles()
-    {
         for (int i=0; i<valuesY.length; i++)
         {
             chartTotalValues += valuesY[i];
