@@ -8,6 +8,7 @@ class ScreenList
     ScreenList()
     {
         screens = new ArrayList<>();
+        namedScreens = new HashMap<>();
     }
     
     public void addScreen(Screen s)

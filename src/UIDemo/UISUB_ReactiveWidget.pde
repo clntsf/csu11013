@@ -116,32 +116,45 @@ class CheckBox extends ReactiveWidget
 }
 class CheckBoxList extends Container
 {
-    final int LABEL_FONT_SIZE = 14;
-    final int BOX_FONT_SIZE = LABEL_FONT_SIZE-2;
-    final int GAP = 15;
+    final int LABEL_FONT_SIZE;
+    final int BOX_FONT_SIZE;
     final int BOX_SIZE = 10;
-    final int HORIZ_PAD = 2;
+    final int HORIZ_PAD = 5;
     
     ArrayList<CheckBox> boxes;
     
     void onCheck(CheckBox c){}
     
-    CheckBoxList(int x, int y, String labelText, String[] options)
+    CheckBoxList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
     {
         super();
+        
+        LABEL_FONT_SIZE = labelFontSize;
+        BOX_FONT_SIZE = boxFontSize;
+        
         Label listLabel = new Label(x,y+LABEL_FONT_SIZE/2,labelText);
         listLabel.fontSize = LABEL_FONT_SIZE;
         addChild(listLabel);
         
-        y += LABEL_FONT_SIZE + GAP;
+        y += LABEL_FONT_SIZE * 2;
         for (String option : options)
         {
             CheckBox cb = new CheckBox(x+BOX_SIZE/2+HORIZ_PAD,y,option);
             cb.setParent(this);
             cb.fontSize = BOX_FONT_SIZE;
             addChild(cb);
-            y += GAP;
+            y += BOX_FONT_SIZE * 1.5;
         }
+    }
+
+    CheckBoxList(int x, int y, String labelText, String[] options, int labelFontSize)
+    {
+        this(x,y,labelText,options,labelFontSize,labelFontSize-2);
+    }
+    
+    CheckBoxList(int x, int y, String labelText, String[] options)
+    {
+        this(x,y,labelText,options,14,12);
     }
     
     List<Widget> getBoxes()
@@ -162,13 +175,23 @@ class CheckBoxList extends Container
 
 class RadioButtonList extends CheckBoxList
 {
-    RadioButtonList(int x, int y, String labelText, String[] options)
+    RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
     {
-        super(x,y,labelText,options);
+        super(x,y,labelText,options,labelFontSize,boxFontSize);
         for (Widget box : getBoxes())
         {
             ((CheckBox)box).isRectangular = false;
         }
+    }
+    
+    RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize)
+    {
+        this(x,y,labelText,options,labelFontSize,labelFontSize-2);
+    }
+    
+    RadioButtonList(int x, int y, String labelText, String[] options)
+    {
+        this(x,y,labelText,options,14,12);
     }
     
     void onCheck(CheckBox c)

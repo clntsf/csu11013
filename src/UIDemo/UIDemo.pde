@@ -9,12 +9,12 @@ boolean dbPopulated;
 
 void setup()
 {
-    size(750,750);
+    size(600,600);
     font = createFont("Outfit-Regular.ttf", 13);
     
     //chartDemo();
     //navDemo();
-    chartDemoNew();
+    Wk2Demo();
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     Table table = loadTable("flights2k.csv", "header");
