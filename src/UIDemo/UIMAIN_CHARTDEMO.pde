@@ -115,9 +115,7 @@ void Wk2Demo()
     screen1.addWidget(background);
     screen1.addWidget(navButtons);
 
-    double[] marketShare = new double[]{5,30,100,24,60};
-    String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
-    PieChart p1 = new PieChart(width/2,height/2,width/2,height/2,"Market Share by Airline", marketShare, airlines);
+    PieChart p1 = demoPie();
     screen1.addWidget(p1);    
 
     // --- SCREEN 2: HISTOGRAM DEMO --- //
@@ -166,6 +164,16 @@ boolean loadScreenWithArgs(String screenName)
     return success;
 }
 
+PieChart demoPie()
+{
+    double[] marketShare = new double[]{5,30,100,24,60};
+    String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
+    return new PieChart(
+        width/2,height/2,width/2,height/2,
+        "Market Share by Airline",
+        marketShare, airlines
+    );
+}
 Histogram demoHistogram()
 {
     NumericalParams histParams = new NumericalParams(new float[] {0}, new float[] {0});

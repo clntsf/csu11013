@@ -376,3 +376,9 @@ class ScatterPlot extends Plot
         markers = false;
     }
 }
+
+class InteractiveBar extends Container
+{
+    BarPlot bar;
+    ReactiveWidget[] handles;
+}
