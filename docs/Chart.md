@@ -1,5 +1,5 @@
 # Documentation: `Chart` Classes
-C. Simon-Fellowes
+C. Simon-Fellowes, L. MacNally
 
 ## Table of Contents:
 1. [`Chart`](#1-chart-abstract-base-class)
@@ -61,29 +61,36 @@ extends Chart
 implements None
 ```
 
-> One-line class summary
+> A standard pie chart, with a colour coded key to represent each section
 
-extended summary, justification
+A subclass of `Chart`, with a primary focus on visual representation of data, describing only one type of variable and showing the frequencies graphically rather than numerically.
 
 ### Constructor Summary:
 ```
-literally just paste the params section of the constructor in herer
+PieChart(int x,
+    int y,
+    int w,
+    int h,
+    String title,
+    double[] valuesY
+)
 ```
 
-### Constructor Parameters:
+### Constructor Parameters not inherited from parent (Chart) constructor(s):
 
 |Name|Type|Description|
 |----|----|-----------|
-||||    fill these (delete this comment) and copy the row downward as needed
+|labels|String[]|List of names for each section of the pie chart|    
+|angles|float[]|Proportional size of each angle in circle|
 
 
 ### Non-Constructor fields:
 
 |Name|Type|Description|Default|
 |----|----|-----------|-------|
-||||| same as above
+|colors|color[]|Random pastel color chosen for each section of pie chart|Random|
 
-## 2. `Plot`
+## 3. `Plot`
 
 ```
 abstract class Plot
@@ -141,7 +148,7 @@ In which only the maximum value for the y-axis is passed: the minimum is taken a
 
 ---
 
-## 3. `BarPlot`
+## 4. `BarPlot`
 
 ```
 class BarPlot
@@ -181,7 +188,7 @@ BarPlot(int x,
 
 ---
 
-## 4. `Histogram`
+## 5. `Histogram`
 
 ```
 class Histogram
@@ -223,7 +230,7 @@ Histogram(int x,
 
 ---
 
-## 5. `ScatterPlot`
+## 6. `ScatterPlot`
 
 ```
 class ScatterPlot
