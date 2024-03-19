@@ -80,7 +80,7 @@ void Wk2Demo()
         "Reliability vs Market Share",
         "Flight Map",
         "Flight Volume Heatmap",
-        "Average Departure Delay",
+        "Flight Duration Vs Volume",
         "Tim's Line Plot"
     };
     final int[] BTN_COLORS = new int[]{
@@ -141,7 +141,7 @@ void Wk2Demo()
     // --- Screen 6 - Avg Departure Delay  --- //
 
     Screen screen6 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen6, "Average Departure Delay");
+    screens.addNamedScreen(screen6, "Flight Duration Vs Volume");
     screen6.addWidget(background);
     screen6.addWidget(navButtons);
     
@@ -185,24 +185,19 @@ Histogram demoHistogram()
 }
 
 ScatterPlot demoScatterPlot(){
- int numVals = 50;
- int daysOfWeek = 8;
-    double[] xVals = new double[daysOfWeek], yVals = new double[numVals];
-    for (int i=1; i<daysOfWeek; i++)
+ //double DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
+ double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
+ int Carriers = 10;
+ int AA = 149, AS = 120, B6 = 144,HA = 98, NK = 95, G4 = 47,WN = 125,UA = 31,DL = 6,F9 = 55;
+    double[] xVals = new double[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9}, yVals = new double[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
+    for (int i=1; i<Carriers; i++)
     {
-   // String flightDate = db.getString("FlightDate");
-    //System.out.println(flightDate);
-  //  String origin = db.getString("Origin");
-    //String destination = db.getString("Dest");
-      double averageDelay = 0;
-      
-        double propI = TAU/(numVals-1) * i;
-        xVals[i] = i;
-        yVals[i] = cos((float)propI);
+        xVals[i] =xVals[i];
+        yVals[i] = yVals[i];
     }
-    ScatterPlot s1 = new ScatterPlot(width/2, height/2, 300, 300,
-        "Average Departure Delay by Day", "Day of Week", "Average Delay (minutes)",
-        xVals, yVals, new int[] {1,7}, new int[]{0,180}
+    ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
+        "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration",
+        xVals, yVals, new int[] {0,150}, new int[]{0,550}
     );
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";
