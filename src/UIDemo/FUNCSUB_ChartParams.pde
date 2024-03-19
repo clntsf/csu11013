@@ -34,6 +34,18 @@ class NumericalParams extends ChartParams   // scatter plots and histograms
     }
 }
 
+class HistParams
+{
+    Integer[] bins;
+    double[] freqs;
+    
+    HistParams(Integer[] bins, double[] freqs)
+    {
+        this.freqs = freqs;
+        this.bins = bins;
+    }
+}
+
 class BubbleParams extends NumericalParams
 {
     float[] sizes;

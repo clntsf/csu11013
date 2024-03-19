@@ -176,13 +176,14 @@ PieChart demoPie()
 }
 Histogram demoHistogram()
 {
-    NumericalParams histParams = new NumericalParams(new float[] {0}, new float[] {0});
     Integer[] bins = new Integer[]{-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
-    double[] quantities = new double[]{2, 2, 25, 644, 26824, 293591, 84166, 33941, 20416, 13843, 10087, 7712, 6104, 31095};
+    double[] freqs = new double[]{2, 2, 25, 644, 26824, 293591, 84166, 33941, 20416, 13843, 10087, 7712, 6104, 31095};
+    HistParams histParams = new HistParams(bins, freqs);
+    
     Histogram h = new Histogram(width/2, height/2, 480, 480,
         "Flight Departure Delay (Minutes, negative delays represent early departures)",
         "Delay", "Frequency",
-        bins, quantities, 300000
+        histParams.bins, histParams.freqs, 300000
     );
 
     h.fontSize = 12;
