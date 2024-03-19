@@ -299,3 +299,60 @@ class ScatterPlot extends Plot
         markers = false;
     }
 }
+
+// Macnalll - added pie chart subclass 19/3/24
+class PieChart extends Chart 
+{
+    float angles[];
+    int chartTotalValues;
+    PieChart(
+        int x, int y, int w, int h,
+        String title, double[] valuesY
+    )
+    {
+        super(x,y,w,h,title, valuesY);
+        this.valuesY = valuesY;
+        angles = new float[valuesY.length];
+    }
+    
+    void calculateAngles()
+    {
+        for (int i=0; i<valuesY.length; i++)
+        {
+            chartTotalValues += valuesY[i];
+        }
+        for (int i=0; i<valuesY.length; i++)
+        {
+            angles[i] = (float)(valuesY[i]/chartTotalValues)*360;
+        }
+    }
+    
+    void drawChartAndKey(String[] labelNames)
+    {
+        float lastAngle = 0;
+        for (int i=0, xpos = x+w/2+30, ypos = 10; i<angles.length; i++) 
+        {
+            // draw pie chart
+            float r = map(i, 0, angles.length, 255, 0);
+            float g = map(i, 0, angles.length, 85, 340);
+            float b = map(i, 0, angles.length, 170, 425);
+            if (g > 255) g -=255;
+            if (b > 255) b -=255;
+            color tmpColor = color(r, g, b); 
+            fill(tmpColor);
+            arc(x, y, h/1.2, h/1.2, lastAngle, lastAngle+radians(angles[i]));
+            lastAngle += radians(angles[i]);
+            
+            // draw key
+            if (ypos > height-10) 
+            {
+                ypos = 10;
+                xpos +=50;
+            }
+            rect(xpos, ypos+2, 10, 10);
+            fill(0);
+            text(labelNames[i], xpos+15, ypos);
+            ypos += 20;
+        }
+    } 
+}
