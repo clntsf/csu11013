@@ -101,7 +101,7 @@ void Wk2Demo()
         btn.setStroke(0);
         btn.addListener((e,w) -> {
             if (e.getAction() != MouseEvent.PRESS) {return;}
-            loadScreenWithArgs(NAME);
+            if (loadScreenWithArgs(NAME)) { surface.setTitle(NAME); }
         });
         titleScreen.addWidget(btn);
         titleScreen.addNamedChild(btn, NAME);
@@ -130,9 +130,13 @@ void Wk2Demo()
 
 }
 
-void loadScreenWithArgs(String screenName)
+boolean loadScreenWithArgs(String screenName)
 {
-    screens.setActiveScreen(screenName);
+    boolean success = screens.setActiveScreen(screenName);
+    
+    // processing goes here
+    
+    return success;
 }
 
 Histogram demoHistogram()

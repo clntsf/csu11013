@@ -14,6 +14,7 @@ void setup()
     
     //chartDemo();
     //navDemo();
+    //weekOneDemo();
     Wk2Demo();
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
@@ -35,7 +36,7 @@ void setup()
 void draw()
 {
     screens.getActiveScreen().draw();
-    // if(dbPopulated) { printText(); }
+     //if(dbPopulated) { printText(); }
 }
 
 // CSF - added functions to pass inputs to the UI elements 13/3/2024 10PM
