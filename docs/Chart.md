@@ -81,7 +81,6 @@ PieChart(int x,
 |Name|Type|Description|
 |----|----|-----------|
 |labels|String[]|List of names for each section of the pie chart|    
-|angles|float[]|Proportional size of each angle in circle|
 
 
 ### Non-Constructor fields:
@@ -89,6 +88,7 @@ PieChart(int x,
 |Name|Type|Description|Default|
 |----|----|-----------|-------|
 |colors|color[]|Random pastel color chosen for each section of pie chart|Random|
+|angles|float[]|Proportional size of each angle in circle|360°|
 
 ## 3. `Plot`
 
