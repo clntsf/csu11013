@@ -6,13 +6,13 @@ C. Simon-Fellowes
 2. [The `Screen` Class](#2-the-screen-class)
 3. [The `Widget` Class](#3-the-widget-class)
     1. [`ReactiveWidget`](#3ii-reactivewidget)
-        1. [The `MouseEventListener` interface](#3iia-the-mouseeventlistener-interface)
-        2. Checkboxes, CheckBoxLists and RadioButtonLists
+        1. [The `MouseEventListener` interface](#3ia-the-mouseeventlistener-interface)
+        2. [`Checkbox`, `CheckBoxList` and `RadioButtonList`](#3ib-checkbox-checkboxlist-and-radiobuttonlist)
     2. [Static Children](#3ii-static-children)
-        1. [Label](#3iia-label)
-        2. [Shape](#3iib-shape)
-        3. [Image](#3iic-image)
-        4. [Container](#3iid-container)
+        1. [`Label`](#3iia-label)
+        2. [`Shape`](#3iib-shape)
+        3. [`Image`](#3iic-image)
+        4. [`Container`](#3iid-container)
     3. [`Chart` (and subclasses)](Chart.md)
 ---
 
@@ -49,16 +49,13 @@ They are ordered in the program by their order here.
 > 
 > Params:
 > - s: the screen to add
-<br>
 
 #### - `void addNamedScreen(Screen s, String name)`
 > Add `s` to `screens`, but also as a value to `namedScreens` with `name` as the key 
 > 
 > Params
 > - s: the screen to add
-> - name: the name for the screen
-
-<br>
+> - name: the name to assign it
 
 #### - `Screen getActiveScreen()`
 > Get the currently active screen
@@ -66,8 +63,6 @@ They are ordered in the program by their order here.
 > Returns:
 > - s: the current screen
 (synonymous with `screens.get(screens.activeScreen)`)
-
-<br>
 
 #### - `Screen getNamedScreen(String name)`
 > Get the screen in `namedScreens` with key `name`  
@@ -78,17 +73,11 @@ They are ordered in the program by their order here.
 > Returns:
 > - Screen 
 
-<br>
-
 #### - `void nextScreen()`
 > set the active screen to the next screen in `screens`, wrapping around if necessary
 
-<br>
-
 #### - `void prevScreen()`
 > set the active screen to the previous screen in `screens`, wrapping around if necessary
-
-<br>
 
 #### - `boolean setActiveScreen(int index)`
 > set the active screen to the one at the specified index in `screens`
@@ -98,8 +87,6 @@ They are ordered in the program by their order here.
 > 
 > Returns:
 > - successful: whether the operation was successful (i.e. valid index)
-
-<br>
 
 #### - `boolean setActiveScreen(String name)`
 > same as above, but with the index in `screens` of the screen with name `name` in `namedScreens`
@@ -116,6 +103,53 @@ class Screen
 extends None
 implements None
 ```
+
+A midlevel container class directly corresponding to one screen of the program UI.
+
+A `Screen` is the second level of organization for program UI, corresponding to the group of widgets that will be drawn on-screen at a given time (if that `Screen` is active). `Screen` in fact has very similar functionality to its enclosing `ScreenList`, as it allows the user to add and track named widgets. Beyond this, each `Screen` is responsible for drawing and updating its child widgets
+
+### Constructor Summary:
+```
+Screen(color bgColor)
+```
+
+`Screen` takes only one argument, its background color, as the size of the window is determined in `setup()`/`settings()` so it is constant between all screens.
+
+### Attributes:
+`ArrayList<Widget> children`:
+All direct child widgets of this object (**NB**: since widgets can have children, not every widget on a screen is in this list and to iterate over all child widgets it must be traversed recursively)
+
+`HashMap<String, Widget> namedChildren`: Stores all named child widgets within this object, regardless of whether these are direct children or not. These are in no particular order.
+
+`color bgColor`: The screen's background color
+
+### Methods:
+
+#### - `void addWidget(Widget w)`
+> Add `w` to `children`
+> 
+> Params:
+> - w: the widget to add
+
+#### - `void addNamedChild(Widget w, String name)`
+> Add `w` to `namedChildren` with name `name`.
+> 
+> Params:
+> - w: the widget to add
+> - name: the name to assign it
+
+#### - `Widget getNamedChild(String name)`
+> Get the widget with name `name` from `namedChildren`.
+> 
+> Params:
+> - name: the name of the widget to get
+> 
+> Returns:
+> - widget: the widget with that name in `namedChildren`
+
+#### - `void displayNamedChildren()`
+> print the named children of this `Screen` to console in `name: widget` form, principally a debug function (**NB**: as widgets do not have a `toString()` method this display will not be very informative beyond revealing the type of the widget.)
+
 
 ## 3. The `Widget` Class
 ```
@@ -166,11 +200,14 @@ btn.addListener((e,w) -> {
 ```
 (see [here][github-mevent] for a list of MouseEvent events)
 
+#### 3.i.b. `Checkbox`, `CheckBoxList` and `RadioButtonList`
+
+
+
 ### 3.ii. Static Children
 
 There are several compelling use cases for widgets even without reactive functionality, and so several 'static' (in the english sense, not the java sense) subclasses of `Widget` exist. They are outlined below:
 
-<br>
 
 #### 3.ii.a. Label
 
@@ -192,7 +229,6 @@ Label(int x, int y, String text, color textColor)
 
 It is worth noting that despite their designation as 'static', these widgets' attributes can still be altered at runtime by the program, e.g. through a callback from a `ReactiveWidget`. A common example of this would be a radiobutton/checkbox list that updates a label to display the current selection.
 
-<br>
 
 #### 3.ii.b. Shape
 
@@ -211,7 +247,6 @@ Shape(int x, int y, color backgroundColor, Runnable onDraw)
 
 `x` and `y` represent the origin of the shape (the coordinates relative to which all points in `onDraw()` are drawn), `backgroundColor` is the color with which to `fill` when drawing the `Shape` (though the user can put other calls to `fill` inside `onDraw` which will overwrite as normal), and `onDraw` is the function to execute each time the `Shape` is drawn
 
-<br>
 
 #### 3.ii.c. Image
 
@@ -231,7 +266,6 @@ Image(int x, int y, int w, int h, PImage image)
 
 Images can either be drawn at native size, or at a size (in pixels) determined by the optional `w` and `h` parameters.
 
-<br>
 
 #### 3.ii.d. Container
 

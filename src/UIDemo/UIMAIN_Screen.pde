@@ -87,6 +87,11 @@ class Screen
     {
         namedChildren.put(name,w);
     }
+
+    public Widget getNamedChild(String name)
+    {
+        return namedChildren.get(name);
+    }
     
     void displayNamedChildren()
     {
