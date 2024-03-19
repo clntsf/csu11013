@@ -39,6 +39,81 @@ abstract class Chart extends Widget
     }
 }
 
+int channelToPastel(float orig, float rm)
+{
+    return (int)(orig-rm+255)/2;
+}
+
+int randomPastel(float seed)
+{
+    float r = 255*pow(sin(seed), 2);
+    float g = 255*pow(sin(seed+PI/3), 2);
+    float b = 255*pow(sin(seed+TAU/3), 2);
+    
+    float gray = (float) min(r,g,b);
+    float saturation_amt = 0.8;
+    float rm = gray*saturation_amt;
+
+    return color(channelToPastel(r,rm), channelToPastel(g,rm), channelToPastel(b,rm));
+}
+
+// Macnalll - added pie chart subclass 19/3/24
+class PieChart extends Chart 
+{
+    float angles[];
+    String[] labels;
+    color[] colors;
+
+    PieChart(
+        int x, int y, int w, int h,
+        String title, double[] valuesY,
+        String[] labels
+    )
+    {
+        super(x,y,w,h,title, valuesY);
+        this.labels = labels;
+
+        angles = new float[valuesY.length];
+        colors = new color[valuesY.length];
+
+        int chartTotalValues = 0;
+        for (int i=0; i<valuesY.length; i++)
+        {
+            chartTotalValues += valuesY[i];
+            colors[i] = randomPastel(0.1+0.7*i);    // random linear gen I've found works well
+        }
+        for (int i=0; i<valuesY.length; i++)
+        {
+            angles[i] = (float)(valuesY[i]/chartTotalValues)*360;
+        }
+    }
+    
+    void drawChartAndKey()
+    {
+        float lastAngle = 0;
+        int xpos = x+w/2+30, ypos = y-h/2+10;
+        for (int i=0; i<angles.length; i++) 
+        {
+            // draw pie chart
+            fill(colors[i]);
+            arc(x, y, h/1.2, h/1.2, lastAngle, lastAngle+radians(angles[i]));
+            lastAngle += radians(angles[i]);
+
+            // draw key
+            rect(xpos, ypos + 20*i, 10, 10);
+            textSize(fontSize - 4);
+            fill(0);
+            text(labels[i], xpos+20, ypos + 20*i);
+        }
+    } 
+    
+    void draw()
+    {
+        super.draw();
+        drawChartAndKey();
+    }
+}
+
 /*
 Plots have somewhat more functionality, supporting axis labels and a y-axis limit.
 Again, Plot is abstract because it should not be used in favor of one of its subclasses
@@ -298,61 +373,4 @@ class ScatterPlot extends Plot
         connect = true;
         markers = false;
     }
-}
-
-// Macnalll - added pie chart subclass 19/3/24
-class PieChart extends Chart 
-{
-    float angles[];
-    String[] labels;
-    int chartTotalValues;
-    PieChart(
-        int x, int y, int w, int h,
-        String title, double[] valuesY,
-        String[] labels
-    )
-    {
-        super(x,y,w,h,title, valuesY);
-        this.labels = labels;
-        angles = new float[valuesY.length];
-        for (int i=0; i<valuesY.length; i++)
-        {
-            chartTotalValues += valuesY[i];
-        }
-        for (int i=0; i<valuesY.length; i++)
-        {
-            angles[i] = (float)(valuesY[i]/chartTotalValues)*360;
-        }
-    }
-
-    void draw()
-    {
-        super.draw();
-        drawChartAndKey();
-    }
-    
-    void drawChartAndKey()
-    {
-        float lastAngle = 0;
-        int xpos = x+w/2+30, ypos = y-h/2+10;
-        for (int i=0; i<angles.length; i++) 
-        {
-            // draw pie chart
-            float r = map(i, 0, angles.length, 255, 0);
-            float g = map(i, 0, angles.length, 85, 340);
-            float b = map(i, 0, angles.length, 170, 425);
-            if (g > 255) g -=255;
-            if (b > 255) b -=255;
-            color tmpColor = color(r, g, b); 
-            fill(tmpColor);
-            arc(x, y, h/1.2, h/1.2, lastAngle, lastAngle+radians(angles[i]));
-            lastAngle += radians(angles[i]);
-
-            // draw key
-            rect(xpos, ypos + 20*i, 10, 10);
-            textSize(fontSize - 4);
-            fill(0);
-            text(labels[i], xpos+20, ypos + 20*i);
-        }
-    } 
 }
