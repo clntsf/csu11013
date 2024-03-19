@@ -127,6 +127,11 @@ void Wk2Demo()
     screens.addNamedScreen(screen3, "Kilian's Scatter Plot");
     screen3.addWidget(background);
     screen3.addWidget(navButtons);
+    
+    Screen screen4 = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(screen4, "Tim's Line Plot");
+    screen4.addWidget(background);
+    screen4.addWidget(navButtons);
 
 }
 
