@@ -1,4 +1,4 @@
-import de.bezier.data.sql.*;
+import de.bezier.data.sql.SQLite;
 import java.util.Map;
 
 ScreenList screens = new ScreenList();
