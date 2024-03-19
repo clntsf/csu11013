@@ -1,5 +1,10 @@
 import java.util.List;
 
+interface MouseListener
+{
+    void performAction(MouseEvent e, Object widget);
+}
+
 // CSF - Implemented widgets which respond to input by extending Exercise 6 reponse/challenge 12/4/2024 5PM
 class ReactiveWidget extends Widget
 {
