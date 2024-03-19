@@ -111,7 +111,7 @@ void Wk2Demo()
     // --- SCREEN 1: Market Share Pie Chart --- //
 
     Screen screen1 = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
-    screens.addNamedScreen(screen1, "Market Share by Airline (Leo)");    // except of course change 'screen1' for the name of the screen
+    screens.addNamedScreen(screen1, "Market Share by Airline");    // except of course change 'screen1' for the name of the screen
     screen1.addWidget(background);
     screen1.addWidget(navButtons);
 
