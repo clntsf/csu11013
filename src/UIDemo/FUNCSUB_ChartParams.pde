@@ -56,8 +56,3 @@ class BubbleParams extends NumericalParams
         this.sizes = sizes;
     }
 }
-
-interface ChartParamGenerator<T extends ChartParams>
-{
-    public T generateParams(SQLite db, String tableName);
-}

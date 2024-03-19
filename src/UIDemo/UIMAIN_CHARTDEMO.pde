@@ -127,7 +127,7 @@ void Wk2Demo()
     histScr.addWidget(navButtons);
     
     Histogram h1 = demoHistogram();
-    screen2.addWidget(h1);
+    histScr.addWidget(h1);
 
     // --- Screen 4: Flight Map --- //
     
@@ -143,8 +143,8 @@ void Wk2Demo()
     barPlotScr.addWidget(background);
     barPlotScr.addWidget(navButtons);
     
-    BarPlot b1 = demoBarPlot();
-    barPlotScr.addWidget(b1);
+    //BarPlot b1 = demoBarPlot();
+    //barPlotScr.addWidget(b1);
     
     // --- Screen 7 - Avg Departure Delay  --- //
 
@@ -235,4 +235,4 @@ ScatterPlot demoScatterPlot(){
     
 }
 
-void demoBarPlot() {}
+BarPlot demoBarPlot() {return null;}
