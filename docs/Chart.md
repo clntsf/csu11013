@@ -72,7 +72,8 @@ PieChart(int x,
     int w,
     int h,
     String title,
-    double[] valuesY
+    double[] valuesY,
+    String[] labels
 )
 ```
 
