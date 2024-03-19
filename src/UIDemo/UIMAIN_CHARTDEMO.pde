@@ -1,3 +1,4 @@
+
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
@@ -79,7 +80,7 @@ void Wk2Demo()
         "Reliability vs Market Share",
         "Flight Map",
         "Flight Volume Heatmap",
-        "Kilian's Scatter Plot"
+        "Average Departure Delay"
     };
     final int[] BTN_COLORS = new int[]{
         #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #c3b1e1
@@ -122,12 +123,18 @@ void Wk2Demo()
     screens.addNamedScreen(screen2, "Flight Map");
     screen2.addWidget(background);
     screen2.addWidget(navButtons);
+    
+    
+    // --- Screen 3 --- //
 
     Screen screen3 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen3, "Kilian's Scatter Plot");
+    screens.addNamedScreen(screen3, "Average Departure Delay");
     screen3.addWidget(background);
     screen3.addWidget(navButtons);
-
+    
+    ScatterPlot s1 = demoScatterPlot();
+    screen3.addWidget(s1);
+    
 }
 
 void loadScreenWithArgs(String screenName)
@@ -151,6 +158,38 @@ Histogram demoHistogram()
     h1.numAxisTicksY = 6;
     
     return h1;
+}
+
+ScatterPlot demoScatterPlot(){
+ int numVals = 50;
+ int daysOfWeek = 8;
+    double[] xVals = new double[daysOfWeek], yVals = new double[numVals];
+    for (int i=1; i<daysOfWeek; i++)
+    {
+    String flightDate = db.getString("FlightDate");
+    System.out.println(flightDate);
+    String origin = db.getString("Origin");
+    String destination = db.getString("Dest");
+      double averageDelay = 0;
+      
+        double propI = TAU/(numVals-1) * i;
+        xVals[i] = i;
+        yVals[i] = cos((float)propI);
+    }
+    ScatterPlot s1 = new ScatterPlot(width/2, height/2, 300, 300,
+        "Average Departure Delay by Day", "Day of Week", "Average Delay (minutes)",
+        xVals, yVals, new int[] {1,7}, new int[]{0,180}
+    );
+    s1.fontSize = 14;
+    s1.labelFormatStringY = "%.1f";
+    s1.labelFormatStringX = "%.0f";
+    
+    // play around with these to make the chart feel like a line chart or a scatter plot (or a line chart with points drawn)
+    s1.connect = false;
+    s1.markers = true;
+    //s1.makeLinePlot();    // Or just this, for a 1-line solution
+    return s1;
+    
 }
 
 // Other demo functions go here and get added to chartDemoNew() in a new Screen
