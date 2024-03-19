@@ -108,15 +108,27 @@ void Wk2Demo()
         titleScreen.addWidget(btn);
         titleScreen.addNamedChild(btn, NAME);
     }
+    // --- SCREEN 1: Market Share Pie Chart --- //
 
-    // --- SCREEN 1: HISTOGRAM DEMO --- //
     Screen screen1 = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
-    screens.addNamedScreen(screen1, "Departure Delay Times");    // except of course change 'screen1' for the name of the screen
+    screens.addNamedScreen(screen1, "Market Share by Airline (Leo)");    // except of course change 'screen1' for the name of the screen
     screen1.addWidget(background);
     screen1.addWidget(navButtons);
+
+    double[] marketShare = new double[]{5,30,100,24,60};
+    String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
+    PieChart p1 = new PieChart(width/2,height/2,width/2,height/2,"Market Share by Airline", marketShare, airlines);
+    screen1.addWidget(p1);    
+
+    // --- SCREEN 2: HISTOGRAM DEMO --- //
+
+    Screen screen2 = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(screen2, "Departure Delay Times");
+    screen2.addWidget(background);
+    screen2.addWidget(navButtons);
     
     Histogram h1 = demoHistogram();
-    screen1.addWidget(h1);
+    screen2.addWidget(h1);
 
     // --- Screen 4: Flight Map --- //
     
@@ -134,8 +146,7 @@ void Wk2Demo()
     screen6.addWidget(navButtons);
     
     ScatterPlot s1 = demoScatterPlot();
-    screen3.addWidget(s1);
-    
+    screen6.addWidget(s1);
 
     // --- Screen 7 - Tim's Line Plot --- //
 

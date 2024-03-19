@@ -304,14 +304,16 @@ class ScatterPlot extends Plot
 class PieChart extends Chart 
 {
     float angles[];
+    String[] labels;
     int chartTotalValues;
     PieChart(
         int x, int y, int w, int h,
-        String title, double[] valuesY
+        String title, double[] valuesY,
+        String[] labels
     )
     {
         super(x,y,w,h,title, valuesY);
-        this.valuesY = valuesY;
+        this.labels = labels;
         angles = new float[valuesY.length];
         for (int i=0; i<valuesY.length; i++)
         {
@@ -322,11 +324,18 @@ class PieChart extends Chart
             angles[i] = (float)(valuesY[i]/chartTotalValues)*360;
         }
     }
+
+    void draw()
+    {
+        super.draw();
+        drawChartAndKey();
+    }
     
-    void drawChartAndKey(String[] labelNames)
+    void drawChartAndKey()
     {
         float lastAngle = 0;
-        for (int i=0, xpos = x+w/2+30, ypos = 10; i<angles.length; i++) 
+        int xpos = x+w/2+30, ypos = y-h/2+10;
+        for (int i=0; i<angles.length; i++) 
         {
             // draw pie chart
             float r = map(i, 0, angles.length, 255, 0);
@@ -338,17 +347,12 @@ class PieChart extends Chart
             fill(tmpColor);
             arc(x, y, h/1.2, h/1.2, lastAngle, lastAngle+radians(angles[i]));
             lastAngle += radians(angles[i]);
-            
+
             // draw key
-            if (ypos > height-10) 
-            {
-                ypos = 10;
-                xpos +=50;
-            }
-            rect(xpos, ypos+2, 10, 10);
+            rect(xpos, ypos + 20*i, 10, 10);
+            textSize(fontSize - 4);
             fill(0);
-            text(labelNames[i], xpos+15, ypos);
-            ypos += 20;
+            text(labels[i], xpos+20, ypos + 20*i);
         }
     } 
 }
