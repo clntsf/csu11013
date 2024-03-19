@@ -1,5 +1,4 @@
-// CSF - Implemented charts, plots, and their children (Bar, Histogram, Scatter (includes line plots)) - 14/3/2024 5PM
-
+// CSF 14/3/2024 5PM - Implemented charts, plots, and their children (Bar, Histogram, Scatter (includes line plots))
 
 /**
 * A Chart only has the minimum standard functionality - a frame and a title.
@@ -39,6 +38,9 @@ abstract class Chart extends Widget
     }
 }
 
+/* CSF 19/3/24 7:30PM - Added Random Pastel color generator loosely inspired
+by https://mdigi.tools/random-pastel-color/ (see "How to Generate Random Pastel Colors?")
+*/
 int channelToPastel(float orig, float rm)
 {
     return (int)(orig-rm+255)/2;
