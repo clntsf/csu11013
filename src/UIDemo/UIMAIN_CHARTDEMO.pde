@@ -175,10 +175,10 @@ ScatterPlot demoScatterPlot(){
     double[] xVals = new double[daysOfWeek], yVals = new double[numVals];
     for (int i=1; i<daysOfWeek; i++)
     {
-    String flightDate = db.getString("FlightDate");
-    System.out.println(flightDate);
-    String origin = db.getString("Origin");
-    String destination = db.getString("Dest");
+   // String flightDate = db.getString("FlightDate");
+    //System.out.println(flightDate);
+  //  String origin = db.getString("Origin");
+    //String destination = db.getString("Dest");
       double averageDelay = 0;
       
         double propI = TAU/(numVals-1) * i;
