@@ -80,10 +80,11 @@ void Wk2Demo()
         "Reliability vs Market Share",
         "Flight Map",
         "Flight Volume Heatmap",
-        "Average Departure Delay"
+        "Average Departure Delay",
+        "Tim's Line Plot"
     };
     final int[] BTN_COLORS = new int[]{
-        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #c3b1e1
+        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #c3b1e1, #ffd1dc
     };
 
     Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:");
@@ -117,28 +118,31 @@ void Wk2Demo()
     Histogram h1 = demoHistogram();
     screen1.addWidget(h1);
 
-    // --- Screen 2 --- //
+    // --- Screen 4: Flight Map --- //
     
-    Screen screen2 = new Screen(SCREEN_COLOR);        
-    screens.addNamedScreen(screen2, "Flight Map");
-    screen2.addWidget(background);
-    screen2.addWidget(navButtons);
+    Screen screen4 = new Screen(SCREEN_COLOR);        
+    screens.addNamedScreen(screen4, "Flight Map");
+    screen4.addWidget(background);
+    screen4.addWidget(navButtons);
     
     
-    // --- Screen 3 --- //
+    // --- Screen 6 - Avg Departure Delay  --- //
 
-    Screen screen3 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen3, "Average Departure Delay");
-    screen3.addWidget(background);
-    screen3.addWidget(navButtons);
+    Screen screen6 = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(screen6, "Average Departure Delay");
+    screen6.addWidget(background);
+    screen6.addWidget(navButtons);
     
     ScatterPlot s1 = demoScatterPlot();
     screen3.addWidget(s1);
     
-    Screen screen4 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen4, "Tim's Line Plot");
-    screen4.addWidget(background);
-    screen4.addWidget(navButtons);
+
+    // --- Screen 7 - Tim's Line Plot --- //
+
+    Screen screen7 = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(screen7, "Tim's Line Plot");
+    screen7.addWidget(background);
+    screen7.addWidget(navButtons);
 
 }
 
