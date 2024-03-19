@@ -1,5 +1,6 @@
 class Label extends Widget
 {   
+    int justify = LEFT;
 
     Label(int x, int y, String text)
     {
@@ -15,8 +16,7 @@ class Label extends Widget
     
     void draw()
     {
-        //rectMode(CORNER);
-        textAlign(LEFT, CENTER);
+        textAlign(justify, CENTER);
         textSize(fontSize);
         fill(textColor);
         text(text,x,y);
