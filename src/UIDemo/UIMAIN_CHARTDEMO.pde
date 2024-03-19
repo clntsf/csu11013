@@ -80,11 +80,12 @@ void Wk2Demo()
         "Reliability vs Market Share",
         "Flight Map",
         "Flight Volume Heatmap",
+        "Will's BarPlot",
         "Average Departure Delay",
         "Tim's Line Plot"
     };
     final int[] BTN_COLORS = new int[]{
-        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #c3b1e1, #ffd1dc
+        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc
     };
 
     Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:");
@@ -110,48 +111,57 @@ void Wk2Demo()
     }
     // --- SCREEN 1: Market Share Pie Chart --- //
 
-    Screen screen1 = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
-    screens.addNamedScreen(screen1, "Market Share by Airline");    // except of course change 'screen1' for the name of the screen
-    screen1.addWidget(background);
-    screen1.addWidget(navButtons);
+    Screen mktShareScr = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
+    screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'screen1' for the name of the screen
+    mktShareScr.addWidget(background);
+    mktShareScr.addWidget(navButtons);
 
     PieChart p1 = demoPie();
-    screen1.addWidget(p1);    
+    mktShareScr.addWidget(p1);    
 
     // --- SCREEN 2: HISTOGRAM DEMO --- //
 
-    Screen screen2 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen2, "Departure Delay Times");
-    screen2.addWidget(background);
-    screen2.addWidget(navButtons);
+    Screen histScr = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(histScr, "Departure Delay Times");
+    histScr.addWidget(background);
+    histScr.addWidget(navButtons);
     
     Histogram h1 = demoHistogram();
     screen2.addWidget(h1);
 
     // --- Screen 4: Flight Map --- //
     
-    Screen screen4 = new Screen(SCREEN_COLOR);        
-    screens.addNamedScreen(screen4, "Flight Map");
-    screen4.addWidget(background);
-    screen4.addWidget(navButtons);
+    Screen mapScr = new Screen(SCREEN_COLOR);        
+    screens.addNamedScreen(mapScr, "Flight Map");
+    mapScr.addWidget(background);
+    mapScr.addWidget(navButtons);
     
-    
-    // --- Screen 6 - Avg Departure Delay  --- //
+    // --- Screen 6 - Bar Plot Screen  --- //
 
-    Screen screen6 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen6, "Average Departure Delay");
-    screen6.addWidget(background);
-    screen6.addWidget(navButtons);
+    Screen barPlotScr = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(barPlotScr, "Will's BarPlot");
+    barPlotScr.addWidget(background);
+    barPlotScr.addWidget(navButtons);
+    
+    BarPlot b1 = demoBarPlot();
+    barPlotScr.addWidget(b1);
+    
+    // --- Screen 7 - Avg Departure Delay  --- //
+
+    Screen depDelayScr = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(depDelayScr, "Average Departure Delay");
+    depDelayScr.addWidget(background);
+    depDelayScr.addWidget(navButtons);
     
     ScatterPlot s1 = demoScatterPlot();
-    screen6.addWidget(s1);
+    depDelayScr.addWidget(s1);
 
-    // --- Screen 7 - Tim's Line Plot --- //
+    // --- Screen 8 - Tim's Line Plot --- //
 
-    Screen screen7 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen7, "Tim's Line Plot");
-    screen7.addWidget(background);
-    screen7.addWidget(navButtons);
+    Screen linePlotScr = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(linePlotScr, "Tim's Line Plot");
+    linePlotScr.addWidget(background);
+    linePlotScr.addWidget(navButtons);
 
 }
 
@@ -225,5 +235,4 @@ ScatterPlot demoScatterPlot(){
     
 }
 
-// Other demo functions go here and get added to chartDemoNew() in a new Screen
-// - for convention, make your function return the object (ex. Histogram above) so it can be manipulated in the main function
+void demoBarPlot() {}
