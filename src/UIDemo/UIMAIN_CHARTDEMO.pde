@@ -1,3 +1,4 @@
+import java.util.concurrent.atomic.AtomicReference;
 
 void Wk2Demo()
 {
@@ -85,7 +86,7 @@ void Wk2Demo()
         "Tim's Line Plot"
     };
     final int[] BTN_COLORS = new int[]{
-        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc
+        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24
     };
 
     Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:");
@@ -106,6 +107,7 @@ void Wk2Demo()
             if (e.getAction() != MouseEvent.PRESS) {return;}
             if (loadScreenWithArgs(NAME)) { surface.setTitle(NAME); }
         });
+        
         titleScreen.addWidget(btn);
         titleScreen.addNamedChild(btn, "button: " + NAME);
     }
@@ -127,9 +129,32 @@ void Wk2Demo()
     histScr.addWidget(background);
     histScr.addWidget(navButtons);
     
-    Histogram h1 = demoHistogram();
-    histScr.addWidget(h1);
-
+    AtomicReference<HistParams> hP = new AtomicReference<>(null);
+    Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
+    
+    ReactiveWidget histBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Departure Delay Times");
+    histBtn.addListener((e,w) -> {
+        if (!histScr.widgets.isEmpty()) {
+            histScr.widgets = new ArrayList<>();
+            histScr.addWidget(background);
+            histScr.addWidget(navButtons);
+        }
+        Thread histT = new Thread(() -> {
+            hP.set(populateHistFreqs(bins, new double[bins.length-1]));
+        });
+        histT.start();
+        histScr.addWidget(new Label(width/2,height/2,"LOADING"));
+        while (histT.isAlive()) {
+            //println("LOADING");
+            //histScr.addWidget(new Label(width/2,height/2,"LOADING"));
+        }
+        Histogram h = demoHistogram(titleScreen, hP.get());
+        histScr.addWidget(h);
+    });
+    
+    //Histogram h = demoHistogram(titleScreen, hP.get());
+    //histScr.addWidget(h);
+    
     // --- Screen 4: Flight Map --- //
     
     Screen mapScr = new Screen(SCREEN_COLOR);        
@@ -172,8 +197,6 @@ boolean loadScreenWithArgs(String screenName)
 {
     boolean success = screens.setActiveScreen(screenName);
     
-    // processing goes here
-    
     return success;
 }
 
@@ -212,18 +235,17 @@ PieChart demoPie()
         marketShare, airlines
     );
 }
-Histogram demoHistogram()
+
+Histogram demoHistogram(Screen titleScreen, HistParams histParams)
 {
-    Integer[] bins = new Integer[]{-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
-    double[] freqs = new double[]{2, 2, 25, 644, 26824, 293591, 84166, 33941, 20416, 13843, 10087, 7712, 6104, 31095};
-    HistParams histParams = new HistParams(bins, freqs);
+    //double[] freqs = new double[] {2, 2, 25, 644, 26824, 293591, 84166, 33941, 20416, 13843, 10087, 7712, 6104, 31095};
     
     Histogram h = new Histogram(width/2, height/2, 480, 480,
         "Flight Departure Delay (Minutes, negative delays represent early departures)",
         "Delay", "Frequency",
         histParams.bins, histParams.freqs, 300000
     );
-
+    
     h.fontSize = 12;
     h.labelFormatStringY = "%,.0f";
     h.numAxisTicksY = 6;

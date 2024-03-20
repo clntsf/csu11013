@@ -64,6 +64,81 @@ public void populateDelays(Table table)
     print("done");
 }
 
+public HistParams populateHistFreqs(Integer[] bins, double[] freqs)
+{
+    int i = 0;
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -60 AND Delay < -50");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -50 AND Delay < -40");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -40 AND Delay < -30");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -30 AND Delay < -20");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -20 AND Delay < -10");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -10 AND Delay < 0");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 0 AND Delay < 10");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 10 AND Delay < 20");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 20 AND Delay < 30");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 30 AND Delay < 40");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 40 AND Delay < 50");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 50 AND Delay < 60");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 60 AND Delay < 70");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    i++;
+    
+    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 70");
+    freqs[i] = db.getInt("freq");
+    println(freqs[i]);
+    
+    return new HistParams(bins, freqs);
+}
+
 public LocalDate dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
     String[] split = stringDate.split("\\s+", 2);
