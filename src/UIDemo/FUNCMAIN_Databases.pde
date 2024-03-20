@@ -85,75 +85,15 @@ public void populateDelays(Table table)
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(Integer[] bins, double[] freqs)
 {
-    int i = 0;
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -60 AND Delay < -50");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -50 AND Delay < -40");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -40 AND Delay < -30");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -30 AND Delay < -20");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -20 AND Delay < -10");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= -10 AND Delay < 0");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 0 AND Delay < 10");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 10 AND Delay < 20");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 20 AND Delay < 30");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 30 AND Delay < 40");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 40 AND Delay < 50");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 50 AND Delay < 60");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 60 AND Delay < 70");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
-    i++;
-    
-    db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= 70");
-    freqs[i] = db.getInt("freq");
-    println(freqs[i]);
+    // RSR - improved method with extra vars and loop - 20/3/24 5PM
+    int minBin = -60;
+    int step = 10;
+    for (int i = 0; i < freqs.length; i++)
+    {
+        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i) + ((i == freqs.length-1)?"":" AND Delay < "+(minBin+step+step*i)));
+        freqs[i] = db.getInt("freq");
+        println(freqs[i]);
+    }
     
     return new HistParams(bins, freqs);
 }
