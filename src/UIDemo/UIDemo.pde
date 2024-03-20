@@ -9,7 +9,7 @@ boolean dbPopulated;
 
 void setup()
 {
-    size(600,600);
+    size(640,640);
     font = createFont("Outfit-Regular.ttf", 13);
     
     //chartDemo();

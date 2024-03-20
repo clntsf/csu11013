@@ -5,16 +5,26 @@ void Wk2Demo()
     final int BG_MARGIN = 20;
     final int SCREEN_COLOR = #778899;
     final int BACKGROUND_COLOR = #F0F8FF;
-    
-    Container navButtons = initNavButtons();
+    final String MAIN_TITLE = "Flight Data Visualisation App";
+
     Widget background = new Widget(width/2, height/2, width-2*BG_MARGIN, height-2*BG_MARGIN, BACKGROUND_COLOR);
+    // back to title button, add to each new screen
+    ReactiveWidget titleButton = new ReactiveWidget(
+        width-BG_MARGIN-60, height-BG_MARGIN-25, 100, 30,
+        SCREEN_COLOR, "Back to Title"
+    );
+    titleButton.setStroke(0);
+    titleButton.addListener((e,w) -> {
+            if (e.getAction() != MouseEvent.PRESS) {return;}
+            screens.setActiveScreen("Title Screen");
+            surface.setTitle(MAIN_TITLE);
+    });
     
-    surface.setTitle("Flight Data Visualisation App");
+    surface.setTitle(MAIN_TITLE);
 
     Screen titleScreen = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(titleScreen, "Title Screen");   
     titleScreen.addWidget(background);
-    titleScreen.addWidget(navButtons);
 
     Label titleLabel = new Label(width/2, BG_MARGIN + 25, "Flight Data Visualisation App");
     titleLabel.fontSize = 36;
@@ -117,7 +127,7 @@ void Wk2Demo()
     Screen mktShareScr = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
     screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'screen1' for the name of the screen
     mktShareScr.addWidget(background);
-    mktShareScr.addWidget(navButtons);
+    mktShareScr.addWidget(titleButton);
 
     PieChart p1 = demoPie();
     mktShareScr.addWidget(p1);    
@@ -127,7 +137,7 @@ void Wk2Demo()
     Screen histScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(histScr, "Departure Delay Times");
     histScr.addWidget(background);
-    histScr.addWidget(navButtons);
+    histScr.addWidget(titleButton);
     
     // RSR - if button pressed, chart is loaded. - 20/3/24 4PM
     
@@ -138,7 +148,7 @@ void Wk2Demo()
         if (!histScr.widgets.isEmpty()) {
             histScr.widgets = new ArrayList<>();
             histScr.addWidget(background);
-            histScr.addWidget(navButtons);
+            histScr.addWidget(titleButton);
         }
         Thread histT = new Thread(() -> {
             hP.set(populateHistFreqs(bins, new double[bins.length-1]));
@@ -153,14 +163,14 @@ void Wk2Demo()
     Screen mapScr = new Screen(SCREEN_COLOR);        
     screens.addNamedScreen(mapScr, "Flight Map");
     mapScr.addWidget(background);
-    mapScr.addWidget(navButtons);
+    mapScr.addWidget(titleButton);
 
     // --- Screen 6 - Scatter Plot Screen  --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
     flightVolScr.addWidget(background);
-    flightVolScr.addWidget(navButtons);
+    flightVolScr.addWidget(titleButton);
 
     ScatterPlot s1 = demoScatterPlot();
     flightVolScr.addWidget(s1);
@@ -170,7 +180,7 @@ void Wk2Demo()
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(barPlotScr, "Will's BarPlot");
     barPlotScr.addWidget(background);
-    barPlotScr.addWidget(navButtons);
+    barPlotScr.addWidget(titleButton);
     
     //BarPlot b1 = demoBarPlot();
     //barPlotScr.addWidget(b1);
@@ -180,7 +190,7 @@ void Wk2Demo()
     Screen linePlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(linePlotScr, "Tim's Line Plot");
     linePlotScr.addWidget(background);
-    linePlotScr.addWidget(navButtons);
+    linePlotScr.addWidget(titleButton);
     
     ScatterPlot l1 = demoLinePlot();
     linePlotScr.addWidget(l1);
