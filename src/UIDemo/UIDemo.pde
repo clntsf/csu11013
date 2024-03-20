@@ -18,8 +18,8 @@ void setup()
     Wk2Demo();
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
-    Table table = loadTable("flights2k.csv", "header");
-    String tableName = "flights2k";
+    Table table = loadTable("flights_full.csv", "header");
+    String tableName = "flights_full";
     db = new SQLite(this, "test.db");
     
     //Table delays = loadTable("delaysdemo.csv", "header");
