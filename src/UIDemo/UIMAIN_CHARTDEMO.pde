@@ -130,11 +130,11 @@ void Wk2Demo()
     histScr.addWidget(navButtons);
     
     // RSR - if button pressed, chart is loaded. - 20/3/24 4PM
-    AtomicReference<HistParams> hP = new AtomicReference<>(null);
-    Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
     
     ReactiveWidget histBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Departure Delay Times");
     histBtn.addListener((e,w) -> {
+        AtomicReference<HistParams> hP = new AtomicReference<>(null);
+        Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
         if (!histScr.widgets.isEmpty()) {
             histScr.widgets = new ArrayList<>();
             histScr.addWidget(background);
@@ -142,7 +142,7 @@ void Wk2Demo()
         }
         Thread histT = new Thread(() -> {
             hP.set(populateHistFreqs(bins, new double[bins.length-1]));
-            Histogram h = demoHistogram(titleScreen, hP.get(), false);
+            Histogram h = demoHistogram(titleScreen, hP.get());
             histScr.addWidget(h);
         });
         histT.start();
@@ -229,30 +229,17 @@ PieChart demoPie()
     );
 }
 
-Histogram demoHistogram(Screen titleScreen, HistParams histParams, boolean isAlive)
+Histogram demoHistogram(Screen titleScreen, HistParams histParams)
 {
-    Histogram h;
-    //double[] freqs = new double[] {2, 2, 25, 644, 26824, 293591, 84166, 33941, 20416, 13843, 10087, 7712, 6104, 31095};
-    if (isAlive)
-    {
-        h = new Histogram(width/2, height/2, 0, 0,
-            "Flight Departure Delay (Minutes, negative delays represent early departures)",
-            "Delay", "Frequency",
-            new Integer[]{0, 100, null}, new double[]{0, 100}, 300000
-        );
-    }
-    else
-    {
-        h = new Histogram(width/2, height/2, 480, 480,
-            "Flight Departure Delay (Minutes, negative delays represent early departures)",
-            "Delay", "Frequency",
-            histParams.bins, histParams.freqs, 300000
-        );
-        
-        h.fontSize = 12;
-        h.labelFormatStringY = "%,.0f";
-        h.numAxisTicksY = 6;
-    }
+    Histogram h = new Histogram(width/2, height/2, 480, 480,
+        "Flight Departure Delay (Minutes, negative delays represent early departures)",
+        "Delay", "Frequency",
+        histParams.bins, histParams.freqs, 300000
+    );
+    
+    h.fontSize = 12;
+    h.labelFormatStringY = "%,.0f";
+    h.numAxisTicksY = 6;
     return h;
 }
 
