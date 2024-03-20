@@ -57,6 +57,8 @@ public void populateDatabase(Table table, String databaseTableName)
                           currentRow.getString("DEST_CITY_NAME"), currentRow.getString("DEST_STATE_ABR"), currentRow.getInt("DEST_WAC"), timeToLocalTime(currentRow.getString("CRS_DEP_TIME")),
                           timeToLocalTime(currentRow.getString("DEP_TIME")), timeToLocalTime(currentRow.getString("CRS_ARR_TIME")), timeToLocalTime(currentRow.getString("ARR_TIME")),
                           currentRow.getInt("CANCELLED"), currentRow.getInt("DIVERTED"), currentRow.getInt("DISTANCE"));*/
+    
+    // RSR - updated method to be a lot more efficient - 20/3/24 2PM
     db.query("BEGIN TRANSACTION;");
     for (int i = 0; i < table.getRowCount(); i++)
     {
@@ -80,6 +82,7 @@ public void populateDelays(Table table)
     print("done");
 }
 
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(Integer[] bins, double[] freqs)
 {
     int i = 0;

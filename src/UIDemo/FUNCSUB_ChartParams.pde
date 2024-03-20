@@ -34,6 +34,7 @@ class NumericalParams extends ChartParams   // scatter plots and histograms
     }
 }
 
+// RSR - created HistParams class - 19/3/24 6PM
 class HistParams
 {
     Integer[] bins;
