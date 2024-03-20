@@ -5,7 +5,7 @@ ScreenList screens = new ScreenList();
 PFont font;
 
 SQLite db;
-boolean dbPopulated;
+//boolean dbPopulated;
 
 void setup()
 {
@@ -16,6 +16,7 @@ void setup()
     //navDemo();
     //weekOneDemo();
     Wk2Demo();
+    
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     //Table table = loadTable("flights_full.csv", "header");
     String tableName = "flights_full";
@@ -27,11 +28,7 @@ void setup()
         //new Thread(() -> populateDatabase(table, tableName)).start(); // shouldn't have to do always but we'll add a check later
         //new Thread(() -> populateDelays(delays)).start();
     }
-    else
-    {
-        println("Error connecting to database!");
-    }
-    
+    else println("Error connecting to database!");
 }
 
 void draw()

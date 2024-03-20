@@ -144,14 +144,14 @@ void Wk2Demo()
     ReactiveWidget histBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Departure Delay Times");
     histBtn.addListener((e,w) -> {
         AtomicReference<HistParams> hP = new AtomicReference<>(null);
-        Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
+        //Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
         if (!histScr.widgets.isEmpty()) {
             histScr.widgets = new ArrayList<>();
             histScr.addWidget(background);
             histScr.addWidget(titleButton);
         }
         Thread histT = new Thread(() -> {
-            hP.set(populateHistFreqs(bins, new double[bins.length-1]));
+            hP.set(populateHistFreqs(-60, 10, 70));//bins, new double[bins.length-1]));
             Histogram h = demoHistogram(titleScreen, hP.get());
             histScr.addWidget(h);
         });

@@ -37,27 +37,6 @@ public void populateDatabase(Table table, String databaseTableName)
 
     println("Started to populate database...");
     String columns = "FlightDate, IATA_Code_Marketing_Airline, Flight_Number_Marketing_Airline, Origin, OriginCityName, OriginState, OriginWac, Dest, DestCityName, DestState, DestWac, CRSDepTime, DepTime, CRSArrTime, ArrTime, Cancelled, Diverted, Distance";
-    /*StringBuilder valueBuilder = new StringBuilder();
-    valueBuilder.append("INSERT INTO "+databaseTableName+" ("+columns+") VALUES");
-    for (int i = 0; i < 2; i++)
-    {
-        TableRow currentRow = table.getRow(i);
-        valueBuilder.append(" ('"+dateToLocalDate(currentRow.getString("FL_DATE"))+"', '"+currentRow.getString("MKT_CARRIER")+"', "+currentRow.getInt("MKT_CARRIER_FL_NUM")+", '"+currentRow.getString("ORIGIN")+"', '"+currentRow.getString("ORIGIN_CITY_NAME")+"', '"+currentRow.getString("ORIGIN_STATE_ABR")+"', "+currentRow.getInt("ORIGIN_WAC")+", '"+currentRow.getString("DEST")+"', '"+currentRow.getString("DEST_CITY_NAME")+"', '"+currentRow.getString("DEST_STATE_ABR")+"', "+currentRow.getInt("DEST_WAC")+", '"+timeToLocalTime(currentRow.getString("CRS_DEP_TIME"))+"', '"+timeToLocalTime(currentRow.getString("DEP_TIME"))+"', '"+timeToLocalTime(currentRow.getString("CRS_ARR_TIME"))+"', '"+timeToLocalTime(currentRow.getString("ARR_TIME"))+"', "+currentRow.getInt("CANCELLED")+", "+currentRow.getInt("DIVERTED")+", "+currentRow.getInt("DISTANCE")+((i == 2-1) ? ");":"),"));
-    }
-    String values = valueBuilder.toString();*/
-    //println(values);
-    
-    //for (int i = 0; i < table.getRowCount(); i++)
-    //{
-        // if (i%100 == 0) { println(i); }
-        //TableRow currentRow = table.getRow(i);
-        /*db.query("INSERT INTO "+databaseTableName+" ("+columns+") VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", %d, \"%s\", \"%s\", \"%s\", %d, \"%s\", \"%s\", \"%s\", \"%s\", %d, %d, %d)",
-                          dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("MKT_CARRIER"), currentRow.getString("MKT_CARRIER_FL_NUM"), currentRow.getString("ORIGIN"),
-                          currentRow.getString("ORIGIN_CITY_NAME"), currentRow.getString("ORIGIN_STATE_ABR"), currentRow.getInt("ORIGIN_WAC"), currentRow.getString("DEST"),
-                          currentRow.getString("DEST_CITY_NAME"), currentRow.getString("DEST_STATE_ABR"), currentRow.getInt("DEST_WAC"), timeToLocalTime(currentRow.getString("CRS_DEP_TIME")),
-                          timeToLocalTime(currentRow.getString("DEP_TIME")), timeToLocalTime(currentRow.getString("CRS_ARR_TIME")), timeToLocalTime(currentRow.getString("ARR_TIME")),
-                          currentRow.getInt("CANCELLED"), currentRow.getInt("DIVERTED"), currentRow.getInt("DISTANCE"));*/
-    
     // RSR - updated method to be a lot more efficient - 20/3/24 2PM
     db.query("BEGIN TRANSACTION;");
     for (int i = 0; i < table.getRowCount(); i++)
@@ -67,7 +46,7 @@ public void populateDatabase(Table table, String databaseTableName)
     }
     db.query("COMMIT;");
     println("Database successfully populated!\n");
-    dbPopulated = true;
+    //dbPopulated = true;
 }
 
 // RSR - demo function to populate a delay table in the database - 19/3/24 7PM
@@ -83,14 +62,21 @@ public void populateDelays(Table table)
 }
 
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
-public HistParams populateHistFreqs(Integer[] bins, double[] freqs)
+public HistParams populateHistFreqs(int minBin, int step, int lastBin)
 {
-    // RSR - improved method with extra vars and loop - 20/3/24 5PM
-    int minBin = -60;
-    int step = 10;
+    Integer[] bins = new Integer[(lastBin-minBin)/step+2];
+    for (int i = 0; i < bins.length; i++)
+    {
+        if (i == bins.length-1) bins[i] = null;
+        else bins[i] = minBin+step*i;
+    }
+    println(bins);
+    double[] freqs = new double[bins.length-1]; //<>//
+    // RSR - improved method with extra parameters and loop - 20/3/24 5PM
     for (int i = 0; i < freqs.length; i++)
     {
-        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i) + ((i == freqs.length-1)?"":" AND Delay < "+(minBin+step+step*i)));
+        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+ ((i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i)) );
+        //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
         println(freqs[i]);
     }
