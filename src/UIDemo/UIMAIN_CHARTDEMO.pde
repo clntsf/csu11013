@@ -1,4 +1,4 @@
-import java.util.Random;
+
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
@@ -80,9 +80,8 @@ void Wk2Demo()
         "Reliability vs Market Share",
         "Flight Map",
         "Flight Volume Heatmap",
-        "Flight Duration Vs Volume",
+        "Flight Duration vs Volume",
         "Will's BarPlot",
-        "Average Departure Delay",
         "Tim's Line Plot"
     };
     final int[] BTN_COLORS = new int[]{
@@ -137,13 +136,19 @@ void Wk2Demo()
     screens.addNamedScreen(mapScr, "Flight Map");
     mapScr.addWidget(background);
     mapScr.addWidget(navButtons);
-    
-    // --- Screen 6 - Bar Plot Screen  --- //
 
-    Screen screen6 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen6, "Flight Duration Vs Volume");
-    screen6.addWidget(background);
-    screen6.addWidget(navButtons);
+    // --- Screen 6 - Scatter Plot Screen  --- //
+
+    Screen flightVolScr = new Screen(SCREEN_COLOR);      
+    screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
+    flightVolScr.addWidget(background);
+    flightVolScr.addWidget(navButtons);
+
+    ScatterPlot s1 = demoScatterPlot();
+    flightVolScr.addWidget(s1);
+    
+    // --- Screen 7 - Bar Plot Screen  --- //
+
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(barPlotScr, "Will's BarPlot");
     barPlotScr.addWidget(background);
@@ -151,16 +156,6 @@ void Wk2Demo()
     
     //BarPlot b1 = demoBarPlot();
     //barPlotScr.addWidget(b1);
-    
-    // --- Screen 7 - Avg Departure Delay  --- //
-
-    Screen depDelayScr = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(depDelayScr, "Average Departure Delay");
-    depDelayScr.addWidget(background);
-    depDelayScr.addWidget(navButtons);
-    
-    ScatterPlot s1 = demoScatterPlot();
-    depDelayScr.addWidget(s1);
 
     // --- Screen 8 - Tim's Line Plot --- //
 
@@ -183,7 +178,6 @@ boolean loadScreenWithArgs(String screenName)
 }
 
 ScatterPlot demoLinePlot() {
-    Random rand = new Random();
     int[] axisRangeX = new int[]{1, 31}; 
     int[] axisRangeY = new int[]{0, 1000}; 
     double[] daysOfMonth = new double[31];
@@ -192,7 +186,7 @@ ScatterPlot demoLinePlot() {
     }
     double[] countByDay = new double[31];
     for (int i = 0; i < 31; i++) { 
-        countByDay[i] = rand.nextInt(1000); 
+        countByDay[i] = (int) random(1000); 
     }
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
         "Flights per day of the month",
