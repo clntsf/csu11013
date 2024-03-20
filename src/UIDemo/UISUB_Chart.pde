@@ -26,6 +26,16 @@ abstract class Chart extends Widget
         setStroke(0);
     }
     
+    int[] genColors(int len)
+    {
+        color[] colors = new int[len];
+        for (int i=0; i<len; i++)
+        {
+            colors[i] = randomPastel(0.3+0.25*i);    // random linear gen I've found works well
+        }
+        return colors;
+    }
+    
     void draw()
     {
         strokeWeight(2);
@@ -36,6 +46,11 @@ abstract class Chart extends Widget
         textSize(fontSize+2);
         text(title, x, y-h/2-fontSize-labelMargin);
     }
+}
+
+color applyAlpha(color c, int alpha)
+{
+    return (alpha << 24) + c;
 }
 
 /* CSF 19/3/24 7:30PM - Added Random Pastel color generator loosely inspired
@@ -76,13 +91,12 @@ class PieChart extends Chart
         this.labels = labels;
 
         angles = new float[valuesY.length];
-        colors = new color[valuesY.length];
+        colors = genColors(valuesY.length);
 
         int chartTotalValues = 0;
         for (int i=0; i<valuesY.length; i++)
         {
             chartTotalValues += valuesY[i];
-            colors[i] = randomPastel(0.1+0.7*i);    // random linear gen I've found works well
         }
         for (int i=0; i<valuesY.length; i++)
         {
@@ -124,7 +138,7 @@ abstract class Plot extends Chart
 {
     String axisLabelX;
     String axisLabelY;
-    int[] axisRangeY;
+    float[] axisRangeY;
     
     // again, config attributes
     int numAxisTicksY;
@@ -134,7 +148,7 @@ abstract class Plot extends Chart
     Plot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesY, int[] axisRangeY
+        double[] valuesY, float[] axisRangeY
     )
     {
         super(x,y,w,h,title, valuesY);
@@ -147,10 +161,10 @@ abstract class Plot extends Chart
     Plot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesY, int axisMaxY
+        double[] valuesY, float axisMaxY
     )
     {
-        this(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,new int[]{0,axisMaxY});
+        this(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,new float[]{0,axisMaxY});
     }
     
     // transforms the origin of the transformation matrix to the middle of the y axis, where -y' (new up) = +x (old right)
@@ -164,10 +178,10 @@ abstract class Plot extends Chart
         rotate(3*HALF_PI);
     }
     
-    float lerp (int[] range, double amt)
+    float lerp (float[] range, double amt)
     {
-        float start = (float)range[0], stop = (float)range[1];
-        return (float)(amt*stop + (1-amt)*start);
+        //float start = range[0], stop = (float)range[1];
+        return (float)(amt*range[1] + (1-amt)*range[0]);
     }
     
     void drawAxisNames()    
@@ -179,7 +193,7 @@ abstract class Plot extends Chart
         popMatrix();
     }
     
-    void drawAxisTicks(int[] range, String fmtString, int numAxisTicks)
+    void drawAxisTicks(float[] range, String fmtString, int numAxisTicks)
     {
         textSize((int)(0.8*fontSize));
         for (int i=0; i<numAxisTicks; i++)
@@ -299,7 +313,7 @@ class Histogram extends BarPlot
 class ScatterPlot extends Plot
 {
     double[] valuesX;
-    int[] axisRangeX;
+    float[] axisRangeX;
     
     // config
     String labelFormatStringX;
@@ -310,7 +324,7 @@ class ScatterPlot extends Plot
     ScatterPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesX, double[] valuesY, int[] axisRangeX, int[] axisRangeY
+        double[] valuesX, double[] valuesY, float[] axisRangeX, float[] axisRangeY
     )
     {
         super(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,axisRangeY);
@@ -318,7 +332,7 @@ class ScatterPlot extends Plot
         this.axisRangeX = axisRangeX;
         connect = false;
         markers = true;
-        numAxisTicksX = 7;
+        numAxisTicksX = 5;
     }
     
     void drawAxisTicksX()
@@ -340,11 +354,15 @@ class ScatterPlot extends Plot
         return new float[] {x-w/2 + propX*w, y+h/2 - propY*h};
     }
     
-    void draw()
+    void drawFrame()
     {
         drawAxisTicksX();
         super.draw();
-        
+    }
+    
+    void draw()
+    {
+        drawFrame();
         fill(0,0,200);
         
         float[] lastCoords = null;
@@ -374,6 +392,48 @@ class ScatterPlot extends Plot
     {
         connect = true;
         markers = false;
+    }
+}
+
+class BubblePlot extends ScatterPlot
+{
+    float[] valuesZ;
+    float maxZ;
+    String[] labels;
+    color[] colors;
+    int maxSize = 60;
+
+    BubblePlot(
+        int x, int y, int w, int h,
+        String title, String axisLabelX, String axisLabelY,
+        double[] valuesX, double[] valuesY, float[] valuesZ, String[] labels,
+        float[] axisRangeX, float[] axisRangeY
+    )
+    {
+        super(x,y,w,h,title,axisLabelX,axisLabelY,valuesX,valuesY,axisRangeX,axisRangeY);
+        this.valuesZ = valuesZ;
+        this.maxZ = max(valuesZ);
+        this.labels = labels;
+        colors = genColors(valuesY.length);
+        for (int i=0; i<colors.length; i++)
+        {
+            colors[i] = applyAlpha(colors[i], 127);    // 50% transparency
+        }
+    }
+    
+    void draw()
+    {
+        super.drawFrame();
+        for (int i=0; i<colors.length; i++)
+        {
+            color c = colors[i];
+            fill(c);
+            float[] screenCoords = getScreenCoords((float)valuesX[i], (float)valuesY[i]);
+            circle(screenCoords[0], screenCoords[1], maxSize*pow(valuesZ[i]/maxZ,0.5));
+            fill(0);
+            // textAlign(LEFT,TOP);
+            text(labels[i], screenCoords[0], screenCoords[1]);
+        }
     }
 }
 

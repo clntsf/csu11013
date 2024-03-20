@@ -140,7 +140,7 @@ void chartDemo()
     }
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 300, 300,
         "F(x) = Cos(x)", "x", "cos(x)",
-        xVals, yVals, new int[] {-1,7}, new int[]{-3,3}
+        xVals, yVals, new float[] {-1,7}, new float[]{-3,3}
     );
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";
