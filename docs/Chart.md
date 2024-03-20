@@ -77,7 +77,7 @@ PieChart(int x,
 )
 ```
 
-### Constructor Parameters not inherited from parent (Chart) constructor(s):
+### Constructor Parameters not inherited from parent (`Chart`) constructor(s):
 
 |Name|Type|Description|
 |----|----|-----------|
@@ -86,10 +86,7 @@ PieChart(int x,
 
 ### Non-Constructor fields:
 
-|Name|Type|Description|Default|
-|----|----|-----------|-------|
-|colors|color[]|Random pastel color chosen for each section of pie chart|Random|
-|angles|float[]|Proportional size of each angle in circle|360°|
+None
 
 ## 3. `Plot`
 
