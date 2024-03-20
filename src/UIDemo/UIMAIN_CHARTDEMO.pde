@@ -1,4 +1,4 @@
-
+import java.util.Random;
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
@@ -168,7 +168,9 @@ void Wk2Demo()
     screens.addNamedScreen(linePlotScr, "Tim's Line Plot");
     linePlotScr.addWidget(background);
     linePlotScr.addWidget(navButtons);
-
+    
+    ScatterPlot l1 = demoLinePlot();
+    linePlotScr.addWidget(l1);
 }
 
 boolean loadScreenWithArgs(String screenName)
@@ -179,6 +181,32 @@ boolean loadScreenWithArgs(String screenName)
     
     return success;
 }
+
+ScatterPlot demoLinePlot() {
+    Random rand = new Random();
+    int[] axisRangeX = new int[]{1, 31}; 
+    int[] axisRangeY = new int[]{0, 1000}; 
+    double[] daysOfMonth = new double[31];
+    for (int i = 1; i <= 31; i++) {
+        daysOfMonth[i-1] = i;
+    }
+    double[] countByDay = new double[31];
+    for (int i = 0; i < 31; i++) { 
+        countByDay[i] = rand.nextInt(1000); 
+    }
+    ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
+        "Flights per day of the month",
+        "Day of month", "Count of flights",
+        daysOfMonth, countByDay, axisRangeX, axisRangeY);
+    s1.fontSize = 12;
+    
+    s1.labelFormatStringY = "%,.0f";
+    s1.numAxisTicksY = 6;
+    s1.numAxisTicksX = 31;
+    s1.makeLinePlot();
+    return s1;
+}
+
 
 PieChart demoPie()
 {
