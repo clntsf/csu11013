@@ -91,29 +91,16 @@ void Wk2Demo()
         "Reliability vs Market Share",
         "Flight Map",
         "Flight Volume Heatmap",
-<<<<<<< Updated upstream
         "Flight Duration vs Volume",
         "Will's BarPlot",
         "Tim's Line Plot"
     };
-    final int[] BTN_COLORS = new int[]{
-        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24
-=======
-        "Average Departure Delay",
-        "Tim's Line Plot",
-        "Will's BarChart"
-        
-    };
-    final int[] BTN_COLORS = new int[]{
-        #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #c3b1e1, #ffd1dc, #ffd1dc
->>>>>>> Stashed changes
-    };
+    final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24 };
 
     Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:");
     dataQueryLabel.fontSize = 24;
     dataQueryLabel.justify = CENTER;
     titleScreen.addWidget(dataQueryLabel);
-
 
     for (int i=0; i<BTN_NAMES.length; i++)
     {
@@ -195,17 +182,15 @@ void Wk2Demo()
     ScatterPlot s1 = demoScatterPlot();
     flightVolScr.addWidget(s1);
     
-    // --- Screen 7 - Bar Plot Screen  --- //
+     // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
 
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(barPlotScr, "Will's BarPlot");
     barPlotScr.addWidget(background);
     barPlotScr.addWidget(titleButton);
-    
-    //BarPlot b1 = demoBarPlot();
-    //barPlotScr.addWidget(b1);
+    InteractiveBarPlot b1 = demoBarPlot();
+    barPlotScr.addWidget(b1);
 
-<<<<<<< Updated upstream
     // --- Screen 8 - Tim's Line Plot --- //
 
     Screen linePlotScr = new Screen(SCREEN_COLOR);      
@@ -215,25 +200,7 @@ void Wk2Demo()
     
     ScatterPlot l1 = demoLinePlot();
     linePlotScr.addWidget(l1);
-=======
-    Screen screen7 = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(screen7, "Tim's Line Plot");
-    screen7.addWidget(background);
-    screen7.addWidget(navButtons);
     
-    // --- Screen 8 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
-    Screen screen8 = new Screen(SCREEN_COLOR);
-    screens.addNamedScreen(screen8, "Will's BarChart");
-    screen8.addWidget(background);
-    screen8.addWidget(navButtons);
-    String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
-    double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
-    InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
-    "Delays by Market Carrier" , "Market Carrier", "Number of Delays",
-    airlines2, numOfDelays, 50,
-    50, height - 40, 30, 30);
-    screen8.addWidget(b1);
->>>>>>> Stashed changes
 }
 
 boolean loadScreenWithArgs(String screenName)
@@ -337,11 +304,14 @@ ScatterPlot demoScatterPlot(){
     
 }
 
-<<<<<<< Updated upstream
-BarPlot demoBarPlot() {return null;}
-=======
 
-
-// Other demo functions go here and get added to chartDemoNew() in a new Screen
-// - for convention, make your function return the object (ex. Histogram above) so it can be manipulated in the main function
->>>>>>> Stashed changes
+InteractiveBarPlot demoBarPlot()
+{
+    String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
+    double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
+    InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
+    "Delays by Market Carrier" , "Market Carrier", "Number of Delays",
+    airlines2, numOfDelays, 50,
+    50, height - 40, 30, 30);
+    return b1;
+}

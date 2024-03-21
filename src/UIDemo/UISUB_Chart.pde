@@ -298,14 +298,19 @@ class BarPlot extends Plot
     }
 }
 //Will S cooked a storm in here and made Gordon Ramsey proud 20/3/24
-class InteractiveBarPlot extends Container{
+class InteractiveBarPlot extends Container
+{
   BarPlot bar;
   ReactiveWidget[] handles;
   color[] barColors;
-  InteractiveBarPlot(int x, int y, int w, int h,
+
+  InteractiveBarPlot(
+        int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         String[] categories, double[] valuesY, int axisMaxY,
-        int handlesX, int handlesY, int handlesW, int handlesH){
+        int handlesX, int handlesY, int handlesW, int handlesH
+    )
+    {
           super();
           bar = new BarPlot(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
           handles = new ReactiveWidget[categories.length];
@@ -316,17 +321,18 @@ class InteractiveBarPlot extends Container{
           for(int i = 0; i < handles.length; i++)
           {
             handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, barColors[i]);
-            handles[i].addListener((e,widget) -> {
-              if (e.getAction() != MouseEvent.CLICK) { return; }
+            handles[i].addListener((e,widg) -> {
+              if (e.getAction() != MouseEvent.DRAG) { return; }
                 println("Drag event registered!");
             });
+            children.add(handles[i]);
           }
   }
   void dragHandles()
   {
   }
-  void handlesDraw(){
-    
+  void handlesDraw()
+  {
     for(ReactiveWidget h : handles)
     {
       h.updateHover();
@@ -493,10 +499,4 @@ class BubblePlot extends ScatterPlot
             text(labels[i], screenCoords[0], screenCoords[1]);
         }
     }
-}
-
-class InteractiveBar extends Container
-{
-    BarPlot bar;
-    ReactiveWidget[] handles;
 }
