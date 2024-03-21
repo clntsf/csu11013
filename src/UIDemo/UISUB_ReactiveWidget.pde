@@ -29,6 +29,13 @@ class ReactiveWidget extends Widget
         super(x,y,w,h,backgroundColor,text,textColor);
         initListeners();
     }
+    //Will S to allow their position to be updated.
+    void setX(int xPos){
+      x = xPos;
+    }
+    void setY(int yPos){
+      y = yPos;
+    }
     
     void updateHover()
     {

@@ -220,7 +220,7 @@ abstract class Plot extends Chart
         drawAxisTicksY();
     }
 }
-
+// Will S made minor changes to allow interactive barPlot;
 class BarPlot extends Plot
 {
     String[] categories;
@@ -229,7 +229,7 @@ class BarPlot extends Plot
     int barWidth;
     int gapSize;
     color[] barColors;
-    
+    float[] centers;
     // we are here making the assumption (by not checking) that the sizes of categories and valuesY will
     // always be the same. This is (I think) ok, as this fact should always be up to the programmer's
     // prudence in initializing new charts, but if it bites us later we can throw in a check easily enough
@@ -245,6 +245,7 @@ class BarPlot extends Plot
         this.barWidth = 40;
         this.gapSize = 20;
         setBarColors(0.2, 0.5);
+        centers = xLabelCenters();
     }
     
     float[] xLabelCenters ()
@@ -260,7 +261,11 @@ class BarPlot extends Plot
         }
         return centers;
     }
-    // added in functionality to allow a pastel color to be added and accessed by outside classes.
+    void setCenters(float[] newCenters)
+    {
+      centers = newCenters;
+    }
+    // Will S added in functionality to allow a pastel color to be added and accessed by outside classes.
     void setBarColors(float constant, float multiple)
     {
       barColors = new color[valuesY.length];
@@ -277,7 +282,6 @@ class BarPlot extends Plot
     
     void plotValues()
     {
-        float[] centers = xLabelCenters();
         for (int i=0; i<valuesY.length; i++)
         {
             double yVal = valuesY[i];
@@ -303,7 +307,9 @@ class InteractiveBarPlot extends Container
   BarPlot bar;
   ReactiveWidget[] handles;
   color[] barColors;
-
+  float[] barCenters;
+  int[] barOrder;
+  int handlesAxis;
   InteractiveBarPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
@@ -314,29 +320,52 @@ class InteractiveBarPlot extends Container
           super();
           bar = new BarPlot(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
           handles = new ReactiveWidget[categories.length];
-          float[] barCenters = bar.xLabelCenters();
-          //println (barCentres);
+          barOrder = new int[categories.length];
+          barCenters = bar.xLabelCenters();
           barColors = bar.getBarColors();
-          //println (barColors);
+          handlesAxis = handlesY;
           for(int i = 0; i < handles.length; i++)
           {
             handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, barColors[i]);
+            barOrder[i] = i;
+            int index = i;
             handles[i].addListener((e,widg) -> {
               if (e.getAction() != MouseEvent.DRAG) { return; }
-                println("Drag event registered!");
+                //println("Drag event registered!");
+                handles[index].setX(mouseX);
+                handles[index].setY(mouseY);
             });
             children.add(handles[i]);
           }
   }
-  void dragHandles()
+  void swapHandles()
   {
+    for(int i = 0; i< barOrder.length; i++)
+    {
+      for(int aboveIndex = i + 1; aboveIndex < handles.length; aboveIndex++)
+      {
+        if(handles[barOrder[i]].x > handles[barOrder[aboveIndex]].x)
+        {
+          float temp = barCenters[barOrder[i]];
+          barCenters[barOrder[i]] = barCenters[barOrder[aboveIndex]];
+          barCenters[barOrder[aboveIndex]] = temp;
+          bar.setCenters(barCenters);
+          handles[barOrder[i]].setX(int(barCenters[barOrder[i]]));
+          handles[barOrder[i]].setY(handlesAxis);
+          handles[barOrder[aboveIndex]].setX(int(barCenters[barOrder[aboveIndex]]));
+          handles[barOrder[aboveIndex]].setY(handlesAxis);
+          int temp2 = barOrder[i];
+          barOrder[i] = barOrder[aboveIndex];
+          barOrder[aboveIndex] = temp2;
+        }
+      }
+    }
   }
   void handlesDraw()
   {
     for(ReactiveWidget h : handles)
     {
       h.updateHover();
-      //h.onMouseEvent(event);
       h.draw();
     }
   }
@@ -344,6 +373,7 @@ class InteractiveBarPlot extends Container
   {
     super.draw();
     bar.draw();
+    swapHandles();
     handlesDraw();
   }
 }
