@@ -182,7 +182,7 @@ void Wk2Demo()
     ScatterPlot s1 = demoScatterPlot();
     flightVolScr.addWidget(s1);
     
-     // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
+    // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
 
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(barPlotScr, "Will's BarPlot");
