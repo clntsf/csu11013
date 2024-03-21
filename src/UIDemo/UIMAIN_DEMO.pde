@@ -5,7 +5,7 @@ void weekOneDemo()
     final int WIDGET_COLOR = #F0F8FF;
     
     Screen screen1 = new Screen(SCREEN_COLOR);
-    screens.add(screen1);
+    screens.addScreen(screen1);
     
     Widget mainFrame = new Widget(width/2, height/2, width-20, height-20, WIDGET_COLOR);
     screen1.addWidget(mainFrame);
@@ -53,10 +53,10 @@ void chartDemo()
     
     Screen screen1 = new Screen(128);
     screen1.addWidget(navButtons);
-    screens.add(screen1);
+    screens.addScreen(screen1);
     
     // demos of the simple widgets, courtesy of the Minecraft Joke Book
-    Widget w1 = new Widget(width/2, 20, 90, 30, color(255,225,225), "I do Nothing!" );
+    Widget w1 = new Widget(width/2, 20, 100, 30, color(255,225,225), "I do Nothing!" );
     w1.setStroke(255);
     screen1.addWidget(w1);
     
@@ -82,19 +82,19 @@ void chartDemo()
     h1.numAxisTicksY = 6;
     screen1.addWidget(h1);
     
+    
     // displaying the capabilty to add named children to a screen so
     // they can be kept track of without putting them in global space
     screen1.addNamedChild(w1, "Base Class Widget");
     screen1.addNamedChild(l1, "Label");
     screen1.addNamedChild(r1, "Button Example");
-    screen1.addNamedChild(h1, "Histogram demo");
     //screen1.displayNamedChildren();
     
     // ---------------------------- SCREEN 2 ---------------------------- //
     
     Screen screen2 = new Screen(128);
     screen2.addWidget(navButtons);
-    screens.add(screen2);
+    screens.addScreen(screen2);
     
     // Arbitrary shapes can be drawn by supplying a function as so.
     // Coordinates are relative to the first two parameters in the constructor (x,y)
@@ -127,7 +127,7 @@ void chartDemo()
     
     Screen screen3 = new Screen(128);
     screen3.addWidget(navButtons);
-    screens.add(screen3);
+    screens.addScreen(screen3);
     
     // Scatter plot, using example data courtesy of cos()
     int numVals = 30;
@@ -140,19 +140,16 @@ void chartDemo()
     }
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 300, 300,
         "F(x) = Cos(x)", "x", "cos(x)",
-        xVals, yVals, new int[] {-1,7}, new int[]{-3,3}
+        xVals, yVals, new float[] {-1,7}, new float[]{-3,3}
     );
     s1.fontSize = 14;
-    s1.labelFormatStringY = "%.2f";
+    s1.labelFormatStringY = "%.1f";
     s1.labelFormatStringX = "%.0f";
     
     // play around with these to make the chart feel like a line chart or a scatter plot (or a line chart with points drawn)
     s1.connect = true;
     s1.markers = false;
-    
-    // Or just this, for a 1-line solution
-    //s1.makeLinePlot();
-    
+    //s1.makeLinePlot();    // Or just this, for a 1-line solution
     screen3.addWidget(s1);
 }
 
@@ -168,16 +165,16 @@ void navDemo()
     imageMode(CENTER);
     
     Screen screen1 = new Screen(SCREEN_COLOR);
-    screens.add(screen1);
+    screens.addScreen(screen1);
     
     Screen screen2 = new Screen(100);
-    screens.add(screen2);
+    screens.addScreen(screen2);
     
     Widget w1 = new Widget(width/2,height/2,width-2*MARGIN,height-2*MARGIN,WIDGET_COLOR);
     screen1.addWidget(w1);
     
     Container navButtons = initNavButtons();
-    for (Screen s : screens)
+    for (Screen s : screens.screens)
     {
         s.addWidget(navButtons);
     }
@@ -216,7 +213,7 @@ Container initNavButtons()
     navButtons.addChild(forwardButton);
     forwardButton.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) { return; }
-        activeScreen++; activeScreen%=screens.size();
+        screens.nextScreen();
     });
     
     int backwardPad = forwardPad + NAV_SIZE + NAV_PAD;
@@ -232,7 +229,7 @@ Container initNavButtons()
     navButtons.addChild(backwardButton);
     backwardButton.addListener((e, w) -> {
         if (e.getAction() != MouseEvent.PRESS) { return; }
-        activeScreen = (activeScreen == 0 ? screens.size()-1 : activeScreen-1);
+        screens.prevScreen();
     });
     
     return navButtons;
