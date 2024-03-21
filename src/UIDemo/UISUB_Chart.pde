@@ -220,8 +220,73 @@ abstract class Plot extends Chart
         drawAxisTicksY();
     }
 }
-// Will S made minor changes to allow interactive barPlot;
+
+
+// CSF - Trying to fix hierarchy and Histogram 21 Mar 3:45PM
 class BarPlot extends Plot
+{
+    String[] categories;
+    
+    // config attributes
+    int barWidth;
+    int gapSize;
+    
+    // we are here making the assumption (by not checking) that the sizes of categories and valuesY will
+    // always be the same. This is (I think) ok, as this fact should always be up to the programmer's
+    // prudence in initializing new charts, but if it bites us later we can throw in a check easily enough
+    // (though as we will see Histogram leverages the absence of this check to deliberately mismatch sizes)
+    BarPlot(
+        int x, int y, int w, int h,
+        String title, String axisLabelX, String axisLabelY,
+        String[] categories, double[] valuesY, int axisMaxY
+    )
+    {
+        super( x, y, w, h, title, axisLabelX, axisLabelY, valuesY, axisMaxY);
+        this.categories = categories;
+        this.barWidth = 40;
+        this.gapSize = 20;
+    }
+    
+    float[] xLabelCenters ()
+    {
+        int numBars = valuesY.length;
+        float barSpacing = (this.barWidth+this.gapSize);                           // distance between the centers of adjacent bars;
+        int leftX = (int)( x - barSpacing*(double)(numBars-1)/2 );
+
+        float[] centers = new float[numBars];
+        for (int i=0; i<numBars; i++)
+        {
+            centers[i] = leftX + i*barSpacing;
+        }
+        return centers;
+    }
+    
+    void plotValues()
+    {
+        float[] centers = xLabelCenters();
+        for (int i=0; i<valuesY.length; i++)
+        {
+            double yVal = valuesY[i];
+            double barHeight = h * (yVal/axisRangeY[1]);
+            fill(0);
+            text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
+            
+            strokeWeight(1);
+            fill(plotColor);
+            rect(centers[i], (float)(y+h/2-barHeight/2), (float)barWidth, (float)barHeight);
+        }
+    }
+    
+    void draw()
+    {
+        textSize((int)(0.8*fontSize));
+        super.draw();
+        plotValues();
+    }
+}
+
+// Will S made minor changes to allow interactive barPlot;
+class ColorBar extends BarPlot
 {
     String[] categories;
     
@@ -234,13 +299,13 @@ class BarPlot extends Plot
     // always be the same. This is (I think) ok, as this fact should always be up to the programmer's
     // prudence in initializing new charts, but if it bites us later we can throw in a check easily enough
     // (though as we will see Histogram leverages the absence of this check to deliberately mismatch sizes)
-    BarPlot(
+    ColorBar(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         String[] categories, double[] valuesY, int axisMaxY
     )
     {
-        super( x, y, w, h, title, axisLabelX, axisLabelY, valuesY, axisMaxY);
+        super( x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
         this.categories = categories;
         this.barWidth = 40;
         this.gapSize = 20;
@@ -301,10 +366,11 @@ class BarPlot extends Plot
         plotValues();
     }
 }
+
 //Will S cooked a storm in here and made Gordon Ramsey proud 20/3/24
 class InteractiveBarPlot extends Container
 {
-  BarPlot bar;
+  ColorBar bar;
   ReactiveWidget[] handles;
   color[] barColors;
   float[] barCenters;
@@ -318,7 +384,7 @@ class InteractiveBarPlot extends Container
     )
     {
           super();
-          bar = new BarPlot(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
+          bar = new ColorBar(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
           handles = new ReactiveWidget[categories.length];
           barOrder = new int[categories.length];
           barCenters = bar.xLabelCenters();
@@ -377,6 +443,7 @@ class InteractiveBarPlot extends Container
     handlesDraw();
   }
 }
+
 class Histogram extends BarPlot
 {
     Histogram(

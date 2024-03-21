@@ -118,7 +118,6 @@ void Wk2Demo()
         titleScreen.addWidget(btn);
         titleScreen.addNamedChild(btn, "button: " + NAME);
     }
-    titleScreen.displayNamedChildren();
     // --- SCREEN 1: Market Share Pie Chart --- //
 
     Screen mktShareScr = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
