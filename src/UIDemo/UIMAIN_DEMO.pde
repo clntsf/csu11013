@@ -82,12 +82,12 @@ void chartDemo()
     h1.numAxisTicksY = 6;
     screen1.addWidget(h1);
     
+    
     // displaying the capabilty to add named children to a screen so
     // they can be kept track of without putting them in global space
     screen1.addNamedChild(w1, "Base Class Widget");
     screen1.addNamedChild(l1, "Label");
     screen1.addNamedChild(r1, "Button Example");
-    screen1.addNamedChild(h1, "Histogram demo");
     //screen1.displayNamedChildren();
     
     // ---------------------------- SCREEN 2 ---------------------------- //
@@ -140,7 +140,7 @@ void chartDemo()
     }
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 300, 300,
         "F(x) = Cos(x)", "x", "cos(x)",
-        xVals, yVals, new int[] {-1,7}, new int[]{-3,3}
+        xVals, yVals, new float[] {-1,7}, new float[]{-3,3}
     );
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";

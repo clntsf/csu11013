@@ -8,6 +8,7 @@ class ScreenList
     ScreenList()
     {
         screens = new ArrayList<>();
+        namedScreens = new HashMap<>();
     }
     
     public void addScreen(Screen s)
@@ -64,7 +65,7 @@ class ScreenList
     }
 }
 
-// CSF - Implemented Screen by extending Exercise 6 reponse/challenge 12/4/2024 5PM
+// CSF - Implemented Screen by extending Exercise 6 reponse/challenge 12/3/2024 5PM
 class Screen
 {
     ArrayList<Widget> widgets;
@@ -87,11 +88,6 @@ class Screen
     {
         namedChildren.put(name,w);
     }
-
-    public Widget getNamedChild(String name)
-    {
-        return namedChildren.get(name);
-    }
     
     void displayNamedChildren()
     {
@@ -99,6 +95,11 @@ class Screen
         {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+    }
+
+    Widget getNamedChild(String name)
+    {
+        return namedChildren.get(name);
     }
     
     void draw()
