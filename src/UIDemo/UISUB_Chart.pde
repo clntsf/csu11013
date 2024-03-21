@@ -367,7 +367,7 @@ class ColorBar extends BarPlot
     }
 }
 
-//Will S cooked a storm in here and made Gordon Ramsey proud 20/3/24
+//Will S cooked a storm in here and made Gordon Ramsay proud 20/3/24
 class InteractiveBarPlot extends Container
 {
   ColorBar bar;
