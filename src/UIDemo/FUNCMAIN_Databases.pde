@@ -1,36 +1,34 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-void printText() {
-    int y = 10;
-    final int TEXT_X = 20;
-    fill(0);
-    textFont(font);
-    db.query("SELECT * FROM flights2k LIMIT "+y);
-    for (int i = 0; i < 10; i++)
-    {
-        if (db.next())
-        { 
-            String flightDate = db.getString("FlightDate");
-            String origin = db.getString("Origin");
-            String destination = db.getString("Dest");
-            text("Flight Date: " + flightDate + ", Origin: " + origin + ", Destination: " + destination, TEXT_X, y+150);
-        }
-        else
-        {
-            text("No data found.", TEXT_X, y);
-        }
-        y += 15;
-    }
-}
-
 DateTimeFormatter[] dateFormatters = {
                   DateTimeFormatter.ofPattern("dd/MM/yyyy"),
                   DateTimeFormatter.ofPattern("M/d/yyyy")
 };
 
+// RSR - creates database file if it does not already exist - 21/3/24 7PM
+public void createDBFile(String fileName)
+{
+    File dbFile = new File(sketchPath()+"\\data\\"+fileName+".db");
+    try
+    {
+        if (dbFile.createNewFile())
+            println("File created!");
+        else
+            println("File was already there!");
+    } catch (IOException e) {e.printStackTrace();}
+}
+
+public void initSchema(String dbName)
+{
+    if (db.connect())
+    {
+        
+    }
+}
+
 // RSR - created method to populate the SQLite database I made. See commented   - 12/3/24 10PM
-//       below the original methods that used an ArrayList of DataPoints.
+//       below the old methods that used an ArrayList of DataPoints.
 public void populateDatabase(Table table, String databaseTableName)
 {
     db.query("DELETE FROM "+databaseTableName);
@@ -72,7 +70,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
     }
     println(bins);
     double[] freqs = new double[bins.length-1]; //<>//
-    // RSR - improved method with extra parameters and loop - 20/3/24 5PM
+    // RSR - improved method with extra parameters and loop - 20/3/24 5PM //<>//
     for (int i = 0; i < freqs.length; i++)
     {
         db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+ ((i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i)) );
@@ -109,3 +107,26 @@ public LocalTime timeToLocalTime(String stringTime) {
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
          and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
 */
+
+/*void printText() {
+    int y = 10;
+    final int TEXT_X = 20;
+    fill(0);
+    textFont(font);
+    db.query("SELECT * FROM flights2k LIMIT "+y);
+    for (int i = 0; i < 10; i++)
+    {
+        if (db.next())
+        { 
+            String flightDate = db.getString("FlightDate");
+            String origin = db.getString("Origin");
+            String destination = db.getString("Dest");
+            text("Flight Date: " + flightDate + ", Origin: " + origin + ", Destination: " + destination, TEXT_X, y+150);
+        }
+        else
+        {
+            text("No data found.", TEXT_X, y);
+        }
+        y += 15;
+    }
+}*/

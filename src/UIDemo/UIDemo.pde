@@ -20,15 +20,18 @@ void setup()
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     //Table table = loadTable("flights_full.csv", "header");
     String tableName = "flights_full";
-    db = new SQLite(this, "test.db");
     
+    createDBFile("test");
+    db = new SQLite(this, "test.db");
+    if (db.connect()) println("Connected to DB!");
+    else println("ERROR connecting to DB!");
     //Table delays = loadTable("delaysdemo.csv", "header");
-    if (db.connect())
-    {
+    //if (db.connect())
+    //{
         //new Thread(() -> populateDatabase(table, tableName)).start(); // shouldn't have to do always but we'll add a check later
         //new Thread(() -> populateDelays(delays)).start();
-    }
-    else println("Error connecting to database!");
+    //}
+    //else println("Error connecting to database!");
 }
 
 void draw()
