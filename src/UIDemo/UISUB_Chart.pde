@@ -228,6 +228,7 @@ class BarPlot extends Plot
     // config attributes
     int barWidth;
     int gapSize;
+    color[] barColors;
     
     // we are here making the assumption (by not checking) that the sizes of categories and valuesY will
     // always be the same. This is (I think) ok, as this fact should always be up to the programmer's
@@ -243,6 +244,7 @@ class BarPlot extends Plot
         this.categories = categories;
         this.barWidth = 40;
         this.gapSize = 20;
+        setBarColors(0.2, 0.5);
     }
     
     float[] xLabelCenters ()
@@ -258,6 +260,20 @@ class BarPlot extends Plot
         }
         return centers;
     }
+    // added in functionality to allow a pastel color to be added and accessed by outside classes.
+    void setBarColors(float constant, float multiple)
+    {
+      barColors = new color[valuesY.length];
+      for (int i = 0; i < valuesY.length; i++)
+      {
+        barColors[i] = randomPastel(constant + (multiple * i));
+      }
+    }
+    
+    color[] getBarColors()
+    {
+      return barColors;
+    }
     
     void plotValues()
     {
@@ -268,9 +284,8 @@ class BarPlot extends Plot
             double barHeight = h * (yVal/axisRangeY[1]);
             fill(0);
             text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
-            
             strokeWeight(1);
-            fill(plotColor);
+            fill(barColors[i]);
             rect(centers[i], (float)(y+h/2-barHeight/2), (float)barWidth, (float)barHeight);
         }
     }
@@ -282,7 +297,50 @@ class BarPlot extends Plot
         plotValues();
     }
 }
-
+//Will S cooked a storm in here and made Gordon Ramsey proud 20/3/24
+class InteractiveBarPlot extends Container{
+  BarPlot bar;
+  ReactiveWidget[] handles;
+  color[] barColors;
+  InteractiveBarPlot(int x, int y, int w, int h,
+        String title, String axisLabelX, String axisLabelY,
+        String[] categories, double[] valuesY, int axisMaxY,
+        int handlesX, int handlesY, int handlesW, int handlesH){
+          super();
+          bar = new BarPlot(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
+          handles = new ReactiveWidget[categories.length];
+          float[] barCenters = bar.xLabelCenters();
+          //println (barCentres);
+          barColors = bar.getBarColors();
+          //println (barColors);
+          for(int i = 0; i < handles.length; i++)
+          {
+            handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, barColors[i]);
+            handles[i].addListener((e,widget) -> {
+              if (e.getAction() != MouseEvent.CLICK) { return; }
+                println("Drag event registered!");
+            });
+          }
+  }
+  void dragHandles()
+  {
+  }
+  void handlesDraw(){
+    
+    for(ReactiveWidget h : handles)
+    {
+      h.updateHover();
+      //h.onMouseEvent(event);
+      h.draw();
+    }
+  }
+  void draw()
+  {
+    super.draw();
+    bar.draw();
+    handlesDraw();
+  }
+}
 class Histogram extends BarPlot
 {
     Histogram(
