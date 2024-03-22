@@ -229,23 +229,11 @@ class TextEntry extends ReactiveWidget
     {
         if (e instanceof MouseEvent && e.getAction() == MouseEvent.PRESS)
         {
-            if (isFocused != isHovered)
-            {
-                println(isHovered);
-            }
             isFocused = isHovered;
         }
         else if (e instanceof KeyEvent && isFocused)
         {
-            KeyEvent kev = (KeyEvent) e;
-            if (kev.getKeyCode() == BACKSPACE)
-            {
-                text = text.substring(0, max(text.length()-1, 0));
-            }
-            else
-            {
-                text += kev.getKey();
-            }
+            switch e.key
         }
         super.onEvent(e);
     }
@@ -253,7 +241,6 @@ class TextEntry extends ReactiveWidget
     TextEntry(int x, int y, int w, int h)
     {
         super(x,y,w,h,color(255));
-        text = "";
         setStroke(0);
         isFocused = false;
     }

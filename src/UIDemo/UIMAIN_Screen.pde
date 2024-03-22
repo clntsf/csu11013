@@ -111,11 +111,11 @@ class Screen
         }
     }
     
-    void handleMouseEvent(MouseEvent e)
+    void handleEvent(Event e)
     {
         for (Widget w : widgets)
         {
-            w.onMouseEvent(e);
+            w.onEvent(e);
         }
     }
     

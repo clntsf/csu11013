@@ -73,13 +73,21 @@ class Widget
         }
     }
     
-    void onMouseEvent(MouseEvent e)
+    void onEvent(Event e)
     {
         for (Widget child : children)
         {
-            child.onMouseEvent(e);
+            child.onEvent(e);
         }
     }
+
+    // void onMouseEvent(MouseEvent e)
+    // {
+    //     for (Widget child : children)
+    //     {
+    //         child.onMouseEvent(e);
+    //     }
+    // }
     
     void drawChildren()
     {

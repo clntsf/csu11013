@@ -40,17 +40,22 @@ void draw()
 }
 
 // CSF - added functions to pass inputs to the UI elements 13/3/2024 10PM
-void mousePressed(MouseEvent evt)
+void mousePressed(MouseEvent mev)
 {
-    screens.getActiveScreen().handleMouseEvent(evt);
+    screens.getActiveScreen().handleEvent(mev);
 }
 
-void mouseDragged(MouseEvent evt)
+void mouseDragged(MouseEvent mev)
 {
-    screens.getActiveScreen().handleMouseEvent(evt);
+    screens.getActiveScreen().handleEvent(mev);
 }
 
 void mouseMoved()
 {
     screens.getActiveScreen().mouseMoved();
+}
+
+void keyPressed(KeyEvent kev)
+{
+    screens.getActiveScreen().handleEvent(kev);
 }

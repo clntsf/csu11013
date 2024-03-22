@@ -5,9 +5,14 @@ void Wk2Demo()
     final int BG_MARGIN = 20;
     final int SCREEN_COLOR = #778899;
     final int BACKGROUND_COLOR = #F0F8FF;
-    final String MAIN_TITLE = "Flight Data Visualisation App";
 
-    Widget background = new Widget(width/2, height/2, width-2*BG_MARGIN, height-2*BG_MARGIN, BACKGROUND_COLOR);
+    final String MAIN_TITLE = "Flight Data Visualisation App";
+    surface.setTitle(MAIN_TITLE);
+
+    Widget background = new Widget(
+        width/2, height/2, width-2*BG_MARGIN,
+        height-2*BG_MARGIN, BACKGROUND_COLOR
+    );
     // back to title button, add to each new screen
     ReactiveWidget titleButton = new ReactiveWidget(
         width-BG_MARGIN-60, height-BG_MARGIN-25, 100, 30,
@@ -15,12 +20,10 @@ void Wk2Demo()
     );
     titleButton.setStroke(0);
     titleButton.addListener((e,w) -> {
-            if (e.getAction() != MouseEvent.PRESS) {return;}
-            screens.setActiveScreen("Title Screen");
-            surface.setTitle(MAIN_TITLE);
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+        screens.setActiveScreen("Title Screen");
+        surface.setTitle(MAIN_TITLE);
     });
-    
-    surface.setTitle(MAIN_TITLE);
 
     final Screen titleScreen = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(titleScreen, "Title Screen");   
@@ -54,6 +57,15 @@ void Wk2Demo()
     startDateLabel.fontSize = 20;
     titleScreen.addWidget(startDateLabel);
 
+    TextEntry startDateEntry = new TextEntry(
+        BG_MARGIN+COLUMN_SIDE_PAD+INDENT+160,
+        BG_MARGIN+COLUMN_VERT_PAD+30,
+        100, 25
+    );
+    titleScreen.addWidget(startDateEntry);
+    titleScreen.addNamedChild(startDateEntry, "DATE_START");
+
+
     Label endDateLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD+INDENT,
         BG_MARGIN+COLUMN_VERT_PAD+90,
@@ -61,6 +73,15 @@ void Wk2Demo()
     );
     endDateLabel.fontSize = 20;
     titleScreen.addWidget(endDateLabel);
+
+    TextEntry endDateEntry = new TextEntry(
+        BG_MARGIN+COLUMN_SIDE_PAD+INDENT+160,
+        BG_MARGIN+COLUMN_VERT_PAD+90,
+        100, 25
+    );
+    titleScreen.addWidget(endDateEntry);
+    titleScreen.addNamedChild(endDateEntry, "DATE_END");
+
 
     // Airport selection
     Label airportSelectorLabel = new Label(
@@ -70,6 +91,7 @@ void Wk2Demo()
     );
     airportSelectorLabel.fontSize = 24;
     titleScreen.addWidget(airportSelectorLabel);
+
 
     // Table Selection
     String[] tables = new String[]{"flights2k.csv", "flights10k.csv", "flights_full.csv"};
@@ -209,7 +231,8 @@ boolean loadScreenWithArgs(String screenName)
     return success;
 }
 
-ScatterPlot demoLinePlot() {
+ScatterPlot demoLinePlot()
+{
     float[] axisRangeX = new float[]{1, 31}; 
     float[] axisRangeY = new float[]{0, 1000}; 
     double[] daysOfMonth = new double[31];
@@ -276,7 +299,8 @@ Histogram demoHistogram(Screen titleScreen, HistParams histParams)
     return h;
 }
 
-ScatterPlot demoScatterPlot(){
+ScatterPlot demoScatterPlot()
+{
  //double DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
  double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
  int Carriers = 10;
@@ -302,7 +326,6 @@ ScatterPlot demoScatterPlot(){
     return s1;
     
 }
-
 
 InteractiveBarPlot demoBarPlot()
 {

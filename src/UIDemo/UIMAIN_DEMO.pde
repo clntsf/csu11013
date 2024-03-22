@@ -29,23 +29,6 @@ void weekOneDemo()
 
 void chartDemo()
 {
-    // our nav button, which can go forward and back with left- and right-clicks,
-    // used on all screens. in practice a two-button solution might be better but
-    // this is easy and showcases the versatility of our MouseListener interface
-
-    //ReactiveWidget navButton = new ReactiveWidget(width-50, height-40, 40, 30, 255, "<R-L>");
-    //navButton.addListener(e -> {
-    //    if (e.getAction() != MouseEvent.PRESS) { return; }
-    //    switch (e.getButton()) {
-    //        case LEFT:             // on left click, next screen
-    //            activeScreen++;
-    //            break;
-    //        case RIGHT:            // on right click, prev screen
-    //            activeScreen--;
-    //            break;
-    //    }
-    //    activeScreen = (activeScreen<0 ? screens.size()-1 : activeScreen%screens.size()); // wrap-around logic
-    //});
     
     Container navButtons = initNavButtons();
     
