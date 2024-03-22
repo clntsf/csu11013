@@ -226,6 +226,7 @@ class TextEntry extends ReactiveWidget
 {
     boolean isFocused;
     String regex;
+    int maxLength
     
     public void onEvent(Event e)
     {
@@ -240,7 +241,7 @@ class TextEntry extends ReactiveWidget
             {
                 text = text.substring(0, max(text.length()-1, 0));
             }
-            else if ( match("" + kev.getKey(), regex) != null )
+            else if ( match("" + kev.getKey(), regex) != null && text.length() < maxLength )
             {
                 text += kev.getKey();
             }
@@ -255,5 +256,15 @@ class TextEntry extends ReactiveWidget
         setStroke(0);
         isFocused = false;
         regex = ".";
+        maxLength = 10;
+    }
+
+    void applyStroke()
+    {
+        if (!hasStroke) { noStroke(); }
+        else {
+            stroke(strokeColor);
+            strokeWeight(isFocused ? 2 : 1);
+        }
     }
 }

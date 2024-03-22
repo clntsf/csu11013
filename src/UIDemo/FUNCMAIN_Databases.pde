@@ -24,7 +24,7 @@ public void initDB(String dbName)
 // RSR - creates database file if it does not already exist - 21/3/24 7PM
 public boolean createDBFile(String fileName)
 {
-    File dbFile = new File(sketchPath()+"\\data\\"+fileName+".db");
+    File dbFile = new File(dataPath("test.db"));
     try
     {
         return dbFile.createNewFile();
@@ -100,6 +100,7 @@ public void populateFlightDBs(String[] flightTableNames)
         db.query("BEGIN TRANSACTION;");
         for (int j = 0; j < table.getRowCount(); j++)
         {
+            if (j%1000 == 0) { println(j); }
             TableRow currentRow = table.getRow(j);
             db.query("INSERT INTO "+flightTableNames[i]+" ("+columns+") VALUES (\"%s\",\"%s\",%d,\"%s\",\"%s\",\"%s\",%d,\"%s\",\"%s\",\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\",%d,%d,%d);",
                         dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("MKT_CARRIER"), currentRow.getInt("MKT_CARRIER_FL_NUM"), 

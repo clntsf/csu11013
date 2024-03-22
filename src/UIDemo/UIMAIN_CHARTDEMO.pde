@@ -308,12 +308,8 @@ ScatterPlot demoScatterPlot()
  double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
  int Carriers = 10;
  int AA = 149, AS = 120, B6 = 144,HA = 98, NK = 95, G4 = 47,WN = 125,UA = 31,DL = 6,F9 = 55;
-    double[] xVals = new double[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9}, yVals = new double[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
-    for (int i=1; i<Carriers; i++)
-    {
-        xVals[i] =xVals[i];
-        yVals[i] = yVals[i];
-    }
+    double[] xVals = new double[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9};
+    double[] yVals = new double[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
         "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration",
         xVals, yVals, new float[] {0,150}, new float[]{0,550}

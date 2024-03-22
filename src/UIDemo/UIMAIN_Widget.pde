@@ -52,7 +52,10 @@ class Widget
     void applyStroke()
     {
         if (!hasStroke) { noStroke(); }
-        else { stroke(strokeColor); }
+        else {
+            stroke(strokeColor);
+            strokeWeight(1);
+        }
     }
     
     void applyFill()
@@ -102,7 +105,6 @@ class Widget
         textFont(font);
         applyStroke();
         applyFill();
-        strokeWeight(1);
         rectMode(CENTER);
         rect(x,y,w,h);
         
