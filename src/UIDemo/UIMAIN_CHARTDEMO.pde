@@ -23,6 +23,7 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {return;}
         screens.setActiveScreen("Title Screen");
         surface.setTitle(MAIN_TITLE);
+        getDates();
     });
 
     final Screen titleScreen = new Screen(SCREEN_COLOR);
@@ -41,6 +42,8 @@ void Wk2Demo()
     // left side
 
     // Date restriction
+    final String DATE_REGEX = "[0-9/]";
+    
     Label dateRestrictLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD,
         BG_MARGIN+COLUMN_VERT_PAD,
@@ -64,7 +67,7 @@ void Wk2Demo()
     );
     titleScreen.addWidget(startDateEntry);
     titleScreen.addNamedChild(startDateEntry, "DATE_START");
-
+    startDateEntry.regex = DATE_REGEX;
 
     Label endDateLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD+INDENT,
@@ -81,7 +84,7 @@ void Wk2Demo()
     );
     titleScreen.addWidget(endDateEntry);
     titleScreen.addNamedChild(endDateEntry, "DATE_END");
-
+    endDateEntry.regex = DATE_REGEX;
 
     // Airport selection
     Label airportSelectorLabel = new Label(
@@ -325,6 +328,14 @@ ScatterPlot demoScatterPlot()
     //s1.makeLinePlot();    // Or just this, for a 1-line solution
     return s1;
     
+}
+
+String[] getDates()
+{
+    Widget startDate = (TextEntry)(screens.getNamedScreen("Title Screen").getNamedChild("DATE_START"));
+    Widget endDate = (TextEntry)(screens.getNamedScreen("Title Screen").getNamedChild("DATE_END"));
+    println(startDate.text + " | " + endDate.text);
+    return new String[] {startDate.text, endDate.text};
 }
 
 InteractiveBarPlot demoBarPlot()

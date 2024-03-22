@@ -225,14 +225,12 @@ class RadioButtonList extends CheckBoxList
 class TextEntry extends ReactiveWidget
 {
     boolean isFocused;
+    String regex;
+    
     public void onEvent(Event e)
     {
         if (e instanceof MouseEvent && e.getAction() == MouseEvent.PRESS)
         {
-            if (isFocused != isHovered)
-            {
-                println(isHovered);
-            }
             isFocused = isHovered;
         }
         else if (e instanceof KeyEvent && isFocused)
@@ -242,7 +240,7 @@ class TextEntry extends ReactiveWidget
             {
                 text = text.substring(0, max(text.length()-1, 0));
             }
-            else
+            else if ( match("" + kev.getKey(), regex) != null )
             {
                 text += kev.getKey();
             }
@@ -256,5 +254,6 @@ class TextEntry extends ReactiveWidget
         text = "";
         setStroke(0);
         isFocused = false;
+        regex = ".";
     }
 }
