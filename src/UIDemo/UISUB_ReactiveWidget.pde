@@ -226,7 +226,7 @@ class TextEntry extends ReactiveWidget
 {
     boolean isFocused;
     String regex;
-    int maxLength
+    int maxLength;
     
     public void onEvent(Event e)
     {
