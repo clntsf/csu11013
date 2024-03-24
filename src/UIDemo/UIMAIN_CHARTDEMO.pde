@@ -326,14 +326,6 @@ ScatterPlot demoScatterPlot()
     
 }
 
-String[] getDates()
-{
-    Widget startDate = (TextEntry)(screens.getNamedScreen("Title Screen").getNamedChild("DATE_START"));
-    Widget endDate = (TextEntry)(screens.getNamedScreen("Title Screen").getNamedChild("DATE_END"));
-    println(startDate.text + " | " + endDate.text);
-    return new String[] {startDate.text, endDate.text};
-}
-
 InteractiveBarPlot demoBarPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
@@ -343,4 +335,13 @@ InteractiveBarPlot demoBarPlot()
     airlines2, numOfDelays, 50,
     50, height - 40, 30, 30);
     return b1;
+}
+
+String[] getDates()
+{
+    Screen title = screens.getNamedScreen("Title Screen");
+    Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
+    Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
+    println(startDate.text + " | " + endDate.text);
+    return new String[] {startDate.text, endDate.text};
 }

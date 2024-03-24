@@ -3,7 +3,6 @@ import java.util.Map;
 
 ScreenList screens = new ScreenList();
 PFont font;
-
 SQLite db;
 //boolean dbPopulated;
 
