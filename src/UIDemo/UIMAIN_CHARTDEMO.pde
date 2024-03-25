@@ -98,8 +98,8 @@ void Wk2Demo()
     String[] airports = loadStrings("airports.txt");
     ScrollSelector airportSelector = new ScrollSelector(
         BG_MARGIN + COLUMN_SIDE_PAD + 125,
-        BG_MARGIN + COLUMN_SIDE_PAD + 280,
-        250, 120, airports
+        BG_MARGIN + COLUMN_SIDE_PAD + 305,
+        250, 160, airports
     );
     titleScreen.addWidget(airportSelector);
     titleScreen.addNamedChild(airportSelector, "Airport Selector");
@@ -108,7 +108,7 @@ void Wk2Demo()
     String[] tables = new String[]{"flights2k.csv", "flights10k.csv", "flights_full.csv"};
     RadioButtonList tableSelector = new RadioButtonList(
         BG_MARGIN+COLUMN_SIDE_PAD,
-        BG_MARGIN+COLUMN_VERT_PAD+300,
+        BG_MARGIN+COLUMN_VERT_PAD+350,
         "Select Table to Query:",
         tables, 24, 20
     );
