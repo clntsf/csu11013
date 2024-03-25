@@ -296,11 +296,9 @@ class ScrollSelector extends ReactiveWidget
 
         // mouseWheel handler
         addListener((e,widg) -> {
-            if ( e.getAction() != 8 ) { return; }
-            println("A!");
+            if ( e.getAction() != MouseEvent.WHEEL ) { return; }
             if (mouseX >= BLEFT && mouseX <= BRIGHT && mouseY >= BTOP && mouseY <= BBOTTOM)
             {
-                print("A!");
                 scrollY = constrain(scrollY + e.getCount(), BBOTTOM - entries.length*LINE_HEIGHT, BTOP);
             }
         });
@@ -311,7 +309,6 @@ class ScrollSelector extends ReactiveWidget
             ScrollSelector ss = (ScrollSelector) widg;
             if (mouseX >= ss.BLEFT && mouseX <= ss.BRIGHT && mouseY >= ss.BTOP && mouseY <= ss.BBOTTOM)
             {
-                print("B!");
                 int row = (mouseY - ss.scrollY)/LINE_HEIGHT;
                 ss.selected = row;
             }
