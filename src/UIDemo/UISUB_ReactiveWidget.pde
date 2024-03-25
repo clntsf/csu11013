@@ -268,3 +268,101 @@ class TextEntry extends ReactiveWidget
         }
     }
 }
+
+// CSF - Added ScrollSelector class for airport selection - 25/3/2024 3:30PM
+class ScrollSelector extends ReactiveWidget
+{
+    final int BTOP, BLEFT, BBOTTOM, BRIGHT;
+    final int LINE_HEIGHT = 12;
+    String[] entries;
+    int selected;
+
+    int scrollY;
+
+    final int SELECTED_COLOR = #6464C8, ODD_COLOR = #FFFFFF, EVEN_COLOR = #f0f2f4, FRAME_COLOR = #778899;
+
+    ScrollSelector(int x, int y, int w, int h, String[] entries)
+    {
+        super(x,y,w,h);
+        BTOP = y-h/2 + LINE_HEIGHT;
+        BLEFT = x-w/2 + LINE_HEIGHT;
+        BBOTTOM = y+h/2 - LINE_HEIGHT;
+        BRIGHT = x+w/2 - LINE_HEIGHT;
+        println(BTOP,BLEFT,BBOTTOM,BRIGHT);
+
+        this.entries = entries;
+        this.selected = 0;
+        scrollY = BTOP;
+
+        // mouseWheel handler
+        addListener((e,widg) -> {
+            if ( e.getAction() != 8 ) { return; }
+            println("A!");
+            if (mouseX >= BLEFT && mouseX <= BRIGHT && mouseY >= BTOP && mouseY <= BBOTTOM)
+            {
+                print("A!");
+                scrollY = constrain(scrollY + e.getCount(), BBOTTOM - entries.length*LINE_HEIGHT, BTOP);
+            }
+        });
+
+        // click handler
+        addListener((e,widg) -> {
+            if ( e.getAction() != MouseEvent.PRESS ) { return; }
+            ScrollSelector ss = (ScrollSelector) widg;
+            if (mouseX >= ss.BLEFT && mouseX <= ss.BRIGHT && mouseY >= ss.BTOP && mouseY <= ss.BBOTTOM)
+            {
+                print("B!");
+                int row = (mouseY - ss.scrollY)/LINE_HEIGHT;
+                ss.selected = row;
+            }
+        });
+    }
+
+    void drawBox(int row)
+    {
+        int yd = scrollY + LINE_HEIGHT*row;
+        rect(
+            BLEFT, yd,
+            BRIGHT, yd + LINE_HEIGHT
+        );
+    }
+
+    void draw()
+    {
+        noStroke();
+        textSize(LINE_HEIGHT);
+        rectMode(CORNERS);
+        textAlign(LEFT, TOP);
+        
+        text("SELECTED: " + entries[selected], BLEFT - LINE_HEIGHT, BTOP - 2*LINE_HEIGHT);
+        
+        // outer rect
+        fill(FRAME_COLOR);
+        rect(BLEFT-LINE_HEIGHT, BTOP-LINE_HEIGHT, BRIGHT+LINE_HEIGHT, BBOTTOM+LINE_HEIGHT);
+        
+        for (int i = max(0, (BTOP-scrollY)/LINE_HEIGHT); i<min(entries.length, (BBOTTOM-scrollY)/LINE_HEIGHT + 1); i++)
+        {
+            fill(i%2 == 0 ? EVEN_COLOR : ODD_COLOR );
+            drawBox(i);
+
+            int yd = scrollY + LINE_HEIGHT*i;
+            if (selected == i)
+            {
+                fill(SELECTED_COLOR);
+                drawBox(i);
+                fill(255);
+            }
+            else
+            {
+                fill(0);
+            }
+            text(entries[i], BLEFT + 2, yd + 1);
+        }
+
+        // hide overlapping text with 'mountains'
+        fill(FRAME_COLOR);
+        rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
+        rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
+    }
+
+}

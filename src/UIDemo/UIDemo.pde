@@ -66,6 +66,12 @@ void mouseMoved()
     screens.getActiveScreen().mouseMoved();
 }
 
+void mouseWheel(MouseEvent mev)
+{
+    screens.getActiveScreen().handleEvent(mev);
+}
+
+
 void keyPressed(KeyEvent kev)
 {
     screens.getActiveScreen().handleEvent(kev);

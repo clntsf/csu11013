@@ -95,6 +95,14 @@ void Wk2Demo()
     airportSelectorLabel.fontSize = 24;
     titleScreen.addWidget(airportSelectorLabel);
 
+    String[] airports = loadStrings("airports.txt");
+    ScrollSelector airportSelector = new ScrollSelector(
+        BG_MARGIN + COLUMN_SIDE_PAD + 125,
+        BG_MARGIN + COLUMN_SIDE_PAD + 280,
+        250, 120, airports
+    );
+    titleScreen.addWidget(airportSelector);
+    titleScreen.addNamedChild(airportSelector, "Airport Selector");
 
     // Table Selection
     String[] tables = new String[]{"flights2k.csv", "flights10k.csv", "flights_full.csv"};

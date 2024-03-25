@@ -10,7 +10,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
         if (i == bins.length-1) bins[i] = null;
         else bins[i] = minBin+step*i;
     }
-    println(bins);
+    //println(bins);
     double[] freqs = new double[bins.length-1]; //<>//
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM //<>//
     for (int i = 0; i < freqs.length; i++)
@@ -18,7 +18,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
         db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+ ((i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i)) );
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
-        println(freqs[i]);
+        //println(freqs[i]);
     }
     
     return new HistParams(bins, freqs);
@@ -26,7 +26,8 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
 
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
-    DateTimeFormatter[] dateFormatters = {
+    DateTimeFormatter[] dateFormatters =
+    {
                   DateTimeFormatter.ofPattern("MM/dd/yyyy"),
                   DateTimeFormatter.ofPattern("M/d/yyyy")
     };
@@ -44,7 +45,8 @@ public String dateToLocalDate(String stringDate) {
 }
 
 public LocalTime timeToLocalTime(String stringTime) {
-    try {
+    try
+    {
         String paddedTime = String.format("%04d", Integer.parseInt(stringTime));
         String formattedTime = paddedTime.substring(0, 2) + ":" + paddedTime.substring(2, 4);
         return LocalTime.parse(formattedTime, DateTimeFormatter.ofPattern("HH:mm"));
