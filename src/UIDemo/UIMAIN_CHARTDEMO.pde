@@ -277,11 +277,30 @@ Histogram demoHistogram(Screen titleScreen, HistParams histParams)
 }
 
 ScatterPlot demoScatterPlot(){
- //double DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
- double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
- int Carriers = 10;
+ double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500;  //<>//
  int AA = 149, AS = 120, B6 = 144,HA = 98, NK = 95, G4 = 47,WN = 125,UA = 31,DL = 6,F9 = 55;
+ int Carriers = 10;
     double[] xVals = new double[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9}, yVals = new double[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
+  // load data  yourself to test it for  now 
+    db.query("SELECT * FROM flights2k LIMIT "+10);
+   
+    for(int i =0; i< 2000;i++){
+      if (db.next())
+        { 
+            String flightDate = db.getString("FlightDate");
+            String origin = db.getString("Origin");
+            String destination = db.getString("Dest");
+            System.out.println(flightDate + origin + destination);
+            
+        }
+        else
+        {
+            text("No data found.", 320, 600);
+        }
+      
+    }
+    
+    
     for (int i=1; i<Carriers; i++)
     {
         xVals[i] =xVals[i];
