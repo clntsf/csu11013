@@ -23,7 +23,6 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {return;}
         screens.setActiveScreen("Title Screen");
         surface.setTitle(MAIN_TITLE);
-        getDates();
     });
 
     final Screen titleScreen = new Screen(SCREEN_COLOR);
@@ -350,6 +349,13 @@ String[] getDates()
     Screen title = screens.getNamedScreen("Title Screen");
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
-    println(startDate.text + " | " + endDate.text);
+    //println(startDate.text + " | " + endDate.text);
     return new String[] {startDate.text, endDate.text};
+}
+
+String getAirportCode()
+{
+    ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
+    String selectedEntry = sel.entries[sel.selected];
+    return selectedEntry.substring(0,3);
 }

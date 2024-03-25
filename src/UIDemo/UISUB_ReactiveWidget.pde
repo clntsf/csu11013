@@ -5,7 +5,7 @@ interface MouseListener
     void performAction(MouseEvent e, Object widget);
 }
 
-// CSF - Implemented widgets which respond to input by extending Exercise 6 reponse/challenge 12/4/2024 5PM
+// CSF - Implemented widgets which respond to input by extending Exercise 6 reponse/challenge 12/3/2024 5PM
 class ReactiveWidget extends Widget
 {
     ArrayList<MouseListener> eventListeners;
@@ -288,7 +288,6 @@ class ScrollSelector extends ReactiveWidget
         BLEFT = x-w/2 + LINE_HEIGHT;
         BBOTTOM = y+h/2 - LINE_HEIGHT;
         BRIGHT = x+w/2 - LINE_HEIGHT;
-        println(BTOP,BLEFT,BBOTTOM,BRIGHT);
 
         this.entries = entries;
         this.selected = 0;
