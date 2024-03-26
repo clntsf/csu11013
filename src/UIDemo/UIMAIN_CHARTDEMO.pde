@@ -173,11 +173,12 @@ void Wk2Demo()
     histBtn.addListener((e,w) -> {
         AtomicReference<HistParams> hP = new AtomicReference<>(null);
         //Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
-        if (!histScr.widgets.isEmpty()) {
+        /*if (!histScr.widgets.isEmpty()) {
             histScr.widgets = new ArrayList<>();
             histScr.addWidget(background);
             histScr.addWidget(titleButton);
-        }
+        }*/
+        resetScreen(histScr, background, titleButton);
         Thread histT = new Thread(() -> {
             hP.set(populateHistFreqs(-60, 10, 70));//bins, new double[bins.length-1]));
             Histogram h = demoHistogram(titleScreen, hP.get());
@@ -231,8 +232,6 @@ void Wk2Demo()
     
     ScatterPlot l1 = demoLinePlot(db);
     linePlotScr.addWidget(l1);
-    
-    
 }
 
 boolean loadScreenWithArgs(String screenName)
@@ -242,9 +241,19 @@ boolean loadScreenWithArgs(String screenName)
     return success;
 }
 
+
+void resetScreen(Screen s, Widget background, Widget titleButton)
+{
+    if (!s.widgets.isEmpty()) {
+        s.widgets = new ArrayList<>();
+        s.addWidget(background);
+        s.addWidget(titleButton);
+    }
+}
+
 ScatterPlot demoLinePlot(SQLite db)
 {
-    LinePlotParams testParams = getLinePlotData(1, 6, "flights10k", db);
+    LinePlotParams testParams = getLinePlotData(1, 31, "flights_full", db);
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
         "Flights per day of the month",
         "Day of month", "Count of flights",
