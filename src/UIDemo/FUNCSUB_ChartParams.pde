@@ -47,6 +47,27 @@ class HistParams
     }
 }
 
+// TT - created class to use to return line plot data for a query 26/3/24 9AM
+class LinePlotParams {
+      String title;
+      String axisLabelX;
+      String axisLabelY;
+      double[] valuesX;
+      double[] valuesY;
+      float[] axisRangeX;
+      float[] axisRangeY;
+
+      public LinePlotParams(String title, String axisLabelX, String axisLabelY, double[] valuesX, double[] valuesY, float[] axisRangeX, float[] axisRangeY) {
+          this.title = title;
+          this.axisLabelX = axisLabelX;
+          this.axisLabelY = axisLabelY;
+          this.valuesX = valuesX;
+          this.valuesY = valuesY;
+          this.axisRangeX = axisRangeX;
+          this.axisRangeY = axisRangeY;
+      }
+}
+
 class BubbleParams extends NumericalParams
 {
     float[] sizes;
