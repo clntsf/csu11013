@@ -180,7 +180,7 @@ void Wk2Demo()
             histScr.addWidget(background);
             histScr.addWidget(titleButton);
         }*/
-        resetScreen(histScr, background, titleButton);
+        resetScreen(histScr, background);
         Thread histT = new Thread(() -> {
             hP.set(populateHistFreqs(-60, 10, 70));//bins, new double[bins.length-1]));
             Histogram h = demoHistogram(titleScreen, hP.get());
@@ -240,10 +240,10 @@ void Wk2Demo()
     
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Tim's Line Plot");
     linePlotBtn.addListener((e,w) -> {
-    if (e.getAction() != MouseEvent.PRESS) {return;}
-    resetScreen(linePlotScr, background, titleButton);
-    ScatterPlot linePlot = demoLinePlot(db); 
-    linePlotScr.addWidget(linePlot);
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+            resetScreen(linePlotScr, background);
+            ScatterPlot linePlot = demoLinePlot(db); 
+            linePlotScr.addWidget(linePlot);
     });
     
     
@@ -256,13 +256,13 @@ boolean loadScreenWithArgs(String screenName)
     return success;
 }
 
-
-void resetScreen(Screen s, Widget background, Widget titleButton)
+// RSR - resets screen - 26/3/24 2PM
+void resetScreen(Screen s, Widget background)
 {
     if (!s.widgets.isEmpty()) {
         s.widgets = new ArrayList<>();
         s.addWidget(background);
-        s.addWidget(titleButton);
+        s.addWidget(s.getNamedChild("Title Button"));
     }
 }
 
