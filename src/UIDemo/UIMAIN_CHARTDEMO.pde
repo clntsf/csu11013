@@ -238,8 +238,15 @@ void Wk2Demo()
     linePlotScr.addWidget(titleButton);
     linePlotScr.addNamedChild(titleButton, "Title Button");
     
-    ScatterPlot l1 = demoLinePlot(db);
-    linePlotScr.addWidget(l1);
+    ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Tim's Line Plot");
+    linePlotBtn.addListener((e,w) -> {
+    if (e.getAction() != MouseEvent.PRESS) {return;}
+    resetScreen(linePlotScr, background, titleButton);
+    ScatterPlot linePlot = demoLinePlot(db); 
+    linePlotScr.addWidget(linePlot);
+    });
+    
+    
 }
 
 boolean loadScreenWithArgs(String screenName)
