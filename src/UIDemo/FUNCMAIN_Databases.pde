@@ -1,7 +1,50 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Arrays;
 
-  
+// TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
+public LinePlotParams getLinePlotData(int minDate, int maxDate, String table) 
+{
+    double[] datesXAxis = new double[maxDate-minDate+1];
+    double[] numFlightsYAxis = new double[maxDate-minDate+1];
+    for (int i = minDate; i <= maxDate; i++) {
+        datesXAxis[i-minDate] = i;
+        numFlightsYAxis[i-minDate] = 0;
+    }
+    
+    String query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 1, 2) >= '"+ String.format("%02d", minDate) +"' AND SUBSTR(FlightDate, 1, 2) <= '"+ String.format("%02d", maxDate) +"'";
+    db.query(query);
+    
+    try {
+      while (db.next()) {
+          String flightDate = db.getString("FlightDate");
+          int day = Integer.parseInt(flightDate.substring(0, 2));
+          int cancelled = db.getInt("Cancelled");
+          if (day >= minDate && day <= maxDate && cancelled == 0) {
+              numFlightsYAxis[day - minDate] += 1; 
+          }
+      }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    float[] datesRangeX = new float[]{minDate, maxDate};
+    double minFlights = numFlightsYAxis[0];
+    for (double i : numFlightsYAxis) {
+      if (i < minFlights) {
+          minFlights = i;
+      }
+    }
+    double maxFlights = numFlightsYAxis[0];
+    for (double i : numFlightsYAxis) {
+      if (i > maxFlights) {
+          maxFlights = i;
+      }
+    }
+    float[] flightRangeY = new float[]{(float)minFlights, (float)maxFlights};
+    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
+}
+
 
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(int minBin, int step, int lastBin)
