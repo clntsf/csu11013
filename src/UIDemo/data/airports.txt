@@ -1,3 +1,4 @@
+ALL All Airports - do not restrict
 ABE Allentown/Bethlehem/Easton, PA
 ABI Abilene, TX
 ABQ Albuquerque, NM
