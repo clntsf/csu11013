@@ -1,7 +1,6 @@
-import java.time.*;
+import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Arrays;
 
 // TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
 public LinePlotParams getLinePlotData(int minDate, int maxDate, String table) 

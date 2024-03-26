@@ -20,7 +20,7 @@ void setup()
     //Table table = loadTable("flights_full.csv", "header");
     //String tableName = "flights_full";
     
-    println(LocalDate.parse("01/06/2022",DateTimeFormatter.ofPattern("MM/dd/yyyy")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    // println(LocalDate.parse("01/06/2022",DateTimeFormatter.ofPattern("MM/dd/yyyy")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     
     if (createDBFile("test"))
     {
