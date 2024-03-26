@@ -44,7 +44,7 @@ public LinePlotParams getLinePlotData(int minDate, int maxDate, String table, SQ
           maxFlights = i;
       }
     }
-    float[] flightRangeY = new float[]{(float)minFlights, (float)maxFlights};
+    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)};
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
 }
 
