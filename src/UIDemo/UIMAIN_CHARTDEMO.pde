@@ -156,6 +156,7 @@ void Wk2Demo()
     screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'screen1' for the name of the screen
     mktShareScr.addWidget(background);
     mktShareScr.addWidget(titleButton);
+    mktShareScr.addNamedChild(titleButton, "Title Button");
 
     PieChart p1 = demoPie();
     mktShareScr.addWidget(p1);    
@@ -166,6 +167,7 @@ void Wk2Demo()
     screens.addNamedScreen(histScr, "Departure Delay Times");
     histScr.addWidget(background);
     histScr.addWidget(titleButton);
+    histScr.addNamedChild(titleButton, "Title Button");
 
     // RSR - if button pressed, chart is loaded. - 20/3/24 4PM
     
@@ -193,6 +195,7 @@ void Wk2Demo()
     screens.addNamedScreen(reliabilityScr, "Reliability vs Market Share");
     reliabilityScr.addWidget(background);
     reliabilityScr.addWidget(titleButton);
+    reliabilityScr.addNamedChild(titleButton, "Title Button");
 
     BubblePlot bubble = demoBubble();
     reliabilityScr.addWidget(bubble);
@@ -203,6 +206,7 @@ void Wk2Demo()
     screens.addNamedScreen(mapScr, "Flight Map");
     mapScr.addWidget(background);
     mapScr.addWidget(titleButton);
+    mapScr.addNamedChild(titleButton, "Title Button");
 
     // --- Screen 6 - Scatter Plot Screen  --- //
 
@@ -210,6 +214,7 @@ void Wk2Demo()
     screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
     flightVolScr.addWidget(background);
     flightVolScr.addWidget(titleButton);
+    flightVolScr.addNamedChild(titleButton, "Title Button");
 
     ScatterPlot s1 = demoScatterPlot();
     flightVolScr.addWidget(s1);
@@ -220,6 +225,8 @@ void Wk2Demo()
     screens.addNamedScreen(barPlotScr, "Will's BarPlot");
     barPlotScr.addWidget(background);
     barPlotScr.addWidget(titleButton);
+    barPlotScr.addNamedChild(titleButton, "Title Button");
+
     InteractiveBarPlot b1 = demoBarPlot();
     barPlotScr.addWidget(b1);
 
@@ -229,6 +236,7 @@ void Wk2Demo()
     screens.addNamedScreen(linePlotScr, "Tim's Line Plot");
     linePlotScr.addWidget(background);
     linePlotScr.addWidget(titleButton);
+    linePlotScr.addNamedChild(titleButton, "Title Button");
     
     ScatterPlot l1 = demoLinePlot(db);
     linePlotScr.addWidget(l1);
