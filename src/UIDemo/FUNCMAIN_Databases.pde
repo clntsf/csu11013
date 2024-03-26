@@ -1,4 +1,5 @@
-import java.time.*;
+import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
@@ -57,8 +58,8 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
         if (i == bins.length-1) bins[i] = null;
         else bins[i] = minBin+step*i;
     }
-    //println(bins);
-    double[] freqs = new double[bins.length-1]; //<>//
+    //println(bins); //<>//
+    double[] freqs = new double[bins.length-1]; //<>// //<>//
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM //<>//
     for (int i = 0; i < freqs.length; i++)
     {
