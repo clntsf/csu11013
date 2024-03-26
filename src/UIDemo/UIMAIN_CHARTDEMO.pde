@@ -242,9 +242,10 @@ void Wk2Demo()
     linePlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
             resetScreen(linePlotScr, background);
-            ScatterPlot linePlot = demoLinePlot(db); 
-            linePlotScr.addWidget(linePlot);
-        
+            new Thread(() -> {
+                ScatterPlot linePlot = demoLinePlot(db); 
+                linePlotScr.addWidget(linePlot);
+            }).start();
     });
     
     
