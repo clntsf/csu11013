@@ -244,6 +244,7 @@ void Wk2Demo()
             resetScreen(linePlotScr, background);
             ScatterPlot linePlot = demoLinePlot(db); 
             linePlotScr.addWidget(linePlot);
+        
     });
     
     
