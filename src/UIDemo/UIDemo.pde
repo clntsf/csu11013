@@ -14,7 +14,7 @@ void setup()
     //chartDemo();
     //navDemo();
     //weekOneDemo();
-    Wk2Demo();
+    
     
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     //Table table = loadTable("flights_full.csv", "header");
@@ -35,6 +35,9 @@ void setup()
     {
         println("ERROR connecting to DB!");
     }
+    
+    Wk2Demo();
+    
     //Table delays = loadTable("delaysdemo.csv", "header");
     //if (db.connect())
     //{

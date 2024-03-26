@@ -1,10 +1,9 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.Arrays;
 
 // TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
-public LinePlotParams getLinePlotData(int minDate, int maxDate, String table) 
+public LinePlotParams getLinePlotData(int minDate, int maxDate, String table, SQLite db) 
 {
     double[] datesXAxis = new double[maxDate-minDate+1];
     double[] numFlightsYAxis = new double[maxDate-minDate+1];
@@ -28,6 +27,9 @@ public LinePlotParams getLinePlotData(int minDate, int maxDate, String table)
     } catch (Exception e) {
         e.printStackTrace();
     }
+    
+    
+        
     float[] datesRangeX = new float[]{minDate, maxDate};
     double minFlights = numFlightsYAxis[0];
     for (double i : numFlightsYAxis) {

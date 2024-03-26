@@ -229,8 +229,9 @@ void Wk2Demo()
     linePlotScr.addWidget(background);
     linePlotScr.addWidget(titleButton);
     
-    ScatterPlot l1 = demoLinePlot();
+    ScatterPlot l1 = demoLinePlot(db);
     linePlotScr.addWidget(l1);
+    
     
 }
 
@@ -241,27 +242,18 @@ boolean loadScreenWithArgs(String screenName)
     return success;
 }
 
-ScatterPlot demoLinePlot()
+ScatterPlot demoLinePlot(SQLite db)
 {
-    float[] axisRangeX = new float[]{1, 31}; 
-    float[] axisRangeY = new float[]{0, 1000}; 
-    double[] daysOfMonth = new double[31];
-    for (int i = 1; i <= 31; i++) {
-        daysOfMonth[i-1] = i;
-    }
-    double[] countByDay = new double[31];
-    for (int i = 0; i < 31; i++) { 
-        countByDay[i] = (int) random(1000); 
-    }
+    LinePlotParams testParams = getLinePlotData(1, 6, "flights10k", db);
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
         "Flights per day of the month",
         "Day of month", "Count of flights",
-        daysOfMonth, countByDay, axisRangeX, axisRangeY);
+        testParams.valuesX, testParams.valuesY, testParams.axisRangeX, testParams.axisRangeY);
     s1.fontSize = 12;
     
     s1.labelFormatStringY = "%,.0f";
-    s1.numAxisTicksY = 6;
-    s1.numAxisTicksX = 31;
+    s1.numAxisTicksY = 10;
+    s1.numAxisTicksX = testParams.valuesX.length;
     s1.makeLinePlot();
     return s1;
 }
