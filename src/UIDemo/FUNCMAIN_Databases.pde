@@ -3,6 +3,35 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+//macnalll - created method of accessing data from the database into a piechart 26/3/24
+public PieParams getPieChartData(String table)
+{
+    String[] categories = new String[10]; 
+    double[] valuesY = new double[10]; 
+    
+    String column = "IATA_Code_Marketing_Airline";
+    db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " GROUP BY " +column);
+    Map<String, Integer> frequencyMap = new HashMap<>();
+    while (db.next())
+    {
+        String value = db.getString(column);
+        int frequency = db.getInt("frequency"); //<>//
+        frequencyMap.put(value, frequency); 
+    }
+    
+    int i = 0;
+    for (Map.Entry<String, Integer> entry : frequencyMap.entrySet())
+    {
+        String value = entry.getKey();
+        int frequency = entry.getValue();
+        categories[i] = value;
+        valuesY[i] = frequency;
+        i++;
+    }
+
+    return new PieParams(valuesY, categories);
+}
+
 // TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
 public LinePlotParams getLinePlotData(int minDate, int maxDate, String table, SQLite db) 
 {

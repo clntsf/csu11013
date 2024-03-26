@@ -61,6 +61,19 @@ class LinePlotParams {
           this.axisRangeY = axisRangeY;
       }
 }
+ 
+// macnalll - added class to return categorical parameters as type double[] instead of int 26/3/24
+class PieParams
+{
+    double[] valuesY;
+    String[] categories;
+    
+    PieParams(double[] valuesY, String[] categories)
+    {
+        this.valuesY = valuesY;
+        this.categories = categories;
+    }
+}
 
 class BubbleParams extends NumericalParams
 {

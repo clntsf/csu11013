@@ -287,12 +287,13 @@ ScatterPlot demoLinePlot(SQLite db)
 
 PieChart demoPie()
 {
+    PieParams test = getPieChartData("flights2k");
     double[] marketShare = new double[]{5,30,100,24,60};
     String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
     return new PieChart(
         width/2,height/2,width/2,height/2,
         "Market Share by Airline",
-        marketShare, airlines
+        test.valuesY, test.categories
     );
 }
 
