@@ -1,11 +1,11 @@
 // CSF - 14/3/2024 9PM
-// added ChartParams classes and ChartParamsGenerator<T> interface to allow for the creation of
+// added ChartParams classes and ChartParamsGenerator<T> interface (since removed) to allow for the creation of
 // generic database query routines which output in a format directly suitable for use in chart creation
 abstract class ChartParams
 {
-    float[] valuesY;
+    double[] valuesY;
     
-    ChartParams(float[] valuesY)
+    ChartParams(double[] valuesY)
     {
         this.valuesY = valuesY;
     }
@@ -15,7 +15,7 @@ class CategoricalParams extends ChartParams // bar charts and pie charts
 {
     String[] categories;
 
-    CategoricalParams(float[] valuesY, String[] categories)
+    CategoricalParams(double[] valuesY, String[] categories)
     {
         super(valuesY);
         this.categories = categories;
@@ -24,10 +24,9 @@ class CategoricalParams extends ChartParams // bar charts and pie charts
 
 class NumericalParams extends ChartParams   // scatter plots and histograms
 {
-    float[] valuesX;
-    float[] valuesY;
+    double[] valuesX;
     
-    NumericalParams(float[] valuesX, float[] valuesY)
+    NumericalParams(double[] valuesX, double[] valuesY)
     {
         super(valuesY);
         this.valuesX = valuesX;
@@ -79,12 +78,14 @@ class PieParams
 
 class BubbleParams extends NumericalParams
 {
-    float[] sizes;
+    float[] valuesZ;
+    String[] categories;
     
-    BubbleParams(float[] valuesX, float[] valuesY, float[] sizes)
+    BubbleParams(double[] valuesX, double[] valuesY, float[] valuesZ, String[] categories)
     {
         super(valuesX, valuesY);
-        this.sizes = sizes;
+        this.valuesZ = valuesZ;
+        this.categories = categories;
     }
 }
 //WS - added class to return params for barChart 27/3/24

@@ -122,6 +122,18 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //
     println("max is "+max);
     return new HistParams(bins, freqs, (max/1000)*1000+1000);
 }
+
+public BubbleParams makeBubbleParams()
+{
+
+    String[] carriers = new String[]{"AA", "AS", "B6", "DL", "F9", "G4", "HA", "NK", "UA", "WN"};
+    double[] cancelledPct = new double[]{5.776, 6.289, 9.788, 4.689, 4.452, 8.308, 3.698, 3.424, 8.693, 6.618};
+    double[] divertedPct = new double[] {0.157, 0.455, 0.244, 0.234, 0.141, 0.172, 0.187, 0.114, 0.276, 0.132};
+    float[] mktShare = new float[]{0.2651, 0.0526, 0.0378, 0.2089, 0.0214, 0.0155, 0.0104, 0.0311, 0.1844, 0.1728};
+
+    return new BubbleParams(cancelledPct, divertedPct, mktShare, carriers);
+}
+
 //Will S finds all airports within a select state from the scroll bar 27/3/24
 public String[] getStateAirports(String stateCode)
 {
