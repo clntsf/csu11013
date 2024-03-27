@@ -356,11 +356,18 @@ InteractiveBarPlot demoBarPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
     double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
+    String state = getAirportState();
+    String[] airports = getStateAirports("CA");
+    for (String a : airports){
+      println(a);
+    }
+    BarParams test1 = populateBarParams("CA");
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
     "Delays by Market Carrier" , "Market Carrier", "Number of Delays",
-    airlines2, numOfDelays, 50,
+    airports, test1.numOfFlights, 50,
     50, height - 40, 30, 30);
     return b1;
+    
 }
 
 String[] getDates()
@@ -377,4 +384,11 @@ String getAirportCode()
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
     String selectedEntry = sel.entries[sel.selected];
     return selectedEntry.substring(0,3);
+}
+String getAirportState()
+{
+   ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
+    String selectedEntry = sel.entries[sel.selected];
+    String State = selectedEntry.substring(selectedEntry.length() - 2, selectedEntry.length());
+    return State;
 }
