@@ -87,3 +87,14 @@ class BubbleParams extends NumericalParams
         this.sizes = sizes;
     }
 }
+//WS - added class to return params for barChart 27/3/24
+class BarParams
+{
+  String[] categories;
+  double[] numOfFlights;
+  BarParams(String[] categories, double[] numOfFlights)
+  {
+    this.categories = categories;
+    this.numOfFlights = numOfFlights;
+  }
+}

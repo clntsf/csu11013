@@ -118,6 +118,37 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //
     println("max is "+max);
     return new HistParams(bins, freqs, (max/1000)*1000+1000);
 }
+//WS 
+public String[] getStateAirports(String stateCode)
+{
+  String[] airportsInState = new String[0];
+  String[] airportsInCountry = loadStrings("airports.txt");
+  for (String a: airportsInCountry)
+  {
+    String aState = a.substring(a.length() - 2, a.length());
+    if (aState.equals(stateCode))
+    {
+      airportsInState = append(airportsInState, a);
+    }
+  }
+  //db.query("SELECT DISTINCT ORIGIN from flights_full WHERE ORIGIN_STATE_ABR=" + stateCode);
+  //while(db.next()){
+  //  airportsInState = append(airportsInState, db.getString("ORIGIN"));
+  //}
+  return airportsInState;
+}
+public BarParams populateBarParams(String stateCode)
+{
+  String[] airports = getStateAirports(stateCode);
+  double[] numOfFlights = new double[airports.length];
+  for(int i = 0; i < airports.length; i++)
+  {
+    db.query("SELECT COUNT(OriginCityName) AS freq FROM flights2k WHERE Origin='" + airports[i] + "';");
+    numOfFlights[i] = db.getInt("freq");
+    println(numOfFlights[i]);
+  }
+  return new BarParams(airports, numOfFlights);
+}
 
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
@@ -148,7 +179,6 @@ public LocalTime timeToLocalTime(String stringTime) {
     } catch( NumberFormatException e ) { return null; }
     // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
 }
-
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
          and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
 */

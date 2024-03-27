@@ -250,12 +250,14 @@ void Wk2Demo()
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Tim's Line Plot");
     linePlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
+        String[] dates = getDates();
+        if (!dates[0].trim().isEmpty() && !dates[1].trim().isEmpty()) {
             resetScreen(linePlotScr, background);
             new Thread(() -> {
-                ScatterPlot linePlot = demoLinePlot(db); 
-                linePlotScr.addWidget(linePlot);
-            }).start();
-    });
+            ScatterPlot linePlot = demoLinePlot(db); 
+            linePlotScr.addWidget(linePlot);
+        }).start();
+    }});
     
     
 }
@@ -365,11 +367,18 @@ InteractiveBarPlot demoBarPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
     double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
+    String state = getAirportState();
+    String[] airports = getStateAirports("WA");
+    for (int i = 0; i < airports.length; i++){
+      airports[i] = airports[i].substring(0, 3);
+    }
+    BarParams test1 = populateBarParams("WA");
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
     "Delays by Market Carrier" , "Market Carrier", "Number of Delays",
-    airlines2, numOfDelays, 50,
+    airports, test1.numOfFlights, 50,
     50, height - 40, 30, 30);
     return b1;
+    
 }
 
 String[] getDates()
@@ -399,4 +408,11 @@ String getTable()
 {
     RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
     return tbl.boxes.get(tbl.selected).text;
+}
+String getAirportState()
+{
+   ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
+    String selectedEntry = sel.entries[sel.selected];
+    String State = selectedEntry.substring(selectedEntry.length() - 2, selectedEntry.length());
+    return State;
 }
