@@ -4,13 +4,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 //macnalll - created method of accessing data from the database into a piechart 26/3/24
-public PieParams getPieChartData(String table)
-{
-    String[] categories = new String[10]; 
-    double[] valuesY = new double[10]; 
-    
+public PieParams getPieChartData(String table, String selectedAirport)
+{    
     String column = "IATA_Code_Marketing_Airline";
-    db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " GROUP BY " +column);
+    if (selectedAirport != "ALL") db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE Origin LIKE '%" +selectedAirport+ "%' GROUP BY " +column);
+    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " GROUP BY " +column);
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
     {
@@ -18,6 +16,10 @@ public PieParams getPieChartData(String table)
         int frequency = db.getInt("frequency"); //<>// //<>// //<>//
         frequencyMap.put(value, frequency); 
     }
+    
+    int size = frequencyMap.size();
+    String[] categories = new String[size];
+    double[] valuesY = new double[size];
     
     int i = 0;
     for (Map.Entry<String, Integer> entry : frequencyMap.entrySet())
