@@ -125,7 +125,7 @@ void Wk2Demo()
         "Flight Map",
         "Flight Volume Heatmap",
         "Flight Duration vs Volume",
-        "Will's BarPlot",
+        "Volume of State Flights",
         "Tim's Line Plot"
     };
     final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24 };
@@ -231,7 +231,7 @@ void Wk2Demo()
     // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
 
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(barPlotScr, "Will's BarPlot");
+    screens.addNamedScreen(barPlotScr, "Volume of State Flights");
     barPlotScr.addWidget(background);
     barPlotScr.addWidget(titleButton);
     barPlotScr.addNamedChild(titleButton, "Title Button");
@@ -374,7 +374,7 @@ InteractiveBarPlot demoBarPlot()
     }
     BarParams test1 = populateBarParams("WA");
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
-    "Delays by Market Carrier" , "Market Carrier", "Number of Delays",
+    "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
     airports, test1.numOfFlights, 50,
     50, height - 40, 30, 30);
     return b1;
