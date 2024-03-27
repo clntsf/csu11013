@@ -411,7 +411,7 @@ String[] getDates()
     // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/2024 3PM
     // CSF - rearranged functionality (guts?) so that one date could be supplied and the other left blank - 27/3/2024 8:40PM
     
-    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]");
     String start = (startDate.text == "" ? "" : LocalDate.parse(startDate.text,fmt).toString());
     String end = (endDate.text == "" ? "" : LocalDate.parse(endDate.text,fmt).toString());
     return new String[] {start, end};

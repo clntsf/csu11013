@@ -106,11 +106,13 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
     //println(bins);
     float[] freqs = new float[bins.length-1];
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM
+    String startDate = (dateRange[0].equals("") ? "2022-01-01" : dateRange[0]);
+    String endDate = (dateRange[1].equals("") ? "2022-31-01" : dateRange[1]);
     for (int i = 0; i < freqs.length; i++)
     {
         db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+
                 ( (i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i) )+
-                " AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\""+
+                " AND \"Date\" BETWEEN \""+startDate+"\" AND \""+endDate+"\""+
                 ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
