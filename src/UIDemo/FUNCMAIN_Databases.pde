@@ -121,8 +121,14 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
             max = (int) freqs[i];
         }
     }
-    println("maxFreq is "+max);
-    return new HistParams(bins, freqs, (max/1000)*1000+1000);
+    int mag = 1;
+    while (max > mag*10)
+    {
+        mag *= 10;
+    }
+    max = (max/mag + 1) * mag;
+    //println("maxFreq is "+max);
+    return new HistParams(bins, freqs, max);
 }
 
 public BubbleParams makeBubbleParams()
@@ -170,22 +176,9 @@ public BarParams populateBarParams(String[] airports)
 
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
-    DateTimeFormatter[] dateFormatters =
-    {
-                  DateTimeFormatter.ofPattern("MM/dd/yyyy"),
-                  DateTimeFormatter.ofPattern("M/d/yyyy")
-    };
     String[] split = stringDate.split("\\s+", 2);
-    LocalDate date;
-    try
-    {
-        date = LocalDate.parse(split[0], dateFormatters[0]);
-    }
-    catch (Exception e)
-    {
-        date = LocalDate.parse(split[0], dateFormatters[1]);
-    }
-    return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    LocalDate date = LocalDate.parse(split[0], DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy]"));
+    return date.toString();
 }
 
 public LocalTime timeToLocalTime(String stringTime) {

@@ -402,11 +402,12 @@ String[] getDates()
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
     //println(startDate.text + " | " + endDate.text);
-    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 3PM
+    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/24 3PM
     if (startDate.text != "" || endDate.text != "")
     {
-        LocalDate start = LocalDate.parse(startDate.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LocalDate end = LocalDate.parse(endDate.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate start, end;
+        start = LocalDate.parse(startDate.text, DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]"));
+        end = LocalDate.parse(endDate.text, DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]"));
         return new String[] {start.toString(), end.toString()};
     }
     return new String[] {"", ""};
