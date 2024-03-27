@@ -328,7 +328,7 @@ Histogram demoHistogram(Screen titleScreen, HistParams histParams)
     Histogram h = new Histogram(width/2, height/2, 480, 480,
         "Flight Departure Delay (Minutes, negative delays represent early departures)",
         "Delay", "Frequency",
-        histParams.bins, histParams.freqs, 300000
+        histParams.bins, histParams.freqs, histParams.maxFreq
     );
     
     h.fontSize = 12;
@@ -378,7 +378,14 @@ String[] getDates()
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
     //println(startDate.text + " | " + endDate.text);
-    return new String[] {startDate.text, endDate.text};
+    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 3PM
+    if (startDate.text != "" || endDate.text != "")
+    {
+        LocalDate start = LocalDate.parse(startDate.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate end = LocalDate.parse(endDate.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return new String[] {start.toString(), end.toString()};
+    }
+    return new String[] {"", ""};
 }
 
 String getAirportCode()

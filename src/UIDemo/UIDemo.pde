@@ -4,7 +4,6 @@ import java.util.Map;
 ScreenList screens = new ScreenList();
 PFont font;
 SQLite db;
-//boolean dbPopulated;
 
 void setup()
 {
@@ -50,7 +49,6 @@ void setup()
 void draw()
 {
     screens.getActiveScreen().draw();
-    //if(dbPopulated) { printText(); }
 }
 
 // CSF - added functions to pass inputs to the UI elements 13/3/2024 10PM

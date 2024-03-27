@@ -39,11 +39,13 @@ class HistParams
 {
     Integer[] bins;
     double[] freqs;
+    int maxFreq;
     
-    HistParams(Integer[] bins, double[] freqs)
+    HistParams(Integer[] bins, double[] freqs, int maxFreq)
     {
         this.freqs = freqs;
         this.bins = bins;
+        this.maxFreq = maxFreq;
     }
 }
 
