@@ -250,12 +250,14 @@ void Wk2Demo()
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Tim's Line Plot");
     linePlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
+        String[] dates = getDates();
+        if (!dates[0].trim().isEmpty() && !dates[1].trim().isEmpty()) {
             resetScreen(linePlotScr, background);
             new Thread(() -> {
-                ScatterPlot linePlot = demoLinePlot(db); 
-                linePlotScr.addWidget(linePlot);
-            }).start();
-    });
+            ScatterPlot linePlot = demoLinePlot(db); 
+            linePlotScr.addWidget(linePlot);
+        }).start();
+    }});
     
     
 }
