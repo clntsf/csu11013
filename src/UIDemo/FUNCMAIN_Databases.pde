@@ -13,7 +13,7 @@ public PieParams getPieChartData(String table, String selectedAirport)
     while (db.next())
     {
         String value = db.getString(column);
-        int frequency = db.getInt("frequency"); //<>//
+        int frequency = db.getInt("frequency"); //<>// //<>//
         frequencyMap.put(value, frequency); 
     }
     
@@ -62,17 +62,15 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     try {
       while (db.next()) {
           String flightDate = db.getString("FlightDate");
-          int day = Integer.parseInt(flightDate.substring(8, 10)); //<>//
-          int cancelled = db.getInt("Cancelled"); //<>//
-          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>//
+          int day = Integer.parseInt(flightDate.substring(8, 10)); //<>// //<>//
+          int cancelled = db.getInt("Cancelled"); //<>// //<>//
+          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>// //<>//
               numFlightsYAxis[day - minDate] += 1; 
           }
       }
     } catch (Exception e) {
         e.printStackTrace();
     }
-    
-    
         
     float[] datesRangeX = new float[]{minDate, maxDate};
     float minFlights = numFlightsYAxis[0];
@@ -93,9 +91,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
 
  //<>//
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
-{
-    String[] dateRange = getDates();
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>//
+{ //<>//
+    String[] dateRange = getDates(); //<>//
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
     for (int i = 0; i < bins.length; i++)
@@ -134,6 +132,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
     return new HistParams(bins, freqs, max);
 }
 
+// CSF - wrote the back-end for the bubble chart
 public BubbleParams makeBubbleParams()
 {
     String query = """SELECT IATA_Code_Marketing_Airline as airline,
@@ -143,34 +142,31 @@ public BubbleParams makeBubbleParams()
     FROM flights_full
     """;
     
-    String[] dates = getDates();
-    String airport = getAirportCode();
-    
-    boolean conditions = false;
-    if (!airport.equals("ALL"))
-    {
-        query += " WHERE Origin = '" + airport + "'";
-        conditions = true;
-    }
+    String[] dates = getDates();    
     String startDate = (dates[0].equals("") ? "2022-01-01" : dates[0]);
     String endDate = (dates[1].equals("") ? "2022-31-01" : dates[1]);
-    
-    query += (conditions ? " AND" : " WHERE");
-    query += " FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "'";
+    query += " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "'";
+
+    String airport = getAirportCode();
+    if (!airport.equals("ALL"))
+    {
+        query += " AND Origin = '" + airport + "'";
+    }
     query += "\nGROUP BY airline";
+
     db.query(query);
     
     String[] carriers = new String[0];
     float[] cancelledPct = new float[0];
     float[] divertedPct = new float[0];
     float[] marketShare = new float[0];
-    
     int totalFlights = 0;
-    int r=0;
+
     while (db.next())
     {
         int numFlights = db.getInt("len");
         totalFlights += numFlights;
+
         carriers = append(carriers, db.getString("airline"));   
         cancelledPct = append(cancelledPct, 100.0 * db.getInt("cancelled")/numFlights);
         divertedPct = append(divertedPct, 100.0 * db.getInt("diverted")/numFlights);
