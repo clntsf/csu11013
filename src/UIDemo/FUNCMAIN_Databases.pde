@@ -15,7 +15,7 @@ public PieParams getPieChartData(String table)
     while (db.next())
     {
         String value = db.getString(column);
-        int frequency = db.getInt("frequency"); //<>//
+        int frequency = db.getInt("frequency"); //<>// //<>// //<>//
         frequencyMap.put(value, frequency); 
     }
     
@@ -87,28 +87,36 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
 }
 
-
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM
-public HistParams populateHistFreqs(int minBin, int step, int lastBin)
+ //<>// //<>//
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>// //<>//
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>//
 {
+    String[] dateRange = getDates();
+    //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
     for (int i = 0; i < bins.length; i++)
     {
         if (i == bins.length-1) bins[i] = null;
         else bins[i] = minBin+step*i;
     }
-    //println(bins); //<>//
-    double[] freqs = new double[bins.length-1]; //<>// //<>//
-    // RSR - improved method with extra parameters and loop - 20/3/24 5PM //<>//
+    //println(bins);
+    double[] freqs = new double[bins.length-1];
+    // RSR - improved method with extra parameters and loop - 20/3/24 5PM
     for (int i = 0; i < freqs.length; i++)
     {
-        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+ ((i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i)) );
+        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+ ((i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i))+" AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\";");
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
-        //println(freqs[i]);
+        println(freqs[i]);
     }
-    
-    return new HistParams(bins, freqs);
+    int max = 0;
+    for (int i = 0; i < freqs.length; i++) {
+        if (freqs[i] > max) {
+            max = (int) freqs[i];
+        }
+    }
+    println("max is "+max);
+    return new HistParams(bins, freqs, (max/1000)*1000+1000);
 }
 //WS 
 public String[] getStateAirports(String stateCode)
@@ -159,7 +167,7 @@ public String dateToLocalDate(String stringDate) {
     {
         date = LocalDate.parse(split[0], dateFormatters[1]);
     }
-    return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 }
 
 public LocalTime timeToLocalTime(String stringTime) {

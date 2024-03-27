@@ -25,7 +25,7 @@ public boolean createDBFile(String fileName)
 
 public void initSchema(String dbName, String[] flightTableNames)
 {
-    db.query("CREATE TABLE \"delays\" (\"Delay\"  INTEGER)");
+    db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Delay\"  INTEGER NOT NULL)");
     db.query("""CREATE TABLE "wac_codes" (
                   "WAC"  INTEGER NOT NULL,
                   "WAC_Name"  TEXT NOT NULL,
@@ -81,7 +81,6 @@ public void populateWacDB()
 //       below the old methods that used an ArrayList of DataPoints.
 public void populateFlightDBs(String[] flightTableNames)
 {
-    //db.query("DELETE FROM "+dbName);
     for (int i = 0; i < flightTableNames.length; i++)
     {
         Table table = loadTable(flightTableNames[i]+".csv", "header");
@@ -106,7 +105,6 @@ public void populateFlightDBs(String[] flightTableNames)
         db.query("COMMIT;");
         println(flightTableNames[i]+" successfully populated!");
     }
-    //dbPopulated = true;
 }
 
 // RSR - demo function to populate a delay table in the database - 19/3/24 7PM
@@ -118,7 +116,8 @@ public void populateDelays()
     for (int i = 0; i < table.getRowCount(); i++)
     {
         TableRow currentRow = table.getRow(i);
-        db.query("INSERT INTO delays (\"Delay\") VALUES(%d);", currentRow.getInt("DEP_DELAY"));
+        println(i);
+        db.query("INSERT INTO delays (\"Date\", \"Delay\") VALUES(\"%s\", %d);", dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getInt("DEP_DELAY"));
     }
     db.query("COMMIT;");
     print("delays successfully populated!");
