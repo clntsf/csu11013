@@ -299,7 +299,7 @@ class ScrollSelector extends ReactiveWidget
             if ( e.getAction() != MouseEvent.WHEEL ) { return; }
             if (mouseX >= BLEFT && mouseX <= BRIGHT && mouseY >= BTOP && mouseY <= BBOTTOM)
             {
-                scrollY = constrain(scrollY - e.getCount(), BBOTTOM - entries.length*LINE_HEIGHT, BTOP);
+                scrollY = constrain(scrollY - 90*e.getCount(), BBOTTOM - entries.length*LINE_HEIGHT, BTOP);
             }
         });
 
