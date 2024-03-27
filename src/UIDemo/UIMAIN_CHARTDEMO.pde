@@ -153,11 +153,12 @@ void Wk2Demo()
     }
     // --- SCREEN 1: Market Share Pie Chart --- //
 
-    Screen mktShareScr = new Screen(SCREEN_COLOR);        // these four lines should go more or less unchanged at the beginning of each screen        
-    screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'screen1' for the name of the screen
+    Screen mktShareScr = new Screen(SCREEN_COLOR);        // these 5 lines should go more or less unchanged at the beginning of each screen        
+    screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'mktShareScr' for the name of the screen
     mktShareScr.addWidget(background);
     mktShareScr.addWidget(titleButton);
     mktShareScr.addNamedChild(titleButton, "Title Button");
+
     ReactiveWidget mktShareButton = (ReactiveWidget) titleScreen.getNamedChild("button: Market Share by Airline");
     mktShareButton.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
@@ -167,8 +168,6 @@ void Wk2Demo()
                 mktShareScr.addWidget(p1); 
             }).start();
     });
-
-     
 
     // --- SCREEN 2: HISTOGRAM DEMO --- //
 
@@ -205,9 +204,19 @@ void Wk2Demo()
     reliabilityScr.addWidget(titleButton);
     reliabilityScr.addNamedChild(titleButton, "Title Button");
 
-    BubblePlot bubble = demoBubble();
-    reliabilityScr.addWidget(bubble);
-    
+    ReactiveWidget bubbleBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Reliability vs Market Share");
+    bubbleBtn.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+
+        resetScreen(reliabilityScr, background);
+        new Thread(() -> {
+            BubbleParams bp = makeBubbleParams();
+            BubblePlot bubble = demoBubble(bp);
+            resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
+            reliabilityScr.addWidget(bubble);
+        }).start();
+    });
+
     // --- Screen 4: Flight Map --- //
     
     Screen mapScr = new Screen(SCREEN_COLOR);        
@@ -244,9 +253,6 @@ void Wk2Demo()
           barPlotScr.addWidget(b1);
         }).start();
     });
-    //InteractiveBarPlot b1 = demoBarPlot();
-    //barPlotScr.addWidget(b1);
-    
 
     // --- Screen 8 - Tim's Line Plot --- //
 
@@ -274,7 +280,6 @@ void Wk2Demo()
 boolean loadScreenWithArgs(String screenName)
 {
     boolean success = screens.setActiveScreen(screenName);
-    
     return success;
 }
 
@@ -317,17 +322,11 @@ PieChart demoPie()
     );
 }
 
-BubblePlot demoBubble()
+BubblePlot demoBubble(BubbleParams params)
 {
-    String[] carriers = new String[]{"AA", "AS", "B6", "DL", "F9", "G4", "HA", "NK", "UA", "WN"};
-    double[] cancelled_pct = new double[]{5.776, 6.289, 9.788, 4.689, 4.452, 8.308, 3.698, 3.424, 8.693, 6.618};
-    double[] diverted_pct = new double[] {0.157, 0.455, 0.244, 0.234, 0.141, 0.172, 0.187, 0.114, 0.276, 0.132};
-    float[] mkt_share = new float[]{0.2651, 0.0526, 0.0378, 0.2089, 0.0214, 0.0155, 0.0104, 0.0311, 0.1844, 0.1728};
-
     BubblePlot bubble = new BubblePlot(width/2, height/2, 470, 470,
-        "Airline Reliability vs Market Share", "% Flights Cancelled",
-        "% Flights Diverted", cancelled_pct, diverted_pct, mkt_share,
-        carriers, new float[]{0,11}, new float[]{0,0.5}
+        "Airline Reliability vs Market Share", "% Flights Cancelled", "% Flights Diverted",
+        params.valuesX, params.valuesY, params.valuesZ, params.categories, new float[]{0,11}, new float[]{0,0.5}
     );
     bubble.maxSize = 90;
     bubble.labelFormatStringY = "%.2f";
@@ -404,11 +403,12 @@ String[] getDates()
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
     //println(startDate.text + " | " + endDate.text);
-    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 3PM
+    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/24 3PM
     if (startDate.text != "" || endDate.text != "")
     {
-        LocalDate start = LocalDate.parse(startDate.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LocalDate end = LocalDate.parse(endDate.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate start, end;
+        start = LocalDate.parse(startDate.text, DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]"));
+        end = LocalDate.parse(endDate.text, DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]"));
         return new String[] {start.toString(), end.toString()};
     }
     return new String[] {"", ""};
@@ -426,9 +426,10 @@ String getTable()
     RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
     return tbl.boxes.get(tbl.selected).text;
 }
+
 String getAirportState()
 {
-   ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
+    ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
     String selectedEntry = sel.entries[sel.selected];
     String State = selectedEntry.substring(selectedEntry.length() - 2, selectedEntry.length());
     return State;

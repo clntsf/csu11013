@@ -25,7 +25,7 @@ public boolean createDBFile(String fileName)
 
 public void initSchema(String dbName, String[] flightTableNames)
 {
-    db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Delay\"  INTEGER NOT NULL)");
+    db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Origin\" TEXT NOT NULL, \"Delay\"  INTEGER)");
     db.query("""CREATE TABLE "wac_codes" (
                   "WAC"  INTEGER NOT NULL,
                   "WAC_Name"  TEXT NOT NULL,
@@ -85,13 +85,13 @@ public void populateFlightDBs(String[] flightTableNames)
     {
         Table table = loadTable(flightTableNames[i]+".csv", "header");
         println("Started to populate database "+flightTableNames[i]);
-        String columns = """FlightDate, IATA_Code_Marketing_Airline, Flight_Number_Marketing_Airline, Origin, OriginCityName,
-                            OriginState, OriginWac, Dest, DestCityName, DestState, DestWac, CRSDepTime, DepTime, CRSArrTime, ArrTime, Cancelled, Diverted, Distance""";
+        String columns = "FlightDate, IATA_Code_Marketing_Airline, Flight_Number_Marketing_Airline, Origin, OriginCityName, "+
+                         "OriginState, OriginWac, Dest, DestCityName, DestState, DestWac, CRSDepTime, DepTime, CRSArrTime, ArrTime, Cancelled, Diverted, Distance";
         // RSR - updated method to be a lot more efficient - 20/3/24 2PM
         db.query("BEGIN TRANSACTION;");
         for (int j = 0; j < table.getRowCount(); j++)
         {
-            if (j%1000 == 0) { println(j); }
+            if (j%1000 == 0) { println(flightTableNames[i]+", row: "+j); }
             TableRow currentRow = table.getRow(j);
             db.query("INSERT INTO "+flightTableNames[i]+" ("+columns+") VALUES (\"%s\",\"%s\",%d,\"%s\",\"%s\",\"%s\",%d,\"%s\",\"%s\",\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\",%d,%d,%d);",
                         dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("MKT_CARRIER"), currentRow.getInt("MKT_CARRIER_FL_NUM"), 
@@ -115,9 +115,9 @@ public void populateDelays()
     db.query("BEGIN TRANSACTION;");
     for (int i = 0; i < table.getRowCount(); i++)
     {
+        if (i%1000 == 0) { println("delays, row: "+i); }
         TableRow currentRow = table.getRow(i);
-        println(i);
-        db.query("INSERT INTO delays (\"Date\", \"Delay\") VALUES(\"%s\", %d);", dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getInt("DEP_DELAY"));
+        db.query("INSERT INTO delays (\"Date\",\"Origin\", \"Delay\") VALUES(\"%s\", \"%s\", %d);", dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("ORIGIN"), currentRow.getInt("DEP_DELAY"));
     }
     db.query("COMMIT;");
     print("delays successfully populated!");
