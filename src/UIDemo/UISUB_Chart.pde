@@ -305,6 +305,10 @@ class ColorBar extends BarPlot
         this.categories = categories;
         this.barWidth = 40;
         this.gapSize = 20;
+        if((categories.length * barWidth) + ((categories.length - 1) *gapSize) > w){
+          barWidth = 20;
+          gapSize = 10;
+        }
         setBarColors(0.2, 0.5);
         centers = xLabelCenters();
     }

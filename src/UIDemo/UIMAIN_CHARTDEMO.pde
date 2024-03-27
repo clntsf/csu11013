@@ -377,7 +377,8 @@ InteractiveBarPlot demoBarPlot()
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
     double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
     String state = getAirportState();
-    String[] airports = getStateAirports("WA");
+    println(state);
+    String[] airports = getStateAirports(state);
     for (int i = 0; i < airports.length; i++){
       airports[i] = airports[i].substring(0, 3);
     }
@@ -389,7 +390,7 @@ InteractiveBarPlot demoBarPlot()
         maxHeight = size;
       }
     }
-    InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
+    InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 450, 450,
     "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
     airports, test1.numOfFlights, int(1.05 * Math.round(maxHeight)),
     50, height - 40, 30, 30);
