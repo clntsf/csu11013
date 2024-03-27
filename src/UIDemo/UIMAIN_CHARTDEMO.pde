@@ -279,7 +279,7 @@ void resetScreen(Screen s, Widget background)
 
 ScatterPlot demoLinePlot(SQLite db)
 {
-    LinePlotParams testParams = getLinePlotData(1, 31, "flights_full", db);
+    LinePlotParams testParams = getLinePlotData(1, 31, "flights_full", db, getAirportCode());
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
         "Flights per day of the month",
         "Day of month", "Count of flights",
