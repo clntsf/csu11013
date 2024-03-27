@@ -87,7 +87,6 @@ class CheckBox extends ReactiveWidget
     final color UNCHECKED_COLOR = 225;
     
     CheckBoxList parent;
-    String label;
     boolean checked;
     boolean isRectangular;
 
@@ -97,17 +96,16 @@ class CheckBox extends ReactiveWidget
         widg.parent.onCheck(widg);
     };
 
-    CheckBox(int x, int y, String label)
+    CheckBox(int x, int y, String text)
     {
-        super(x,y,10,10);
+        super(x,y,10,10,0,text);
         this.addListener(onClick);
-        this.label = label;
         isRectangular = true;
     }
     
-    CheckBox(int x, int y, String label, boolean checked)
+    CheckBox(int x, int y, String text, boolean checked)
     {
-        this(x,y,label);
+        this(x,y,text);
         this.checked = checked;
     }
     
@@ -130,7 +128,7 @@ class CheckBox extends ReactiveWidget
 
         fill(0);
         textSize(fontSize);
-        text(label, x+10, y);
+        text(text, x+10, y);
     }
 }
 class CheckBoxList extends Container
@@ -155,6 +153,7 @@ class CheckBoxList extends Container
         listLabel.fontSize = LABEL_FONT_SIZE;
         addChild(listLabel);
         
+        boxes = new ArrayList<>();
         y += LABEL_FONT_SIZE * 2;
         for (String option : options)
         {
@@ -162,6 +161,7 @@ class CheckBoxList extends Container
             cb.setParent(this);
             cb.fontSize = BOX_FONT_SIZE;
             addChild(cb);
+            boxes.add(cb);
             y += BOX_FONT_SIZE * 1.5;
         }
     }
@@ -176,11 +176,6 @@ class CheckBoxList extends Container
         this(x,y,labelText,options,14,12);
     }
     
-    List<Widget> getBoxes()
-    {
-        return children.subList(1,children.size());
-    }
-    
     boolean[] getValues()
     {
         boolean[] values = new boolean[boxes.size()];
@@ -193,13 +188,17 @@ class CheckBoxList extends Container
 }
 class RadioButtonList extends CheckBoxList
 {
+    int selected;
+    
     RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
     {
         super(x,y,labelText,options,labelFontSize,boxFontSize);
-        for (Widget box : getBoxes())
+        for (CheckBox box : boxes)
         {
-            ((CheckBox)box).isRectangular = false;
+            box.isRectangular = false;
         }
+        selected = 0;
+        boxes.get(0).checked = true;
     }
     
     RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize)
@@ -214,11 +213,13 @@ class RadioButtonList extends CheckBoxList
     
     void onCheck(CheckBox c)
     {
-        for (Widget box : getBoxes())
+        print("A!");
+        for (CheckBox box : boxes)
         {
-            ((CheckBox)box).checked = false;
+            box.checked = false;
         }
         c.checked = true;
+        selected = boxes.indexOf(c);
     }
 }
 

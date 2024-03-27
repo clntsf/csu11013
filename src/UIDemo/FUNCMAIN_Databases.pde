@@ -33,24 +33,34 @@ public PieParams getPieChartData(String table)
 }
 
 // TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
-public LinePlotParams getLinePlotData(int minDate, int maxDate, String table, SQLite db) 
+public LinePlotParams getLinePlotData(String table, SQLite db, String airport, String[] dates) 
 {
+    int minDate = Integer.valueOf(dates[0].substring(0, 2));
+    int maxDate = Integer.valueOf(dates[1].substring(0, 2));
+    System.out.println("" + minDate + "" + maxDate);
     double[] datesXAxis = new double[maxDate-minDate+1];
     double[] numFlightsYAxis = new double[maxDate-minDate+1];
     for (int i = minDate; i <= maxDate; i++) {
         datesXAxis[i-minDate] = i;
         numFlightsYAxis[i-minDate] = 0;
     }
-    
-    String query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 1, 2) >= '"+ String.format("%02d", minDate) +"' AND SUBSTR(FlightDate, 1, 2) <= '"+ String.format("%02d", maxDate) +"'";
+    String query;
+    if (airport.equals("ALL"))
+      query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 1, 2) >= '"+ String.format("%02d", minDate) +"' AND SUBSTR(FlightDate, 1, 2) <= '"+ String.format("%02d", maxDate)+"'";
+    else
+      query = "SELECT * FROM " + table +
+               " WHERE SUBSTR(FlightDate, 1, 2) >= '" + String.format("%02d", minDate) +
+               "' AND SUBSTR(FlightDate, 1, 2) <= '" + String.format("%02d", maxDate) +
+               "' AND Origin LIKE '%" + airport + "%'";
+
     db.query(query);
     
     try {
       while (db.next()) {
           String flightDate = db.getString("FlightDate");
-          int day = Integer.parseInt(flightDate.substring(0, 2));
-          int cancelled = db.getInt("Cancelled");
-          if (day >= minDate && day <= maxDate && cancelled == 0) {
+          int day = Integer.parseInt(flightDate.substring(0, 2)); //<>//
+          int cancelled = db.getInt("Cancelled"); //<>//
+          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>//
               numFlightsYAxis[day - minDate] += 1; 
           }
       }

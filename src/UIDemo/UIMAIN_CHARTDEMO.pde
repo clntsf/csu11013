@@ -104,7 +104,7 @@ void Wk2Demo()
     titleScreen.addNamedChild(airportSelector, "Airport Selector");
 
     // Table Selection
-    String[] tables = new String[]{"flights2k.csv", "flights10k.csv", "flights_full.csv"};
+    String[] tables = new String[]{"flights2k", "flights10k", "flights_full"};
     RadioButtonList tableSelector = new RadioButtonList(
         BG_MARGIN+COLUMN_SIDE_PAD,
         BG_MARGIN+COLUMN_VERT_PAD+350,
@@ -112,6 +112,7 @@ void Wk2Demo()
         tables, 24, 20
     );
     titleScreen.addWidget(tableSelector);
+    titleScreen.addNamedChild(tableSelector, "Table Selector");
 
     // Right side
     final int COLUMN_RIGHT = 3*width/4;
@@ -157,9 +158,17 @@ void Wk2Demo()
     mktShareScr.addWidget(background);
     mktShareScr.addWidget(titleButton);
     mktShareScr.addNamedChild(titleButton, "Title Button");
+    ReactiveWidget mktShareButton = (ReactiveWidget) titleScreen.getNamedChild("button: Market Share by Airline");
+    mktShareButton.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+            resetScreen(mktShareScr, background);
+            new Thread(() -> {
+                PieChart p1 = demoPie();
+                mktShareScr.addWidget(p1); 
+            }).start();
+    });
 
-    PieChart p1 = demoPie();
-    mktShareScr.addWidget(p1);    
+     
 
     // --- SCREEN 2: HISTOGRAM DEMO --- //
 
@@ -241,12 +250,14 @@ void Wk2Demo()
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Tim's Line Plot");
     linePlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
+        String[] dates = getDates();
+        if (!dates[0].trim().isEmpty() && !dates[1].trim().isEmpty()) {
             resetScreen(linePlotScr, background);
             new Thread(() -> {
-                ScatterPlot linePlot = demoLinePlot(db); 
-                linePlotScr.addWidget(linePlot);
-            }).start();
-    });
+            ScatterPlot linePlot = demoLinePlot(db); 
+            linePlotScr.addWidget(linePlot);
+        }).start();
+    }});
     
     
 }
@@ -270,7 +281,7 @@ void resetScreen(Screen s, Widget background)
 
 ScatterPlot demoLinePlot(SQLite db)
 {
-    LinePlotParams testParams = getLinePlotData(1, 31, "flights_full", db);
+    LinePlotParams testParams = getLinePlotData("flights_full", db, getAirportCode(), getDates());
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
         "Flights per day of the month",
         "Day of month", "Count of flights",
@@ -287,7 +298,7 @@ ScatterPlot demoLinePlot(SQLite db)
 
 PieChart demoPie()
 {
-    PieParams test = getPieChartData("flights2k");
+    PieParams test = getPieChartData("flights_full");
     double[] marketShare = new double[]{5,30,100,24,60};
     String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
     return new PieChart(
@@ -384,6 +395,12 @@ String getAirportCode()
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
     String selectedEntry = sel.entries[sel.selected];
     return selectedEntry.substring(0,3);
+}
+
+String getTable()
+{
+    RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
+    return tbl.boxes.get(tbl.selected).text;
 }
 String getAirportState()
 {
