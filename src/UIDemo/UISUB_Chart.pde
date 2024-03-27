@@ -295,10 +295,6 @@ class ColorBar extends BarPlot
     int gapSize;
     color[] barColors;
     float[] centers;
-    // we are here making the assumption (by not checking) that the sizes of categories and valuesY will
-    // always be the same. This is (I think) ok, as this fact should always be up to the programmer's
-    // prudence in initializing new charts, but if it bites us later we can throw in a check easily enough
-    // (though as we will see Histogram leverages the absence of this check to deliberately mismatch sizes)
     ColorBar(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
