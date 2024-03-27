@@ -157,9 +157,17 @@ void Wk2Demo()
     mktShareScr.addWidget(background);
     mktShareScr.addWidget(titleButton);
     mktShareScr.addNamedChild(titleButton, "Title Button");
+    ReactiveWidget mktShareButton = (ReactiveWidget) titleScreen.getNamedChild("button: Market Share by Airline");
+    mktShareButton.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+            resetScreen(mktShareScr, background);
+            new Thread(() -> {
+                PieChart p1 = demoPie();
+                mktShareScr.addWidget(p1); 
+            }).start();
+    });
 
-    PieChart p1 = demoPie();
-    mktShareScr.addWidget(p1);    
+     
 
     // --- SCREEN 2: HISTOGRAM DEMO --- //
 
@@ -287,7 +295,7 @@ ScatterPlot demoLinePlot(SQLite db)
 
 PieChart demoPie()
 {
-    PieParams test = getPieChartData("flights2k");
+    PieParams test = getPieChartData("flights_full");
     double[] marketShare = new double[]{5,30,100,24,60};
     String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
     return new PieChart(
