@@ -312,7 +312,7 @@ ScatterPlot demoLinePlot(SQLite db)
 
 PieChart demoPie()
 {
-    PieParams test = getPieChartData("flights2k", "JFK");
+    PieParams test = getPieChartData("flights10k", getAirportCode());
     float[] marketShare = new float[]{5,30,100,24,60};
     String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
     return new PieChart(

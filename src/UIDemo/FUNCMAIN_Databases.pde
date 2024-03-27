@@ -7,8 +7,8 @@ import java.time.format.DateTimeFormatter;
 public PieParams getPieChartData(String table, String selectedAirport)
 {    
     String column = "IATA_Code_Marketing_Airline";
-    if (selectedAirport != "ALL") db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE Origin LIKE '%" +selectedAirport+ "%' GROUP BY " +column);
-    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " GROUP BY " +column);
+    if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " GROUP BY " +column);   
+    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE Origin LIKE '%" +selectedAirport+ "%' GROUP BY " +column);
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
     {
