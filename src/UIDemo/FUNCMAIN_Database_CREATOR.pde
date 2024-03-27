@@ -7,8 +7,8 @@ public void initDB(String dbName)
     if (db.connect())
     {
         initSchema(dbName, flightTableNames);
-        populateWacDB(); // must populate this before flights!!!
-        populateFlightDBs(flightTableNames);
+        //populateWacDB(); // must populate this before flights!!!
+        //populateFlightDBs(flightTableNames);
         populateDelays();
     }
 }
@@ -25,7 +25,7 @@ public boolean createDBFile(String fileName)
 
 public void initSchema(String dbName, String[] flightTableNames)
 {
-    db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Delay\"  INTEGER NOT NULL)");
+    db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Origin\" TEXT NOT NULL, \"Delay\"  INTEGER)");
     db.query("""CREATE TABLE "wac_codes" (
                   "WAC"  INTEGER NOT NULL,
                   "WAC_Name"  TEXT NOT NULL,
@@ -117,7 +117,7 @@ public void populateDelays()
     {
         TableRow currentRow = table.getRow(i);
         println(i);
-        db.query("INSERT INTO delays (\"Date\", \"Delay\") VALUES(\"%s\", %d);", dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getInt("DEP_DELAY"));
+        db.query("INSERT INTO delays (\"Date\",\"Origin\", \"Delay\") VALUES(\"%s\", \"%s\", %d);", dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("ORIGIN"), currentRow.getInt("DEP_DELAY"));
     }
     db.query("COMMIT;");
     print("delays successfully populated!");

@@ -424,9 +424,10 @@ String getTable()
     RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
     return tbl.boxes.get(tbl.selected).text;
 }
+
 String getAirportState()
 {
-   ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
+    ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
     String selectedEntry = sel.entries[sel.selected];
     String State = selectedEntry.substring(selectedEntry.length() - 2, selectedEntry.length());
     return State;

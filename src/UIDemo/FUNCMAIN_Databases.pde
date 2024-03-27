@@ -13,7 +13,7 @@ public PieParams getPieChartData(String table, String selectedAirport)
     while (db.next())
     {
         String value = db.getString(column);
-        int frequency = db.getInt("frequency"); //<>// //<>// //<>// //<>//
+        int frequency = db.getInt("frequency"); //<>//
         frequencyMap.put(value, frequency); 
     }
     
@@ -91,10 +91,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
 }
 
- //<>// //<>// //<>//
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>// //<>// //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>// //<>//
-{
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
+{ //<>//
     String[] dateRange = getDates();
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
@@ -108,7 +107,10 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM
     for (int i = 0; i < freqs.length; i++)
     {
-        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+ ((i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i))+" AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\";");
+        db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+
+                ( (i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i) )+
+                " AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\""+
+                ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
         println(freqs[i]);
@@ -119,7 +121,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //
             max = (int) freqs[i];
         }
     }
-    println("max is "+max);
+    println("maxFreq is "+max);
     return new HistParams(bins, freqs, (max/1000)*1000+1000);
 }
 
