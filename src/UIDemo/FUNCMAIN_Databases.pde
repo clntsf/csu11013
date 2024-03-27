@@ -15,7 +15,7 @@ public PieParams getPieChartData(String table)
     while (db.next())
     {
         String value = db.getString(column);
-        int frequency = db.getInt("frequency"); //<>// //<>// //<>//
+        int frequency = db.getInt("frequency"); //<>// //<>// //<>// //<>//
         frequencyMap.put(value, frequency); 
     }
     
@@ -87,9 +87,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
 }
 
- //<>// //<>//
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>// //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>//
+ //<>// //<>// //<>//
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>// //<>// //<>//
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>// //<>//
 {
     String[] dateRange = getDates();
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
@@ -118,7 +118,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //
     println("max is "+max);
     return new HistParams(bins, freqs, (max/1000)*1000+1000);
 }
-//WS 
+//Will S finds all airports within a select state from the scroll bar 27/3/24
 public String[] getStateAirports(String stateCode)
 {
   String[] airportsInState = new String[0];
@@ -137,13 +137,13 @@ public String[] getStateAirports(String stateCode)
   //}
   return airportsInState;
 }
-public BarParams populateBarParams(String stateCode)
+// Will S  finds all flights from an airport 27/3/24
+public BarParams populateBarParams(String[] airports)
 {
-  String[] airports = getStateAirports(stateCode);
   double[] numOfFlights = new double[airports.length];
   for(int i = 0; i < airports.length; i++)
   {
-    db.query("SELECT COUNT(OriginCityName) AS freq FROM flights2k WHERE Origin='" + airports[i] + "';");
+    db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");
     numOfFlights[i] = db.getInt("freq");
     println(numOfFlights[i]);
   }

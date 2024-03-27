@@ -372,10 +372,17 @@ InteractiveBarPlot demoBarPlot()
     for (int i = 0; i < airports.length; i++){
       airports[i] = airports[i].substring(0, 3);
     }
-    BarParams test1 = populateBarParams("WA");
+    BarParams test1 = populateBarParams(airports);
+    double maxHeight = 0;
+    for(double size: test1.numOfFlights){
+      if (size > maxHeight)
+      {
+        maxHeight = size;
+      }
+    }
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
     "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
-    airports, test1.numOfFlights, 50,
+    airports, test1.numOfFlights, int(1.05 * Math.round(maxHeight)),
     50, height - 40, 30, 30);
     return b1;
     
