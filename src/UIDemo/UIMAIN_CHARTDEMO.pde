@@ -235,9 +235,18 @@ void Wk2Demo()
     barPlotScr.addWidget(background);
     barPlotScr.addWidget(titleButton);
     barPlotScr.addNamedChild(titleButton, "Title Button");
-
-    InteractiveBarPlot b1 = demoBarPlot();
-    barPlotScr.addWidget(b1);
+    ReactiveWidget barPlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Volume Of State Flights");
+    barPlotBtn.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+          resetScreen(barPlotScr, background);
+          new Thread(() -> {
+          InteractiveBarPlot b1 = demoBarPlot();
+          barPlotScr.addWidget(b1);
+        }).start();
+    });
+    //InteractiveBarPlot b1 = demoBarPlot();
+    //barPlotScr.addWidget(b1);
+    
 
     // --- Screen 8 - Tim's Line Plot --- //
 
