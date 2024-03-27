@@ -179,7 +179,6 @@ void Wk2Demo()
     histScr.addNamedChild(titleButton, "Title Button");
 
     // RSR - if button pressed, chart is loaded. - 20/3/24 4PM
-    
     ReactiveWidget histBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Departure Delay Times");
     histBtn.addListener((e,w) -> {
         AtomicReference<HistParams> hP = new AtomicReference<>(null);
@@ -235,7 +234,8 @@ void Wk2Demo()
     barPlotScr.addWidget(background);
     barPlotScr.addWidget(titleButton);
     barPlotScr.addNamedChild(titleButton, "Title Button");
-    ReactiveWidget barPlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Volume Of State Flights");
+
+    ReactiveWidget barPlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Volume of State Flights");
     barPlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
           resetScreen(barPlotScr, background);
