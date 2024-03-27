@@ -1,7 +1,7 @@
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+//import java.util.Arrays;
 
 //macnalll - created method of accessing data from the database into a piechart 26/3/24
 public PieParams getPieChartData(String table, String selectedAirport)
@@ -19,7 +19,7 @@ public PieParams getPieChartData(String table, String selectedAirport)
     
     int size = frequencyMap.size();
     String[] categories = new String[size];
-    double[] valuesY = new double[size];
+    float[] valuesY = new float[size];
     
     int i = 0;
     for (Map.Entry<String, Integer> entry : frequencyMap.entrySet())
@@ -41,8 +41,8 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     int minDate = Integer.valueOf(dates[0].substring(8, 10));
     int maxDate = Integer.valueOf(dates[1].substring(8, 10));
     System.out.println("" + minDate + " to " + maxDate);
-    double[] datesXAxis = new double[maxDate-minDate+1];
-    double[] numFlightsYAxis = new double[maxDate-minDate+1];
+    float[] datesXAxis = new float[maxDate-minDate+1];
+    float[] numFlightsYAxis = new float[maxDate-minDate+1];
     for (int i = minDate; i <= maxDate; i++) {
         datesXAxis[i-minDate] = i;
         numFlightsYAxis[i-minDate] = 0;
@@ -75,14 +75,14 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     
         
     float[] datesRangeX = new float[]{minDate, maxDate};
-    double minFlights = numFlightsYAxis[0];
-    for (double i : numFlightsYAxis) {
+    float minFlights = numFlightsYAxis[0];
+    for (float i : numFlightsYAxis) {
       if (i < minFlights) {
           minFlights = i;
       }
     }
-    double maxFlights = numFlightsYAxis[0];
-    for (double i : numFlightsYAxis) {
+    float maxFlights = numFlightsYAxis[0];
+    for (float i : numFlightsYAxis) {
       if (i > maxFlights) {
           maxFlights = i;
       }
@@ -91,9 +91,10 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
 }
 
+ //<>//
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
 public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
-{ //<>//
+{
     String[] dateRange = getDates();
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
@@ -103,7 +104,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
         else bins[i] = minBin+step*i;
     }
     //println(bins);
-    double[] freqs = new double[bins.length-1];
+    float[] freqs = new float[bins.length-1];
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM
     for (int i = 0; i < freqs.length; i++)
     {
@@ -133,13 +134,51 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
 
 public BubbleParams makeBubbleParams()
 {
-
-    String[] carriers = new String[]{"AA", "AS", "B6", "DL", "F9", "G4", "HA", "NK", "UA", "WN"};
-    double[] cancelledPct = new double[]{5.776, 6.289, 9.788, 4.689, 4.452, 8.308, 3.698, 3.424, 8.693, 6.618};
-    double[] divertedPct = new double[] {0.157, 0.455, 0.244, 0.234, 0.141, 0.172, 0.187, 0.114, 0.276, 0.132};
-    float[] mktShare = new float[]{0.2651, 0.0526, 0.0378, 0.2089, 0.0214, 0.0155, 0.0104, 0.0311, 0.1844, 0.1728};
-
-    return new BubbleParams(cancelledPct, divertedPct, mktShare, carriers);
+    String query = """SELECT IATA_Code_Marketing_Airline as airline,
+    COUNT(Cancelled) as len,
+    SUM(Cancelled) as cancelled,
+    SUM(Diverted) as diverted
+    FROM flights_full
+    """;
+    
+    String[] dates = getDates();
+    String airport = getAirportCode();
+    
+    boolean conditions = false;
+    if (!airport.equals("ALL"))
+    {
+        query += " WHERE Origin = '" + airport + "'";
+        conditions = true;
+    }
+    String startDate = (dates[0].equals("") ? "2022-01-01" : dates[0]);
+    String endDate = (dates[1].equals("") ? "2022-31-01" : dates[1]);
+    
+    query += (conditions ? " AND" : " WHERE");
+    query += " FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "'";
+    query += "\nGROUP BY airline";
+    db.query(query);
+    
+    String[] carriers = new String[0];
+    float[] cancelledPct = new float[0];
+    float[] divertedPct = new float[0];
+    float[] marketShare = new float[0];
+    
+    int totalFlights = 0;
+    int r=0;
+    while (db.next())
+    {
+        int numFlights = db.getInt("len");
+        totalFlights += numFlights;
+        carriers = append(carriers, db.getString("airline"));   
+        cancelledPct = append(cancelledPct, 100.0 * db.getInt("cancelled")/numFlights);
+        divertedPct = append(divertedPct, 100.0 * db.getInt("diverted")/numFlights);
+        marketShare = append(marketShare, 100.0 * numFlights);
+    }
+    for (int i=0; i<marketShare.length; i++)
+    {
+        marketShare[i] = marketShare[i]/totalFlights;
+    }
+    return new BubbleParams(cancelledPct, divertedPct, marketShare, carriers);
 }
 
 //Will S finds all airports within a select state from the scroll bar 27/3/24
@@ -164,7 +203,7 @@ public String[] getStateAirports(String stateCode)
 // Will S  finds all flights from an airport 27/3/24
 public BarParams populateBarParams(String[] airports)
 {
-  double[] numOfFlights = new double[airports.length];
+  float[] numOfFlights = new float[airports.length];
   for(int i = 0; i < airports.length; i++)
   {
     db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");

@@ -58,7 +58,7 @@ void chartDemo()
     Histogram h1 = new Histogram(width/2, height/2, 300, 300,
         "Utterances of 'Ni' per day reported by the knights who say 'Ni'",
         "Utterances", "Freq. of Occurrence",
-        new Integer[] {0,5,10,15,20,25}, new double[] {1,4,9,5,2}, 10
+        new Integer[] {0,5,10,15,20,25}, new float[] {1,4,9,5,2}, 10
     );
     h1.fontSize = 14;
     h1.labelFormatStringY = "%.0f";
@@ -100,7 +100,7 @@ void chartDemo()
     BarPlot c1 = new BarPlot(width/2, height/2, 300, 300,
         "Maximum Airspeed of an Unladen Swallow by Species",
         "Species", "Maximum Airspeed (km/h)",
-        new String[] {"African", "European", "Asiatic"}, new double[] {15, 10.75, 19}, 24
+        new String[] {"African", "European", "Asiatic"}, new float[] {15, 10.75, 19}, 24
     );
     c1.fontSize = 14;
     c1.labelFormatStringY = "%.0f";
@@ -114,10 +114,10 @@ void chartDemo()
     
     // Scatter plot, using example data courtesy of cos()
     int numVals = 30;
-    double[] xVals = new double[numVals], yVals = new double[numVals];
+    float[] xVals = new float[numVals], yVals = new float[numVals];
     for (int i=0; i<numVals; i++)
     {
-        double propI = TAU/(numVals-1) * i;
+        float propI = TAU/(numVals-1) * i;
         xVals[i] = propI;
         yVals[i] = cos((float)propI);
     }

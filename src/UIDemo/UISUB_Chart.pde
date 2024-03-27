@@ -9,7 +9,7 @@
 abstract class Chart extends Widget
 {
     String title;
-    double[] valuesY;
+    float[] valuesY;
     
     // this is a config attribute, which can be edited by setting it manually
     // (i.e. obj.labelMargin = ... after initializing) but which doesn't belong in a constructor
@@ -17,7 +17,7 @@ abstract class Chart extends Widget
     
     Chart(
         int x, int y, int w, int h,
-        String title, double[] valuesY
+        String title, float[] valuesY
     )
     {
         super(x,y,w,h,#FAF9F6);
@@ -83,7 +83,7 @@ class PieChart extends Chart
 
     PieChart(
         int x, int y, int w, int h,
-        String title, double[] valuesY,
+        String title, float[] valuesY,
         String[] labels
     )
     {
@@ -148,7 +148,7 @@ abstract class Plot extends Chart
     Plot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesY, float[] axisRangeY
+        float[] valuesY, float[] axisRangeY
     )
     {
         super(x,y,w,h,title, valuesY);
@@ -161,7 +161,7 @@ abstract class Plot extends Chart
     Plot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesY, float axisMaxY
+        float[] valuesY, float axisMaxY
     )
     {
         this(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,new float[]{0,axisMaxY});
@@ -178,7 +178,7 @@ abstract class Plot extends Chart
         rotate(3*HALF_PI);
     }
     
-    float lerp (float[] range, double amt)
+    float lerp (float[] range, float amt)
     {
         //float start = range[0], stop = (float)range[1];
         return (float)(amt*range[1] + (1-amt)*range[0]);
@@ -238,7 +238,7 @@ class BarPlot extends Plot
     BarPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        String[] categories, double[] valuesY, int axisMaxY
+        String[] categories, float[] valuesY, int axisMaxY
     )
     {
         super( x, y, w, h, title, axisLabelX, axisLabelY, valuesY, axisMaxY);
@@ -251,7 +251,7 @@ class BarPlot extends Plot
     {
         int numBars = valuesY.length;
         float barSpacing = (this.barWidth+this.gapSize);                           // distance between the centers of adjacent bars;
-        int leftX = (int)( x - barSpacing*(double)(numBars-1)/2 );
+        int leftX = (int)( x - barSpacing*(float)(numBars-1)/2 );
 
         float[] centers = new float[numBars];
         for (int i=0; i<numBars; i++)
@@ -266,8 +266,8 @@ class BarPlot extends Plot
         float[] centers = xLabelCenters();
         for (int i=0; i<valuesY.length; i++)
         {
-            double yVal = valuesY[i];
-            double barHeight = h * (yVal/axisRangeY[1]);
+            float yVal = valuesY[i];
+            float barHeight = h * (yVal/axisRangeY[1]);
             fill(0);
             text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
             
@@ -298,7 +298,7 @@ class ColorBar extends BarPlot
     ColorBar(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        String[] categories, double[] valuesY, int axisMaxY
+        String[] categories, float[] valuesY, int axisMaxY
     )
     {
         super( x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
@@ -317,7 +317,7 @@ class ColorBar extends BarPlot
     {
         int numBars = valuesY.length;
         float barSpacing = (this.barWidth+this.gapSize);                           // distance between the centers of adjacent bars;
-        int leftX = (int)( x - barSpacing*(double)(numBars-1)/2 );
+        int leftX = (int)( x - barSpacing*(float)(numBars-1)/2 );
 
         float[] centers = new float[numBars];
         for (int i=0; i<numBars; i++)
@@ -349,8 +349,8 @@ class ColorBar extends BarPlot
     {
         for (int i=0; i<valuesY.length; i++)
         {
-            double yVal = valuesY[i];
-            double barHeight = h * (yVal/axisRangeY[1]);
+            float yVal = valuesY[i];
+            float barHeight = h * (yVal/axisRangeY[1]);
             fill(0);
             text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
             strokeWeight(1);
@@ -379,7 +379,7 @@ class InteractiveBarPlot extends Container
   InteractiveBarPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        String[] categories, double[] valuesY, int axisMaxY,
+        String[] categories, float[] valuesY, int axisMaxY,
         int handlesX, int handlesY, int handlesW, int handlesH
     )
     {
@@ -449,7 +449,7 @@ class Histogram extends BarPlot
     Histogram(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        Integer[] binStarts, double[] valuesY, int axisMaxY
+        Integer[] binStarts, float[] valuesY, int axisMaxY
     )
     {
         // we'll take responsibility for setting categories ourself
@@ -473,7 +473,7 @@ class Histogram extends BarPlot
 
 class ScatterPlot extends Plot
 {
-    double[] valuesX;
+    float[] valuesX;
     float[] axisRangeX;
     
     // config
@@ -485,7 +485,7 @@ class ScatterPlot extends Plot
     ScatterPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesX, double[] valuesY, float[] axisRangeX, float[] axisRangeY
+        float[] valuesX, float[] valuesY, float[] axisRangeX, float[] axisRangeY
     )
     {
         super(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,axisRangeY);
@@ -567,7 +567,7 @@ class BubblePlot extends ScatterPlot
     BubblePlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
-        double[] valuesX, double[] valuesY, float[] valuesZ, String[] labels,
+        float[] valuesX, float[] valuesY, float[] valuesZ, String[] labels,
         float[] axisRangeX, float[] axisRangeY
     )
     {

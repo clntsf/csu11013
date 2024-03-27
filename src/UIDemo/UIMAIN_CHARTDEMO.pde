@@ -189,7 +189,7 @@ void Wk2Demo()
         }*/
         resetScreen(histScr, background);
         Thread histT = new Thread(() -> {
-            hP.set(populateHistFreqs(-60, 10, 70));//bins, new double[bins.length-1]));
+            hP.set(populateHistFreqs(-60, 10, 70));//bins, new float[bins.length-1]));
             Histogram h = demoHistogram(titleScreen, hP.get());
             histScr.addWidget(h);
         });
@@ -313,7 +313,7 @@ ScatterPlot demoLinePlot(SQLite db)
 PieChart demoPie()
 {
     PieParams test = getPieChartData("flights2k", "JFK");
-    double[] marketShare = new double[]{5,30,100,24,60};
+    float[] marketShare = new float[]{5,30,100,24,60};
     String[] airlines = new String[]{"AA","UA","DL","B6","HA"};
     return new PieChart(
         width/2,height/2,width/2,height/2,
@@ -324,12 +324,17 @@ PieChart demoPie()
 
 BubblePlot demoBubble(BubbleParams params)
 {
+    // doing some norming for our axes
+    float xMax = max(0.5, round(12*max(params.valuesX)) / 10.0);
+    float yMax = max(0.5, round(12*max(params.valuesY)) / 10.0);
+
     BubblePlot bubble = new BubblePlot(width/2, height/2, 470, 470,
         "Airline Reliability vs Market Share", "% Flights Cancelled", "% Flights Diverted",
-        params.valuesX, params.valuesY, params.valuesZ, params.categories, new float[]{0,11}, new float[]{0,0.5}
+        params.valuesX, params.valuesY, params.valuesZ, params.categories, new float[]{0,xMax}, new float[]{0,yMax}
     );
     bubble.maxSize = 90;
     bubble.labelFormatStringY = "%.2f";
+    
     return bubble;
 }
 
@@ -349,12 +354,12 @@ Histogram demoHistogram(Screen titleScreen, HistParams histParams)
 
 ScatterPlot demoScatterPlot()
 {
- //double DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
- double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
+ //float DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
+ float durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
  int Carriers = 10;
  int AA = 149, AS = 120, B6 = 144,HA = 98, NK = 95, G4 = 47,WN = 125,UA = 31,DL = 6,F9 = 55;
-    double[] xVals = new double[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9};
-    double[] yVals = new double[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
+    float[] xVals = new float[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9};
+    float[] yVals = new float[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
         "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration",
         xVals, yVals, new float[] {0,150}, new float[]{0,550}
@@ -374,7 +379,7 @@ ScatterPlot demoScatterPlot()
 InteractiveBarPlot demoBarPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
-    double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
+    float[] numOfDelays = new float[]{12, 30, 20, 47, 33};
     String state = getAirportState();
     println(state);
     String[] airports = getStateAirports(state);
@@ -382,8 +387,8 @@ InteractiveBarPlot demoBarPlot()
       airports[i] = airports[i].substring(0, 3);
     }
     BarParams test1 = populateBarParams(airports);
-    double maxHeight = 0;
-    for(double size: test1.numOfFlights){
+    float maxHeight = 0;
+    for(float size: test1.numOfFlights){
       if (size > maxHeight)
       {
         maxHeight = size;
@@ -403,15 +408,13 @@ String[] getDates()
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
     //println(startDate.text + " | " + endDate.text);
-    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/24 3PM
-    if (startDate.text != "" || endDate.text != "")
-    {
-        LocalDate start, end;
-        start = LocalDate.parse(startDate.text, DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]"));
-        end = LocalDate.parse(endDate.text, DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]"));
-        return new String[] {start.toString(), end.toString()};
-    }
-    return new String[] {"", ""};
+    // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/2024 3PM
+    // CSF - rearranged functionality (guts?) so that one date could be supplied and the other left blank - 27/3/2024 8:40PM
+    
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    String start = (startDate.text == "" ? "" : LocalDate.parse(startDate.text,fmt).toString());
+    String end = (endDate.text == "" ? "" : LocalDate.parse(endDate.text,fmt).toString());
+    return new String[] {start, end};
 }
 
 String getAirportCode()
