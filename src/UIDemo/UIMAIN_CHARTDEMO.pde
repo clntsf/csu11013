@@ -104,7 +104,7 @@ void Wk2Demo()
     titleScreen.addNamedChild(airportSelector, "Airport Selector");
 
     // Table Selection
-    String[] tables = new String[]{"flights2k.csv", "flights10k.csv", "flights_full.csv"};
+    String[] tables = new String[]{"flights2k", "flights10k", "flights_full"};
     RadioButtonList tableSelector = new RadioButtonList(
         BG_MARGIN+COLUMN_SIDE_PAD,
         BG_MARGIN+COLUMN_VERT_PAD+350,
@@ -112,6 +112,7 @@ void Wk2Demo()
         tables, 24, 20
     );
     titleScreen.addWidget(tableSelector);
+    titleScreen.addNamedChild(tableSelector, "Table Selector");
 
     // Right side
     final int COLUMN_RIGHT = 3*width/4;
@@ -385,4 +386,10 @@ String getAirportCode()
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
     String selectedEntry = sel.entries[sel.selected];
     return selectedEntry.substring(0,3);
+}
+
+String getTable()
+{
+    RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
+    return tbl.boxes.get(tbl.selected).text;
 }
