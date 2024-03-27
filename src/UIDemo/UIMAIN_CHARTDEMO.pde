@@ -368,11 +368,11 @@ InteractiveBarPlot demoBarPlot()
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
     double[] numOfDelays = new double[]{12, 30, 20, 47, 33};
     String state = getAirportState();
-    String[] airports = getStateAirports("CA");
-    for (String a : airports){
-      println(a);
+    String[] airports = getStateAirports("WA");
+    for (int i = 0; i < airports.length; i++){
+      airports[i] = airports[i].substring(0, 3);
     }
-    BarParams test1 = populateBarParams("CA");
+    BarParams test1 = populateBarParams("WA");
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 400, 400,
     "Delays by Market Carrier" , "Market Carrier", "Number of Delays",
     airports, test1.numOfFlights, 50,
