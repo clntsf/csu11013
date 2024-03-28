@@ -412,8 +412,8 @@ String[] getDates()
     // CSF - rearranged functionality (guts?) so that one date could be supplied and the other left blank - 27/3/2024 8:40PM
     
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy]");
-    String start = (startDate.text == "" ? "" : LocalDate.parse(startDate.text,fmt).toString());
-    String end = (endDate.text == "" ? "" : LocalDate.parse(endDate.text,fmt).toString());
+    String start = (startDate.text == "" ? "2022-01-01" : LocalDate.parse(startDate.text,fmt).toString());
+    String end = (endDate.text == "" ? "2022-01-31" : LocalDate.parse(endDate.text,fmt).toString());
     return new String[] {start, end};
 }
 

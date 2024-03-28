@@ -62,9 +62,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     try {
       while (db.next()) {
           String flightDate = db.getString("FlightDate");
-          int day = Integer.parseInt(flightDate.substring(8, 10)); //<>// //<>//
-          int cancelled = db.getInt("Cancelled"); //<>// //<>//
-          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>// //<>//
+          int day = Integer.parseInt(flightDate.substring(8, 10)); //<>//
+          int cancelled = db.getInt("Cancelled"); //<>//
+          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>//
               numFlightsYAxis[day - minDate] += 1; 
           }
       }
@@ -91,7 +91,7 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
 
  //<>//
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>//
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
 { //<>//
     String[] dateRange = getDates(); //<>//
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
@@ -104,13 +104,11 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //
     //println(bins);
     float[] freqs = new float[bins.length-1];
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM
-    String startDate = (dateRange[0].equals("") ? "2022-01-01" : dateRange[0]);
-    String endDate = (dateRange[1].equals("") ? "2022-31-01" : dateRange[1]);
     for (int i = 0; i < freqs.length; i++)
     {
         db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+
                 ( (i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i) )+
-                " AND \"Date\" BETWEEN \""+startDate+"\" AND \""+endDate+"\""+
+                " AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\""+
                 ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
@@ -142,10 +140,8 @@ public BubbleParams makeBubbleParams()
     FROM flights_full
     """;
     
-    String[] dates = getDates();    
-    String startDate = (dates[0].equals("") ? "2022-01-01" : dates[0]);
-    String endDate = (dates[1].equals("") ? "2022-31-01" : dates[1]);
-    query += " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "'";
+    String[] dates = getDates();
+    query += " WHERE FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";
 
     String airport = getAirportCode();
     if (!airport.equals("ALL"))
