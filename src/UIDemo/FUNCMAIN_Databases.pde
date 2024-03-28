@@ -4,11 +4,17 @@ import java.time.format.DateTimeFormatter;
 //import java.util.Arrays;
 
 //macnalll - created method of accessing data from the database into a piechart 26/3/24
-public PieParams getPieChartData(String table, String selectedAirport)
+public PieParams getPieChartData(String table)
 {    
+    String selectedAirport = getAirportCode();
+    String date[] = getDates();
+    String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
+    String endDate = (date[1].equals("") ? "2022-31-01" : date[1]);
     String column = "IATA_Code_Marketing_Airline";
-    if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " GROUP BY " +column);   
-    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE Origin LIKE '%" +selectedAirport+ "%' GROUP BY " +column);
+    if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ 
+        " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " +column);   
+    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate + 
+        "' AND '" + endDate + "' AND Origin = '" +selectedAirport+ "' GROUP BY " +column);
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
     {
