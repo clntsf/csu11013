@@ -56,7 +56,10 @@ void mousePressed(MouseEvent mev)
 {
     screens.getActiveScreen().handleEvent(mev);
 }
-
+void mouseReleased(MouseEvent mev)
+{
+    screens.getActiveScreen().handleEvent(mev);
+}
 void mouseDragged(MouseEvent mev)
 {
     screens.getActiveScreen().handleEvent(mev);

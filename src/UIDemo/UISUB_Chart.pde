@@ -306,8 +306,8 @@ class ColorBar extends BarPlot
         this.barWidth = 40;
         this.gapSize = 20;
         if((categories.length * barWidth) + ((categories.length - 1) *gapSize) > w){
-          barWidth = 20;
-          gapSize = 10;
+          gapSize = w /((3 * categories.length)- 1);
+          barWidth = 2 * gapSize;
         }
         setBarColors(0.2, 0.5);
         centers = xLabelCenters();
@@ -376,6 +376,8 @@ class InteractiveBarPlot extends Container
   float[] barCenters;
   int[] barOrder;
   int handlesAxis;
+  boolean holding = false;
+  int currentHeld;
   InteractiveBarPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
@@ -390,43 +392,71 @@ class InteractiveBarPlot extends Container
           barCenters = bar.xLabelCenters();
           barColors = bar.getBarColors();
           handlesAxis = handlesY;
+          if (bar.barWidth < handlesW){
+            handlesW = bar.barWidth;
+          }
           for(int i = 0; i < handles.length; i++)
           {
             handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, barColors[i]);
             barOrder[i] = i;
             int index = i;
             handles[i].addListener((e,widg) -> {
+              if (e.getAction() != MouseEvent.RELEASE) { return; }
+                println("let go");
+                holding = false;
+            });
+            // handles[i].addListener((e,widg) -> {
+            //  if (e.getAction() != MouseEvent.PRESS) { return; }
+            //    println("held");
+            //    holding = true;
+            //});
+            handles[i].addListener((e,widg) -> {
               if (e.getAction() != MouseEvent.DRAG) { return; }
                 //println("Drag event registered!");
-                handles[index].setX(mouseX);
-                handles[index].setY(mouseY);
+                if(!holding || (holding && currentHeld == index ))
+                {
+                  handles[index].setX(mouseX);
+                  handles[index].setY(mouseY);
+                  currentHeld = index;
+                  holding = true;
+                }
             });
             children.add(handles[i]);
           }
   }
   void swapHandles()
   {
-    for(int i = 0; i< barOrder.length; i++)
-    {
-      for(int aboveIndex = i + 1; aboveIndex < handles.length; aboveIndex++)
+    if(!holding){
+      for(int i = 0; i< barOrder.length; i++)
       {
-        if(handles[barOrder[i]].x > handles[barOrder[aboveIndex]].x)
+        for(int aboveIndex = i + 1; aboveIndex < handles.length; aboveIndex++)
         {
-          float temp = barCenters[barOrder[i]];
-          barCenters[barOrder[i]] = barCenters[barOrder[aboveIndex]];
-          barCenters[barOrder[aboveIndex]] = temp;
-          bar.setCenters(barCenters);
-          handles[barOrder[i]].setX(int(barCenters[barOrder[i]]));
-          handles[barOrder[i]].setY(handlesAxis);
-          handles[barOrder[aboveIndex]].setX(int(barCenters[barOrder[aboveIndex]]));
-          handles[barOrder[aboveIndex]].setY(handlesAxis);
-          int temp2 = barOrder[i];
-          barOrder[i] = barOrder[aboveIndex];
-          barOrder[aboveIndex] = temp2;
+          if(handles[barOrder[i]].x > handles[barOrder[aboveIndex]].x)
+          {
+            float temp = barCenters[barOrder[i]];
+            barCenters[barOrder[i]] = barCenters[barOrder[aboveIndex]];        //swap barCenter
+            barCenters[barOrder[aboveIndex]] = temp;
+            bar.setCenters(barCenters);
+            handles[barOrder[i]].setX(int(barCenters[barOrder[i]]));             //set new handle positions
+            handles[barOrder[i]].setY(handlesAxis);
+            handles[barOrder[aboveIndex]].setX(int(barCenters[barOrder[aboveIndex]]));
+            handles[barOrder[aboveIndex]].setY(handlesAxis);                    
+            int temp2 = barOrder[i];                                            //set barOrder
+            barOrder[i] = barOrder[aboveIndex];
+            barOrder[aboveIndex] = temp2;
+          }
         }
       }
     }
   }
+  //void handlesPlace()
+  //{
+  //  for(int i = 0; i < handles.length; i++)
+  //  {
+  //    handles[i].setX(int(barCenters[i]));
+  //    handles[i].setY(handlesAxis);
+  //  }
+  //}
   void handlesDraw()
   {
     for(ReactiveWidget h : handles)
