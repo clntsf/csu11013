@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="code">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/code/BezierSQLib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/code/sqlite-jdbc-3.7.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

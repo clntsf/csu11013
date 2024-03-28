@@ -47,6 +47,19 @@ class HistParams
     }
 }
 
+// Kilian - created ScatterPlotData Class - 25/03/24
+class ScatterPlotData
+{
+   int[] flightVolume;
+   double[] flightDuration;
+   
+   ScatterPlotData(int[] flightVolume, double[] flightDuration)
+   {
+     this.flightVolume = flightVolume;
+     this.flightDuration = flightDuration;
+   }
+}
+
 class BubbleParams extends NumericalParams
 {
     float[] sizes;

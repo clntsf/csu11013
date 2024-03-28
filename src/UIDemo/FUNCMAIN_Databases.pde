@@ -83,6 +83,32 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
     
     return new HistParams(bins, freqs);
 }
+//Kilian 27/03/24
+//public ScatterPlotData populateScatterPlot()
+//{
+//  int numberOfQueries = 2000;
+//  int[] flightVolume = new int[numberOfQueries];
+//  double[] flightDuration = new double[numberOfQueries];
+//  double[] actualLanding = new double[numberOfQueries]; 
+//  double[] actualTakeOff = new double[numberOfQueries];
+  
+//   for (int i = 0; i < numberOfQueries; i++){
+//     db.query("SELECT COUNT(MKT_CARRIER) AS numOfCarriers");
+//    // estimatedTakeOff[i] = db.getDouble("CRS_DEP_TIME");
+//     actualTakeOff[i] = db.getDouble("DEP_TIME");
+//    // estimatedLanding[i] = db.getDouble("CRS_ARR_TIME");
+//     actualLanding[i] = db.getDouble("ARR_TIME");
+//     flightVolume[i] = db.getInt("numOfCarriers");
+//     println(flightVolume[i]);
+//   }
+//   flightDuration[1] = 1;
+   
+  
+  
+//  return new ScatterPlotData(flightVolume,flightDuration);
+//}
+
+
 
 public LocalDate dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24

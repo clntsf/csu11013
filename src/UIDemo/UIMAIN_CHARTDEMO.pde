@@ -171,7 +171,7 @@ void Wk2Demo()
     mapScr.addWidget(background);
     mapScr.addWidget(titleButton);
 
-    // --- Screen 6 - Scatter Plot Screen  --- //
+    // --- Screen 6 - Kilian's Scatter Plot  --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
@@ -276,39 +276,36 @@ Histogram demoHistogram(Screen titleScreen, HistParams histParams)
     return h;
 }
 
-ScatterPlot demoScatterPlot(){
- double durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500;  //<>//
- int AA = 149, AS = 120, B6 = 144,HA = 98, NK = 95, G4 = 47,WN = 125,UA = 31,DL = 6,F9 = 55;
+ScatterPlot demoScatterPlot(){ //<>//
  int Carriers = 10;
-    double[] xVals = new double[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9}, yVals = new double[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
-  // load data  yourself to test it for  now 
-    db.query("SELECT * FROM flights2k LIMIT "+10);
+  int numberOfQueries = 2000;
+  double[] flightVolume = new double[numberOfQueries];
+//  String[] flightVolume = new String[numberOfQueries];
+  double[] flightDuration = new double[numberOfQueries];
+  double[] actualLanding = new double[numberOfQueries]; 
+  double[] actualTakeOff = new double[numberOfQueries];
+  
+   for (int i = 0; i < numberOfQueries; i++){
+     if(db.next()){
+  //   db.query("SELECT MKT_CARRIER, COUNT(*) AS flight_volume" + "FROM flights2k" + "GROUP BY MKT_CARRIER");
+     db.query("SELECT * FROM flights2k");
+     actualTakeOff[i] = db.getDouble("DEP_TIME");
+     actualLanding[i] = db.getDouble("ARR_TIME");
+     flightVolume[i] = db.getDouble("flight_volume");
+     println(flightVolume[i]);
+   }
+   else
+   {
+     print("No Data Found");
+   }
+   }
+   flightDuration[1] = 1;
    
-    for(int i =0; i< 2000;i++){
-      if (db.next())
-        { 
-            String flightDate = db.getString("FlightDate");
-            String origin = db.getString("Origin");
-            String destination = db.getString("Dest");
-            System.out.println(flightDate + origin + destination);
-            
-        }
-        else
-        {
-            text("No data found.", 320, 600);
-        }
-      
-    }
+   
     
-    
-    for (int i=1; i<Carriers; i++)
-    {
-        xVals[i] =xVals[i];
-        yVals[i] = yVals[i];
-    }
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
         "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration",
-        xVals, yVals, new float[] {0,150}, new float[]{0,550}
+        flightVolume, flightDuration, new float[] {0,150}, new float[]{0,550}
     );
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";
