@@ -1,31 +1,31 @@
 // CSF 14/3/2024 5PM - Implemented charts, plots, and their children (Bar, Histogram, Scatter (includes line plots))
 
 /**
-* A Chart only has the minimum standard functionality - a frame and a title.
-* This is to allow for non-plot charts (see below for Plot), such as a pie chart, which
-* do not avail of axis labels, ticks, etc. and instead just need the above. This class is
-* also abstract, as it is not intended to be used directly in code, only its subclasses.
-*/
+ * A Chart only has the minimum standard functionality - a frame and a title.
+ * This is to allow for non-plot charts (see below for Plot), such as a pie chart, which
+ * do not avail of axis labels, ticks, etc. and instead just need the above. This class is
+ * also abstract, as it is not intended to be used directly in code, only its subclasses.
+ */
 abstract class Chart extends Widget
 {
     String title;
     float[] valuesY;
-    
+
     // this is a config attribute, which can be edited by setting it manually
     // (i.e. obj.labelMargin = ... after initializing) but which doesn't belong in a constructor
     int labelMargin = 15;
-    
+
     Chart(
         int x, int y, int w, int h,
         String title, float[] valuesY
-    )
+        )
     {
-        super(x,y,w,h,#FAF9F6);
+        super(x, y, w, h, #FAF9F6);
         this.title = title;
         this.valuesY = valuesY;
         setStroke(0);
     }
-    
+
     int[] genColors(int len)
     {
         color[] colors = new int[len];
@@ -35,14 +35,14 @@ abstract class Chart extends Widget
         }
         return colors;
     }
-    
+
     void draw()
     {
         strokeWeight(2);
         super.draw();
-        textAlign(CENTER,CENTER);
+        textAlign(CENTER, CENTER);
         fill(0);
-        
+
         textSize(fontSize+2);
         text(title, x, y-h/2-fontSize-labelMargin);
     }
@@ -54,8 +54,8 @@ color applyAlpha(color c, int alpha)
 }
 
 /* CSF 19/3/24 7:30PM - Added Random Pastel color generator loosely inspired
-by https://mdigi.tools/random-pastel-color/ (see "How to Generate Random Pastel Colors?")
-*/
+ by https://mdigi.tools/random-pastel-color/ (see "How to Generate Random Pastel Colors?")
+ */
 int channelToPastel(float orig, float rm)
 {
     return (int)(orig-rm+255)/2;
@@ -66,16 +66,16 @@ int randomPastel(float seed)
     float r = 255*pow(sin(seed), 2);
     float g = 255*pow(sin(seed+PI/3), 2);
     float b = 255*pow(sin(seed+TAU/3), 2);
-    
-    float gray = (float) min(r,g,b);
+
+    float gray = (float) min(r, g, b);
     float saturation_amt = 0.8;
     float rm = gray*saturation_amt;
 
-    return color(channelToPastel(r,rm), channelToPastel(g,rm), channelToPastel(b,rm));
+    return color(channelToPastel(r, rm), channelToPastel(g, rm), channelToPastel(b, rm));
 }
 
 // Macnalll - added pie chart subclass 19/3/24
-class PieChart extends Chart 
+class PieChart extends Chart
 {
     float angles[];
     String[] labels;
@@ -85,9 +85,9 @@ class PieChart extends Chart
         int x, int y, int w, int h,
         String title, float[] valuesY,
         String[] labels
-    )
+        )
     {
-        super(x,y,w,h,title, valuesY);
+        super(x, y, w, h, title, valuesY);
         this.labels = labels;
 
         angles = new float[valuesY.length];
@@ -103,12 +103,12 @@ class PieChart extends Chart
             angles[i] = (float)(valuesY[i]/chartTotalValues)*360;
         }
     }
-    
+
     void drawChartAndKey()
     {
         float lastAngle = 0;
         int xpos = x+w/2+30, ypos = y-h/2+10;
-        for (int i=0; i<angles.length; i++) 
+        for (int i=0; i<angles.length; i++)
         {
             // draw pie chart
             fill(colors[i]);
@@ -121,8 +121,8 @@ class PieChart extends Chart
             fill(0);
             text(labels[i], xpos+20, ypos + 20*i);
         }
-    } 
-    
+    }
+
     void draw()
     {
         super.draw();
@@ -132,26 +132,26 @@ class PieChart extends Chart
 
 /*
 Plots have somewhat more functionality, supporting axis labels and a y-axis limit.
-Again, Plot is abstract because it should not be used in favor of one of its subclasses
-*/
+ Again, Plot is abstract because it should not be used in favor of one of its subclasses
+ */
 abstract class Plot extends Chart
 {
     String axisLabelX;
     String axisLabelY;
     float[] axisRangeY;
-    
+
     // again, config attributes
     int numAxisTicksY;
     String labelFormatStringY = "%.1f";
     color plotColor = #CCCCFF;    // periwinkle :)
-    
+
     Plot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         float[] valuesY, float[] axisRangeY
-    )
+        )
     {
-        super(x,y,w,h,title, valuesY);
+        super(x, y, w, h, title, valuesY);
         this.numAxisTicksY = 5;
         this.axisLabelX = axisLabelX;
         this.axisLabelY = axisLabelY;
@@ -162,13 +162,13 @@ abstract class Plot extends Chart
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         float[] valuesY, float axisMaxY
-    )
+        )
     {
-        this(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,new float[]{0,axisMaxY});
+        this(x, y, w, h, title, axisLabelX, axisLabelY, valuesY, new float[]{0, axisMaxY});
     }
-    
+
     // transforms the origin of the transformation matrix to the middle of the y axis, where -y' (new up) = +x (old right)
-    // NB: popMatrix is not called here, so this function should be treated like pushMatrix and always succeeded (eventually) by a 
+    // NB: popMatrix is not called here, so this function should be treated like pushMatrix and always succeeded (eventually) by a
     // popMatrix call. This error is fortunately easy to notice, as within 32 calls of this function the stack depth will be exceeded
     // and the program will exit, but it doesn't tell you what line causes the issue. It's the fact that you didn't call popMatrix, dummy.
     void transformToYAxis()
@@ -177,14 +177,14 @@ abstract class Plot extends Chart
         translate( x-w/2-labelMargin-fontSize, y );
         rotate(3*HALF_PI);
     }
-    
+
     float lerp (float[] range, float amt)
     {
         //float start = range[0], stop = (float)range[1];
         return (float)(amt*range[1] + (1-amt)*range[0]);
     }
-    
-    void drawAxisNames()    
+
+    void drawAxisNames()
     {
         textSize(fontSize);
         text(axisLabelX, x, y+h/2+labelMargin + fontSize);
@@ -192,7 +192,7 @@ abstract class Plot extends Chart
         text(axisLabelY, 0, 0);
         popMatrix();
     }
-    
+
     void drawAxisTicks(float[] range, String fmtString, int numAxisTicks)
     {
         textSize((int)(0.8*fontSize));
@@ -200,19 +200,19 @@ abstract class Plot extends Chart
         {
             float proportion = (float)i/(numAxisTicks-1);
             String tickLabel = String.format(fmtString, lerp(range, proportion));
-            text(tickLabel,proportion*w,0);
+            text(tickLabel, proportion*w, 0);
         }
     }
-    
+
     void drawAxisTicksY()
     {
         transformToYAxis();
-        translate(-w/2,labelMargin);    // translate to the bottom-left corner of the chart
-        
+        translate(-w/2, labelMargin);    // translate to the bottom-left corner of the chart
+
         drawAxisTicks(axisRangeY, labelFormatStringY, numAxisTicksY);
         popMatrix();
     }
-    
+
     void draw()
     {
         super.draw();
@@ -226,11 +226,11 @@ abstract class Plot extends Chart
 class BarPlot extends Plot
 {
     String[] categories;
-    
+
     // config attributes
     int barWidth;
     int gapSize;
-    
+
     // we are here making the assumption (by not checking) that the sizes of categories and valuesY will
     // always be the same. This is (I think) ok, as this fact should always be up to the programmer's
     // prudence in initializing new charts, but if it bites us later we can throw in a check easily enough
@@ -239,14 +239,14 @@ class BarPlot extends Plot
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         String[] categories, float[] valuesY, int axisMaxY
-    )
+        )
     {
         super( x, y, w, h, title, axisLabelX, axisLabelY, valuesY, axisMaxY);
         this.categories = categories;
-        this.barWidth = 40;
-        this.gapSize = 20;
+        barWidth = 40;
+        gapSize = 20;
     }
-    
+
     float[] xLabelCenters ()
     {
         int numBars = valuesY.length;
@@ -260,7 +260,7 @@ class BarPlot extends Plot
         }
         return centers;
     }
-    
+
     void plotValues()
     {
         float[] centers = xLabelCenters();
@@ -270,13 +270,13 @@ class BarPlot extends Plot
             float barHeight = h * (yVal/axisRangeY[1]);
             fill(0);
             text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
-            
+
             strokeWeight(1);
             fill(plotColor);
             rect(centers[i], (float)(y+h/2-barHeight/2), (float)barWidth, (float)barHeight);
         }
     }
-    
+
     void draw()
     {
         textSize((int)(0.8*fontSize));
@@ -289,7 +289,7 @@ class BarPlot extends Plot
 class ColorBar extends BarPlot
 {
     String[] categories;
-    
+
     // config attributes
     int barWidth;
     int gapSize;
@@ -299,20 +299,21 @@ class ColorBar extends BarPlot
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         String[] categories, float[] valuesY, int axisMaxY
-    )
+        )
     {
         super( x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
-        this.categories = categories;
-        this.barWidth = 40;
+        //this.categories = categories;
+        barWidth = 40;
         this.gapSize = 20;
-        if((categories.length * barWidth) + ((categories.length - 1) *gapSize) > w){
-          gapSize = w /((3 * categories.length)- 1);
-          barWidth = 2 * gapSize;
+        if ( (categories.length * barWidth) + ((categories.length - 1) *gapSize) > w)
+        {
+            gapSize = w /((3 * categories.length)- 1);
+            barWidth = 2 * gapSize;
         }
         setBarColors(0.2, 0.5);
         centers = xLabelCenters();
     }
-    
+
     float[] xLabelCenters ()
     {
         int numBars = valuesY.length;
@@ -328,23 +329,23 @@ class ColorBar extends BarPlot
     }
     void setCenters(float[] newCenters)
     {
-      centers = newCenters;
+        centers = newCenters;
     }
     // Will S added in functionality to allow a pastel color to be added and accessed by outside classes.
     void setBarColors(float constant, float multiple)
     {
-      barColors = new color[valuesY.length];
-      for (int i = 0; i < valuesY.length; i++)
-      {
-        barColors[i] = randomPastel(constant + (multiple * i));
-      }
+        barColors = new color[valuesY.length];
+        for (int i = 0; i < valuesY.length; i++)
+        {
+            barColors[i] = randomPastel(constant + (multiple * i));
+        }
     }
-    
+
     color[] getBarColors()
     {
-      return barColors;
+        return barColors;
     }
-    
+
     void plotValues()
     {
         for (int i=0; i<valuesY.length; i++)
@@ -358,7 +359,7 @@ class ColorBar extends BarPlot
             rect(centers[i], (float)(y+h/2-barHeight/2), (float)barWidth, (float)barHeight);
         }
     }
-    
+
     void draw()
     {
         textSize((int)(0.8*fontSize));
@@ -370,108 +371,116 @@ class ColorBar extends BarPlot
 //Will S cooked a storm in here and made Gordon Ramsay proud 20/3/24
 class InteractiveBarPlot extends Container
 {
-  ColorBar bar;
-  ReactiveWidget[] handles;
-  color[] barColors;
-  float[] barCenters;
-  int[] barOrder;
-  int handlesAxis;
-  boolean holding = false;
-  int currentHeld;
-  InteractiveBarPlot(
+    ColorBar bar;
+    ReactiveWidget[] handles;
+    color[] barColors;
+    float[] barCenters;
+    int[] barOrder;
+    int handlesAxis;
+    boolean holding = false;
+    int currentHeld;
+
+    InteractiveBarPlot(
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         String[] categories, float[] valuesY, int axisMaxY,
         int handlesX, int handlesY, int handlesW, int handlesH
-    )
+        )
     {
-          super();
-          bar = new ColorBar(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
-          handles = new ReactiveWidget[categories.length];
-          barOrder = new int[categories.length];
-          barCenters = bar.xLabelCenters();
-          barColors = bar.getBarColors();
-          handlesAxis = handlesY;
-          if (bar.barWidth < handlesW){
+        super();
+        bar = new ColorBar(x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
+        handles = new ReactiveWidget[categories.length];
+        barOrder = new int[categories.length];
+        barCenters = bar.xLabelCenters();
+        barColors = bar.getBarColors();
+        handlesAxis = handlesY;
+        if (bar.barWidth < handlesW)
+        {
             handlesW = bar.barWidth;
-          }
-          for(int i = 0; i < handles.length; i++)
-          {
+        }
+        for (int i = 0; i < handles.length; i++)
+        {
             handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, barColors[i]);
             barOrder[i] = i;
             int index = i;
-            handles[i].addListener((e,widg) -> {
-              if (e.getAction() != MouseEvent.RELEASE) { return; }
+            handles[i].addListener((e, widg) -> {
+                if (e.getAction() != MouseEvent.RELEASE) {
+                    return;
+                }
                 println("let go");
                 holding = false;
-            });
+            }
+            );
             // handles[i].addListener((e,widg) -> {
             //  if (e.getAction() != MouseEvent.PRESS) { return; }
             //    println("held");
             //    holding = true;
             //});
-            handles[i].addListener((e,widg) -> {
-              if (e.getAction() != MouseEvent.DRAG) { return; }
-                //println("Drag event registered!");
-                if(!holding || (holding && currentHeld == index ))
-                {
-                  handles[index].setX(mouseX);
-                  handles[index].setY(mouseY);
-                  currentHeld = index;
-                  holding = true;
+            handles[i].addListener((e, widg) -> {
+                if (e.getAction() != MouseEvent.DRAG) {
+                    return;
                 }
-            });
+                //println("Drag event registered!");
+                if (!holding || (holding && currentHeld == index ))
+                {
+                    handles[index].setX(mouseX);
+                    handles[index].setY(mouseY);
+                    currentHeld = index;
+                    holding = true;
+                }
+            }
+            );
             children.add(handles[i]);
-          }
-  }
-  void swapHandles()
-  {
-    if(!holding){
-      for(int i = 0; i< barOrder.length; i++)
-      {
-        for(int aboveIndex = i + 1; aboveIndex < handles.length; aboveIndex++)
-        {
-          if(handles[barOrder[i]].x > handles[barOrder[aboveIndex]].x)
-          {
-            float temp = barCenters[barOrder[i]];
-            barCenters[barOrder[i]] = barCenters[barOrder[aboveIndex]];        //swap barCenter
-            barCenters[barOrder[aboveIndex]] = temp;
-            bar.setCenters(barCenters);
-            handles[barOrder[i]].setX(int(barCenters[barOrder[i]]));             //set new handle positions
-            handles[barOrder[i]].setY(handlesAxis);
-            handles[barOrder[aboveIndex]].setX(int(barCenters[barOrder[aboveIndex]]));
-            handles[barOrder[aboveIndex]].setY(handlesAxis);                    
-            int temp2 = barOrder[i];                                            //set barOrder
-            barOrder[i] = barOrder[aboveIndex];
-            barOrder[aboveIndex] = temp2;
-          }
         }
-      }
     }
-  }
-  //void handlesPlace()
-  //{
-  //  for(int i = 0; i < handles.length; i++)
-  //  {
-  //    handles[i].setX(int(barCenters[i]));
-  //    handles[i].setY(handlesAxis);
-  //  }
-  //}
-  void handlesDraw()
-  {
-    for(ReactiveWidget h : handles)
+    void swapHandles()
     {
-      h.updateHover();
-      h.draw();
+        if (!holding) {
+            for (int i = 0; i< barOrder.length; i++)
+            {
+                for (int aboveIndex = i + 1; aboveIndex < handles.length; aboveIndex++)
+                {
+                    if (handles[barOrder[i]].x > handles[barOrder[aboveIndex]].x)
+                    {
+                        float temp = barCenters[barOrder[i]];
+                        barCenters[barOrder[i]] = barCenters[barOrder[aboveIndex]];        //swap barCenter
+                        barCenters[barOrder[aboveIndex]] = temp;
+                        bar.setCenters(barCenters);
+                        handles[barOrder[i]].setX(int(barCenters[barOrder[i]]));             //set new handle positions
+                        handles[barOrder[i]].setY(handlesAxis);
+                        handles[barOrder[aboveIndex]].setX(int(barCenters[barOrder[aboveIndex]]));
+                        handles[barOrder[aboveIndex]].setY(handlesAxis);
+                        int temp2 = barOrder[i];                                            //set barOrder
+                        barOrder[i] = barOrder[aboveIndex];
+                        barOrder[aboveIndex] = temp2;
+                    }
+                }
+            }
+        }
     }
-  }
-  void draw()
-  {
-    super.draw();
-    bar.draw();
-    swapHandles();
-    handlesDraw();
-  }
+    //void handlesPlace()
+    //{
+    //  for(int i = 0; i < handles.length; i++)
+    //  {
+    //    handles[i].setX(int(barCenters[i]));
+    //    handles[i].setY(handlesAxis);
+    //  }
+    //}
+    void handlesDraw()
+    {
+        for (ReactiveWidget h : handles)
+        {
+            h.updateHover();
+            h.draw();
+        }
+    }
+    void draw()
+    {
+        super.draw();
+        bar.draw();
+        swapHandles();
+        handlesDraw();
+    }
 }
 
 class Histogram extends BarPlot
@@ -480,7 +489,7 @@ class Histogram extends BarPlot
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         Integer[] binStarts, float[] valuesY, int axisMaxY
-    )
+        )
     {
         // we'll take responsibility for setting categories ourself
         super( x, y, w, h, title, axisLabelX, axisLabelY, null, valuesY, axisMaxY);
@@ -488,7 +497,7 @@ class Histogram extends BarPlot
         this.barWidth = (int)((float)w/valuesY.length);
         this.gapSize = 0;
     }
-    
+
     String[] makeCategories(Integer[] bins)
     {
         int numCats = bins.length-1;
@@ -505,7 +514,7 @@ class ScatterPlot extends Plot
 {
     float[] valuesX;
     float[] axisRangeX;
-    
+
     // config
     String labelFormatStringX;
     boolean connect;
@@ -516,25 +525,25 @@ class ScatterPlot extends Plot
         int x, int y, int w, int h,
         String title, String axisLabelX, String axisLabelY,
         float[] valuesX, float[] valuesY, float[] axisRangeX, float[] axisRangeY
-    )
+        )
     {
-        super(x,y,w,h,title,axisLabelX,axisLabelY,valuesY,axisRangeY);
+        super(x, y, w, h, title, axisLabelX, axisLabelY, valuesY, axisRangeY);
         this.valuesX = valuesX;
         this.axisRangeX = axisRangeX;
         connect = false;
         markers = true;
         numAxisTicksX = 5;
     }
-    
+
     void drawAxisTicksX()
     {
         String fmtString = (labelFormatStringX == null ? labelFormatStringY : labelFormatStringX);
         pushMatrix();
-        translate(x-w/2,y+h/2+labelMargin);    // translate to the bottom-left corner of the chart
+        translate(x-w/2, y+h/2+labelMargin);    // translate to the bottom-left corner of the chart
         drawAxisTicks(axisRangeX, fmtString, numAxisTicksX);
         popMatrix();
     }
-    
+
     float[] getScreenCoords(float absX, float absY)
     {
         float minX = axisRangeX[0], minY = axisRangeY[0];
@@ -544,30 +553,32 @@ class ScatterPlot extends Plot
         float propY = (absY-minY)/(maxY-minY);
         return new float[] {x-w/2 + propX*w, y+h/2 - propY*h};
     }
-    
+
     void drawFrame()
     {
         drawAxisTicksX();
         super.draw();
     }
-    
+
     void draw()
     {
         drawFrame();
-        fill(0,0,200);
-        
+        fill(0, 0, 200);
+
         float[] lastCoords = null;
         for (int i=0; i<valuesX.length; i++)
         {
             float[] screenCoords = getScreenCoords((float)valuesX[i], (float)valuesY[i]);
             float sx = screenCoords[0], sy = screenCoords[1];
-            if ( sx<x-w/2 || sx>x+w/2 || sy<y-h/2 || sy>y+h/2 ) { continue; }
+            if ( sx<x-w/2 || sx>x+w/2 || sy<y-h/2 || sy>y+h/2 ) {
+                continue;
+            }
             noStroke();
             if (connect)
             {
                 if (lastCoords != null)
                 {
-                    stroke(0,0,200);
+                    stroke(0, 0, 200);
                     line((int)lastCoords[0], (int)lastCoords[1], (int)sx, (int)sy);
                 }
                 lastCoords = screenCoords;
@@ -578,7 +589,7 @@ class ScatterPlot extends Plot
             }
         }
     }
-    
+
     void makeLinePlot()
     {
         connect = true;
@@ -599,9 +610,9 @@ class BubblePlot extends ScatterPlot
         String title, String axisLabelX, String axisLabelY,
         float[] valuesX, float[] valuesY, float[] valuesZ, String[] labels,
         float[] axisRangeX, float[] axisRangeY
-    )
+        )
     {
-        super(x,y,w,h,title,axisLabelX,axisLabelY,valuesX,valuesY,axisRangeX,axisRangeY);
+        super(x, y, w, h, title, axisLabelX, axisLabelY, valuesX, valuesY, axisRangeX, axisRangeY);
         this.valuesZ = valuesZ;
         this.maxZ = max(valuesZ);
         this.labels = labels;
@@ -611,7 +622,7 @@ class BubblePlot extends ScatterPlot
             colors[i] = applyAlpha(colors[i], 127);    // 50% transparency
         }
     }
-    
+
     void draw()
     {
         super.drawFrame();
@@ -620,7 +631,7 @@ class BubblePlot extends ScatterPlot
             color c = colors[i];
             fill(c);
             float[] screenCoords = getScreenCoords((float)valuesX[i], (float)valuesY[i]);
-            circle(screenCoords[0], screenCoords[1], maxSize*pow(valuesZ[i]/maxZ,0.5));
+            circle(screenCoords[0], screenCoords[1], maxSize*pow(valuesZ[i]/maxZ, 0.5));
             fill(0);
             // textAlign(LEFT,TOP);
             text(labels[i], screenCoords[0], screenCoords[1]);
