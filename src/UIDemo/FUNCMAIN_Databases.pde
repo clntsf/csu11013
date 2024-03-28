@@ -182,36 +182,36 @@ public BubbleParams makeBubbleParams()
 }
 
 //Will S finds all airports within a select state from the scroll bar 27/3/24
-public String[] getStateAirports(String stateCode)
-{
-  String[] airportsInState = new String[0];
-  String[] airportsInCountry = loadStrings("airports.txt");
-  for (String a: airportsInCountry)
-  {
-    String aState = a.substring(a.length() - 2, a.length());
-    if (aState.equals(stateCode))
-    {
-      airportsInState = append(airportsInState, a);
-    }
-  }
-  //db.query("SELECT DISTINCT ORIGIN from flights_full WHERE ORIGIN_STATE_ABR=" + stateCode);
-  //while(db.next()){
-  //  airportsInState = append(airportsInState, db.getString("ORIGIN"));
-  //}
-  return airportsInState;
-}
-// Will S  finds all flights from an airport 27/3/24
-public BarParams populateBarParams(String[] airports)
-{
-  float[] numOfFlights = new float[airports.length];
-  for(int i = 0; i < airports.length; i++)
-  {
-    db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");
-    numOfFlights[i] = db.getInt("freq");
-    println(numOfFlights[i]);
-  }
-  return new BarParams(airports, numOfFlights);
-}
+// public String[] getStateAirports(String stateCode)
+// {
+//   String[] airportsInState = new String[0];
+//   String[] airportsInCountry = loadStrings("airports.txt");
+//   for (String a: airportsInCountry)
+//   {
+//     String aState = a.substring(a.length() - 2, a.length());
+//     if (aState.equals(stateCode))
+//     {
+//       airportsInState = append(airportsInState, a);
+//     }
+//   }
+//   //db.query("SELECT DISTINCT ORIGIN from flights_full WHERE ORIGIN_STATE_ABR=" + stateCode);
+//   //while(db.next()){
+//   //  airportsInState = append(airportsInState, db.getString("ORIGIN"));
+//   //}
+//   return airportsInState;
+// }
+// // Will S  finds all flights from an airport 27/3/24
+// public BarParams populateBarParams(String[] airports)
+// {
+//   float[] numOfFlights = new float[airports.length];
+//   for(int i = 0; i < airports.length; i++)
+//   {
+//     db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");
+//     numOfFlights[i] = db.getInt("freq");
+//     println(numOfFlights[i]);
+//   }
+//   return new BarParams(airports, numOfFlights);
+// }
 
 CategoricalParams populateBarParamsRefined()
 {
