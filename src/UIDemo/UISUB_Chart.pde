@@ -302,7 +302,7 @@ class ColorBar extends BarPlot
         )
     {
         super( x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
-        //this.categories = categories;
+        this.categories = categories;
         barWidth = 40;
         this.gapSize = 20;
         if ( (categories.length * barWidth) + ((categories.length - 1) *gapSize) > w)
