@@ -223,6 +223,40 @@ public LocalTime timeToLocalTime(String stringTime) {
     } catch( NumberFormatException e ) { return null; }
     // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
 }
+//Kilian 27/03/24 - created function to fill ScatterPlot
+public ScatterPlotData populateScatterPlot()
+{
+  db.query("SELECT * FROM flights2k");
+  int Carriers = 10;
+  int numberOfQueries = 2000;
+  float[] flightVolume = new float[numberOfQueries];
+  float[] flightDuration = new float[numberOfQueries];
+  float[] actualLanding = new float[numberOfQueries];
+  float[] actualTakeOff = new float[numberOfQueries];
+  int[] departureHours = new int[numberOfQueries];
+  int[] departureMinutes = new int[numberOfQueries];
+  int[] arrivalHours = new int[numberOfQueries];
+  int[] arrivalMinutes = new int[numberOfQueries];
+
+  
+    for (int i = 0; i < numberOfQueries; i++) {
+      db.query("SELECT MKT_CARRIER, COUNT(*) AS flight_volume " + "FROM flights2k " + "GROUP BY MKT_CARRIER");
+      //   db.query("SELECT * FROM flights2k");
+      actualTakeOff[i] = db.getFloat("DEP_TIME");
+      actualLanding[i] = db.getFloat("ARR_TIME");
+      //calculating flightDuration
+      departureHours[i] = (int)actualTakeOff[i] / 100;
+      departureMinutes[i] = (int)actualTakeOff[i] % 100;
+      arrivalHours[i] = (int)actualLanding[i] / 100;
+      arrivalMinutes[i] = (int)actualLanding[i] % 100;
+      flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
+    }
+    for (int i = 0; i < Carriers; i++) {
+      flightVolume[i] = db.getFloat("flight_volume");
+      println(flightVolume[i]);
+    }
+  return new ScatterPlotData(flightVolume, flightDuration);
+}
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
          and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
 */

@@ -229,7 +229,7 @@ void Wk2Demo()
     flightVolScr.addWidget(titleButton);
     flightVolScr.addNamedChild(titleButton, "Title Button");
 
-    ScatterPlot s1 = demoScatterPlot();
+    ScatterPlot s1 = demoScatterPlot(populateScatterPlot());
     flightVolScr.addWidget(s1);
     
     // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
@@ -348,17 +348,12 @@ Histogram demoHistogram(HistParams histParams)
     return h;
 }
 
-ScatterPlot demoScatterPlot()
-{
- //float DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
- float durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
- int Carriers = 10;
- int AA = 149, AS = 120, B6 = 144,HA = 98, NK = 95, G4 = 47,WN = 125,UA = 31,DL = 6,F9 = 55;
-    float[] xVals = new float[]{AA,AS,B6,HA,NK,G4,WN,UA,DL,F9};
-    float[] yVals = new float[]{durationAA,durationAS,durationB6,durationHA, durationNK, durationG4, durationWN, durationUA, durationDL, durationF9};
+
+ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData){
+
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
-        "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration",
-        xVals, yVals, new float[] {0,150}, new float[]{0,550}
+        "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration (minutes)",
+        theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0,150}, new float[]{0,550}
     );
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";
@@ -371,6 +366,8 @@ ScatterPlot demoScatterPlot()
     return s1;
     
 }
+    
+
 
 InteractiveBarPlot demoBarPlot()
 {

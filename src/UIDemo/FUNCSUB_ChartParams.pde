@@ -75,6 +75,18 @@ class PieParams
         this.categories = categories;
     }
 }
+// Kilian - created ScatterPlotData Class - 25/03/24 changed to work with floats 28/03
+class ScatterPlotData
+{
+   float[] flightVolume;
+   float[] flightDuration;
+   
+   ScatterPlotData(float[] flightVolume, float[] flightDuration)
+   {
+     this.flightVolume = flightVolume;
+     this.flightDuration = flightDuration;
+   }
+}
 
 class BubbleParams extends NumericalParams
 {
