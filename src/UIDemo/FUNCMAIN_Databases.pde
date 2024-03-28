@@ -213,6 +213,35 @@ public BarParams populateBarParams(String[] airports)
   return new BarParams(airports, numOfFlights);
 }
 
+CategoricalParams populateBarParamsRefined()
+{
+    String query = """SELECT Origin as airport,
+    COUNT(Origin) as num_flights
+    FROM flights_full
+    """;
+
+    String[] dates = getDates();
+    query += " WHERE FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";
+
+    String airport = getAirportCode();   
+    if (!airport.equals("ALL"))
+    {
+        query += " AND OriginState = '" + getAirportState() + "'";
+    }
+    query += "\nGROUP BY airport";
+    db.query(query);
+    
+    String[] airports = new String[0];
+    float[] numFlights = new float[0];
+    while (db.next())
+    {
+        airports = append(airports, db.getString("airport"));   
+        numFlights = append(numFlights, db.getInt("num_flights"));
+    }
+    return new CategoricalParams(numFlights, airports);
+}
+
+
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
     String[] split = stringDate.split("\\s+", 2);
