@@ -8,3 +8,7 @@ Repository storing project files for 2023/2024 TCD Programming Project Team 12
 - Leo MacNally - `Macnalll`
 - William Sunderland - `WillSunderland`
 - Timothy Tay - `timothytay`
+
+Documentation Links:
+- [Toplevel Organization and Widget Subclasses Documentation](/docs/Widget.md)
+- [Chart Documentation](/docs/Chart.md)
