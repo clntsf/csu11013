@@ -1,4 +1,4 @@
-import java.util.concurrent.atomic.AtomicReference;
+//import java.util.concurrent.atomic.AtomicReference;
 
 void Wk2Demo()
 {
@@ -180,20 +180,16 @@ void Wk2Demo()
     // RSR - if button pressed, chart is loaded. - 20/3/24 4PM
     ReactiveWidget histBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Departure Delay Times");
     histBtn.addListener((e,w) -> {
-        AtomicReference<HistParams> hP = new AtomicReference<>(null);
-        //Integer[] bins = new Integer[] {-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, null};
-        /*if (!histScr.widgets.isEmpty()) {
-            histScr.widgets = new ArrayList<>();
-            histScr.addWidget(background);
-            histScr.addWidget(titleButton);
-        }*/
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+        //AtomicReference<HistParams> hP = new AtomicReference<>(null);
         resetScreen(histScr, background);
-        Thread histT = new Thread(() -> {
-            hP.set(populateHistFreqs(-60, 10, 70));//bins, new float[bins.length-1]));
-            Histogram h = demoHistogram(titleScreen, hP.get());
+        new Thread(() -> {
+            HistParams hp = populateHistFreqs(-60, 10, 70);
+            //hP.set(populateHistFreqs(-60, 10, 70));//bins, new float[bins.length-1]));
+            Histogram h = demoHistogram(hp);
+            resetScreen(histScr, background);
             histScr.addWidget(h);
-        });
-        histT.start();
+        }).start();
     });
 
     // --- Screen 3: Bubble Plot --- //
@@ -338,7 +334,7 @@ BubblePlot demoBubble(BubbleParams params)
     return bubble;
 }
 
-Histogram demoHistogram(Screen titleScreen, HistParams histParams)
+Histogram demoHistogram(HistParams histParams)
 {
     Histogram h = new Histogram(width/2, height/2, 480, 480,
         "Flight Departure Delay (Minutes, negative delays represent early departures)",
