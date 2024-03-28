@@ -34,7 +34,7 @@ void setup()
         println("ERROR connecting to DB!");
     }
 
-    Wk2Demo();
+    InitWindow();
 
     //Table delays = loadTable("delaysdemo.csv", "header");
     //if (db.connect())

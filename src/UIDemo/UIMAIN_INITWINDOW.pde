@@ -1,6 +1,6 @@
 //import java.util.concurrent.atomic.AtomicReference;
 
-void Wk2Demo()
+void InitWindow()
 {
     final int BG_MARGIN = 20;
     final int SCREEN_COLOR = #778899;
@@ -164,12 +164,12 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {return;}
             resetScreen(mktShareScr, background);
             new Thread(() -> {
-                PieChart p1 = demoPie();
+                PieChart p1 = pieChart();
                 mktShareScr.addWidget(p1); 
             }).start();
     });
 
-    // --- SCREEN 2: HISTOGRAM DEMO --- //
+    // --- SCREEN 2: HISTOGRAM --- //
 
     Screen histScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(histScr, "Departure Delay Times");
@@ -186,7 +186,7 @@ void Wk2Demo()
         new Thread(() -> {
             HistParams hp = populateHistFreqs(-60, 10, 70);
             //hP.set(populateHistFreqs(-60, 10, 70));//bins, new float[bins.length-1]));
-            Histogram h = demoHistogram(hp);
+            Histogram h = histogram(hp);
             resetScreen(histScr, background);
             histScr.addWidget(h);
         }).start();
@@ -207,7 +207,7 @@ void Wk2Demo()
         resetScreen(reliabilityScr, background);
         new Thread(() -> {
             BubbleParams bp = makeBubbleParams();
-            BubblePlot bubble = demoBubble(bp);
+            BubblePlot bubble = bubblePlot(bp);
             resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
             reliabilityScr.addWidget(bubble);
         }).start();
@@ -229,7 +229,7 @@ void Wk2Demo()
     flightVolScr.addWidget(titleButton);
     flightVolScr.addNamedChild(titleButton, "Title Button");
 
-    ScatterPlot s1 = demoScatterPlot();
+    ScatterPlot s1 = scatterPlot();
     flightVolScr.addWidget(s1);
     
     // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
@@ -245,7 +245,7 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {return;}
           resetScreen(barPlotScr, background);
           new Thread(() -> {
-          InteractiveBarPlot b1 = demoBarPlot();
+          InteractiveBarPlot b1 = barPlot();
           barPlotScr.addWidget(b1);
         }).start();
     });
@@ -265,7 +265,7 @@ void Wk2Demo()
         if (!dates[0].trim().isEmpty() && !dates[1].trim().isEmpty()) {
             resetScreen(linePlotScr, background);
             new Thread(() -> {
-            ScatterPlot linePlot = demoLinePlot(db); 
+            ScatterPlot linePlot = linePlot(db); 
             linePlotScr.addWidget(linePlot);
         }).start();
     }});
@@ -289,7 +289,7 @@ void resetScreen(Screen s, Widget background)
     }
 }
 
-ScatterPlot demoLinePlot(SQLite db)
+ScatterPlot linePlot(SQLite db)
 {
     LinePlotParams testParams = getLinePlotData("flights_full", db, getAirportCode(), getDates());
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
@@ -306,7 +306,7 @@ ScatterPlot demoLinePlot(SQLite db)
 }
 
 
-PieChart demoPie()
+PieChart pieChart()
 {
     PieParams test = getPieChartData("flights10k");
     return new PieChart(
@@ -316,7 +316,7 @@ PieChart demoPie()
     );
 }
 
-BubblePlot demoBubble(BubbleParams params)
+BubblePlot bubblePlot(BubbleParams params)
 {
     // doing some norming for our axes
     float xMax = max(0.5, round(12*max(params.valuesX)) / 10.0);
@@ -332,7 +332,7 @@ BubblePlot demoBubble(BubbleParams params)
     return bubble;
 }
 
-Histogram demoHistogram(HistParams histParams)
+Histogram histogram(HistParams histParams)
 {
     Histogram h = new Histogram(width/2, height/2, 480, 480,
         "Flight Departure Delay (Minutes, negative delays represent early departures)",
@@ -346,7 +346,7 @@ Histogram demoHistogram(HistParams histParams)
     return h;
 }
 
-ScatterPlot demoScatterPlot()
+ScatterPlot scatterPlot()
 {
  //float DelayAA = 6.21, DelayAS = 15.79, DelayB6 = 3.88, DelayDL = 1.2, DelayF9 = 2.9, DelayG4 = 1.8, DelayHA = 5.5
  float durationAA = 309, durationAS = 310.76, durationB6 = 250, durationHA = 375, durationNK =130, durationG4 = 110, durationWN = 189, durationUA = 70, durationDL =39, durationF9 = 500; 
@@ -370,7 +370,7 @@ ScatterPlot demoScatterPlot()
     
 }
 
-InteractiveBarPlot demoBarPlot()
+InteractiveBarPlot barPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
     float[] numOfDelays = new float[]{12, 30, 20, 47, 33};
