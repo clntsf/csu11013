@@ -126,7 +126,7 @@ void Wk2Demo()
         "Flight Volume Heatmap",
         "Flight Duration vs Volume",
         "Volume of State Flights",
-        "Tim's Line Plot"
+        "Flights per Day"
     };
     final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24 };
 
@@ -257,12 +257,12 @@ void Wk2Demo()
     // --- Screen 8 - Tim's Line Plot --- //
 
     Screen linePlotScr = new Screen(SCREEN_COLOR);      
-    screens.addNamedScreen(linePlotScr, "Tim's Line Plot");
+    screens.addNamedScreen(linePlotScr, "Flights per Day");
     linePlotScr.addWidget(background);
     linePlotScr.addWidget(titleButton);
     linePlotScr.addNamedChild(titleButton, "Title Button");
     
-    ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Tim's Line Plot");
+    ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flights per Day");
     linePlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
         String[] dates = getDates();
