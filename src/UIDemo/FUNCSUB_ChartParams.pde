@@ -3,9 +3,9 @@
 // generic database query routines which output in a format directly suitable for use in chart creation
 abstract class ChartParams
 {
-    double[] valuesY;
+    float[] valuesY;
     
-    ChartParams(double[] valuesY)
+    ChartParams(float[] valuesY)
     {
         this.valuesY = valuesY;
     }
@@ -15,7 +15,7 @@ class CategoricalParams extends ChartParams // bar charts and pie charts
 {
     String[] categories;
 
-    CategoricalParams(double[] valuesY, String[] categories)
+    CategoricalParams(float[] valuesY, String[] categories)
     {
         super(valuesY);
         this.categories = categories;
@@ -24,9 +24,9 @@ class CategoricalParams extends ChartParams // bar charts and pie charts
 
 class NumericalParams extends ChartParams   // scatter plots and histograms
 {
-    double[] valuesX;
+    float[] valuesX;
     
-    NumericalParams(double[] valuesX, double[] valuesY)
+    NumericalParams(float[] valuesX, float[] valuesY)
     {
         super(valuesY);
         this.valuesX = valuesX;
@@ -37,10 +37,10 @@ class NumericalParams extends ChartParams   // scatter plots and histograms
 class HistParams
 {
     Integer[] bins;
-    double[] freqs;
+    float[] freqs;
     int maxFreq;
     
-    HistParams(Integer[] bins, double[] freqs, int maxFreq)
+    HistParams(Integer[] bins, float[] freqs, int maxFreq)
     {
         this.freqs = freqs;
         this.bins = bins;
@@ -50,12 +50,12 @@ class HistParams
 
 // TT - created class to use to return line plot data for a query 26/3/24 9AM
 class LinePlotParams {
-      double[] valuesX;
-      double[] valuesY;
+      float[] valuesX;
+      float[] valuesY;
       float[] axisRangeX;
       float[] axisRangeY;
 
-      public LinePlotParams(double[] valuesX, double[] valuesY, float[] axisRangeX, float[] axisRangeY) {
+      public LinePlotParams(float[] valuesX, float[] valuesY, float[] axisRangeX, float[] axisRangeY) {
           this.valuesX = valuesX;
           this.valuesY = valuesY;
           this.axisRangeX = axisRangeX;
@@ -63,13 +63,13 @@ class LinePlotParams {
       }
 }
  
-// macnalll - added class to return categorical parameters as type double[] instead of int 26/3/24
+// macnalll - added class to return categorical parameters as type float[] instead of int 26/3/24
 class PieParams
 {
-    double[] valuesY;
+    float[] valuesY;
     String[] categories;
     
-    PieParams(double[] valuesY, String[] categories)
+    PieParams(float[] valuesY, String[] categories)
     {
         this.valuesY = valuesY;
         this.categories = categories;
@@ -81,7 +81,7 @@ class BubbleParams extends NumericalParams
     float[] valuesZ;
     String[] categories;
     
-    BubbleParams(double[] valuesX, double[] valuesY, float[] valuesZ, String[] categories)
+    BubbleParams(float[] valuesX, float[] valuesY, float[] valuesZ, String[] categories)
     {
         super(valuesX, valuesY);
         this.valuesZ = valuesZ;
@@ -92,8 +92,8 @@ class BubbleParams extends NumericalParams
 class BarParams
 {
   String[] categories;
-  double[] numOfFlights;
-  BarParams(String[] categories, double[] numOfFlights)
+  float[] numOfFlights;
+  BarParams(String[] categories, float[] numOfFlights)
   {
     this.categories = categories;
     this.numOfFlights = numOfFlights;
