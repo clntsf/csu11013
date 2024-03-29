@@ -16,7 +16,7 @@ public void initDB(String dbName)
 // RSR - creates database file if it does not already exist - 21/3/24 7PM
 public boolean createDBFile(String fileName)
 {
-    File dbFile = new File(dataPath("test.db"));
+    File dbFile = new File(dataPath(fileName+".db"));
     try
     {
         return dbFile.createNewFile();

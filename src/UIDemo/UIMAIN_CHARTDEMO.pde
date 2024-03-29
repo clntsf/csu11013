@@ -377,17 +377,18 @@ InteractiveBarPlot demoBarPlot()
     String state = getAirportState();
     println(state);
     String[] airports = getStateAirports(state);
-    for (int i = 0; i < airports.length; i++){
-      airports[i] = airports[i].substring(0, 3);
-    }
+    //for (int i = 0; i < airports.length; i++){
+    //  airports[i] = airports[i].substring(0, 3);
+    //}
     BarParams test1 = populateBarParams(airports);
+    // CategoricalParams test1 = populateBarParamsRefined();
     float maxHeight = 0;
-    for(float size: test1.numOfFlights){
+    for(float size : test1.valuesY){
       if (size > maxHeight)
       {
         maxHeight = size;
       }
-    }
+    } // test1.categories, test1.valuesY
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 450, 450,
     "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
     airports, test1.numOfFlights, int(1.05 * Math.round(maxHeight)),

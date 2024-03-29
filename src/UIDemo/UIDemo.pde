@@ -21,18 +21,15 @@ void setup()
 
     // println(LocalDate.parse("01/06/2022",DateTimeFormatter.ofPattern("MM/dd/yyyy")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
-    if (createDBFile("test"))
+    if (createDBFile("tables"))
     {
-        initDB("test");
+        initDB("tables");
     }
-    db = new SQLite(this, "test.db");
+    db = new SQLite(this, "tables.db");
     if (db.connect())
     {
         println("Connected to DB!");
-    } else
-    {
-        println("ERROR connecting to DB!");
-    }
+    } else println("ERROR connecting to DB!");
 
     Wk2Demo();
 
