@@ -369,7 +369,7 @@ ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData){
 }
     
 
-
+/*
 InteractiveBarPlot demoBarPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
@@ -395,7 +395,7 @@ InteractiveBarPlot demoBarPlot()
     50, height - 40, 30, 30);
     return b1;
     
-}
+}*/
 
 InteractiveBarPlot barPlotPopulate(CategoricalParams params)
 {
