@@ -68,9 +68,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     try {
       while (db.next()) {
           String flightDate = db.getString("FlightDate");
-          int day = Integer.parseInt(flightDate.substring(8, 10)); //<>// //<>//
-          int cancelled = db.getInt("Cancelled"); //<>// //<>//
-          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>// //<>//
+          int day = Integer.parseInt(flightDate.substring(8, 10));
+          int cancelled = db.getInt("Cancelled");
+          if (day >= minDate && day <= maxDate && cancelled == 0) {
               numFlightsYAxis[day - minDate] += 1; 
           }
       }
@@ -95,11 +95,10 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
 }
 
- //<>// //<>//
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>// //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>// //<>//
-{ //<>// //<>//
-    String[] dateRange = getDates(); //<>// //<>//
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM
+public HistParams populateHistFreqs(int minBin, int step, int lastBin)
+{
+    String[] dateRange = getDates()
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
     for (int i = 0; i < bins.length; i++)

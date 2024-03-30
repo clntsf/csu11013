@@ -359,11 +359,6 @@ ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData){
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";
     s1.labelFormatStringX = "%.0f";
-    
-    // play around with these to make the chart feel like a line chart or a scatter plot (or a line chart with points drawn)
-    s1.connect = false;
-    s1.markers = true;
-    //s1.makeLinePlot();    // Or just this, for a 1-line solution
     return s1;
     
 }
@@ -415,7 +410,7 @@ String[] getDates()
     Screen title = screens.getNamedScreen("Title Screen");
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
-    //println(startDate.text + " | " + endDate.text);
+    //println(startDate.text + " | " + endDate.text);                   // debug
     // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/2024 3PM
     // CSF - rearranged functionality (guts?) so that one date could be supplied and the other left blank - 27/3/2024 8:40PM
     
