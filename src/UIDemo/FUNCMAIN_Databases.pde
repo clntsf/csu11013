@@ -98,7 +98,7 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(int minBin, int step, int lastBin)
 {
-    String[] dateRange = getDates()
+    String[] dateRange = getDates();
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
     for (int i = 0; i < bins.length; i++)
