@@ -221,7 +221,7 @@ void Wk2Demo()
     mapScr.addWidget(titleButton);
     mapScr.addNamedChild(titleButton, "Title Button");
 
-    // --- Screen 6 - Scatter Plot Screen  --- //
+    // --- Screen 6 - Kilian's Scatter Plot Screen  --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
@@ -229,8 +229,19 @@ void Wk2Demo()
     flightVolScr.addWidget(titleButton);
     flightVolScr.addNamedChild(titleButton, "Title Button");
 
-    ScatterPlot s1 = demoScatterPlot(populateScatterPlot());
-    flightVolScr.addWidget(s1);
+    
+    
+       ReactiveWidget scatterBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Duration vs Volume");
+    scatterBtn.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+
+        resetScreen(reliabilityScr, background);
+        new Thread(() -> {
+            ScatterPlot s1 = demoScatterPlot(populateScatterPlot());
+            flightVolScr.addWidget(s1);
+            resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
+        }).start();
+    });
     
     // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
 

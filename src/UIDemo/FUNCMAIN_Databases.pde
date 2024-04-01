@@ -263,34 +263,57 @@ public ScatterPlotData populateScatterPlot()
 {
   int Carriers = 10; //<>//
   int numberOfQueries = 2000;
-  String table = "flights(2k)";
+  String table = "flights_full";
   float[] flightVolume = new float[numberOfQueries];
   float[] flightDuration = new float[numberOfQueries];
-  float[] actualLanding = new float[numberOfQueries];
-  float[] actualTakeOff = new float[numberOfQueries];
-  int[] departureHours = new int[numberOfQueries];
-  int[] departureMinutes = new int[numberOfQueries];
-  int[] arrivalHours = new int[numberOfQueries];
-  int[] arrivalMinutes = new int[numberOfQueries];
+  //float[] actualLanding = new float[numberOfQueries];
+  //float[] actualTakeOff = new float[numberOfQueries];
+  //int[] departureHours = new int[numberOfQueries];
+  //int[] departureMinutes = new int[numberOfQueries];
+  //int[] arrivalHours = new int[numberOfQueries];
+  //int[] arrivalMinutes = new int[numberOfQueries];
+  String selectedAirport = getAirportCode();
+  String date[] = getDates();
+  String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
+  String endDate = (date[1].equals("") ? "2022-31-01" : date[1]);
   
-  
-    //for (int i = 0; i < numberOfQueries; i++) { //<>//
-      
-    //  actualTakeOff[i] = db.getFloat("DepTime");
-    //  actualLanding[i] = db.getFloat("ArrTime");
-    //  print(db.getFloat("ArrTime"));
-    //  //calculating flightDuration
-    //  departureHours[i] = (int)actualTakeOff[i] / 100;
+  String query;
+    //if (selectedAirport.equals("ALL"))
+    //  query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 9, 2) >= '"+ String.format("%02d", startDate) +"' AND SUBSTR(FlightDate, 9, 2) <= '"+ String.format("%02d", endDate)+"'";
+    //else
+    //query = "SELECT * FROM " + table +
+    //        " WHERE SUBSTR(FlightDate, 9, 2) >= '" + String.format("%02d", startDate) +
+    //        "' AND SUBSTR(FlightDate, 9, 2) <= '" + String.format("%02d", endDate) +
+    //        "' AND Origin LIKE '%" + selectedAirport + "%'";
+
+    //query = "SELECT DepTime, COUNT(*) FROM " + table;
+    query = "SELECT DISTANCE, COUNT(*) AS flight_duration FROM "+ table + " GROUP BY IATA_Code_Marketing_Airline";
+    db.query(query);
+    
+    while(db.next()){ //<>//
+      for(int i =0; i < numberOfQueries; i++){
+      //actualTakeOff[i] = db.getFloat("DepTime");
+      //actualLanding[i] = db.getFloat("ArrTime");
+      //print(db.getFloat("ArrTime"));
+      flightDuration[i] = db.getFloat("flight_duration");
+      print(flightDuration[i]);
+      }
+    query = "SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM " + table + " GROUP BY IATA_Code_Marketing_Airline";
+    for (int i = 0; i < Carriers; i++) {
+      db.query(query);
+      while(db.next()){
+      flightVolume[i] = db.getFloat("flight_volume");
+      print(flightVolume[i]);
+      }
+    }
+    }
+    //for(int i = 0; i< numberOfQueries; i++){
+    //departureHours[i] = (int)actualTakeOff[i] / 100;
     //  departureMinutes[i] = (int)actualTakeOff[i] % 100;
     //  arrivalHours[i] = (int)actualLanding[i] / 100;
     //  arrivalMinutes[i] = (int)actualLanding[i] % 100;
     //  flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
     //}
-    for (int i = 0; i < Carriers; i++) {
-      db.query("SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume " + "FROM " + table + "GROUP BY IATA_Code_Marketing_Airline");
-      flightVolume[i] = db.getFloat("flight_volume");
-      println(flightVolume[i]);
-    }
   return new ScatterPlotData(flightVolume, flightDuration);
 }
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
