@@ -349,9 +349,11 @@ Histogram demoHistogram(HistParams histParams)
 
 ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData){
 
+    float xMax = 150;
+    float yMax = 550;
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
         "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration (minutes)",
-        theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0,150}, new float[]{0,550}
+        theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0,xMax}, new float[]{0,yMax}
     );
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";

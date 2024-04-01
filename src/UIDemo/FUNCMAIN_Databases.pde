@@ -13,7 +13,7 @@ public PieParams getPieChartData(String table)
     String column = "IATA_Code_Marketing_Airline";
     if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ 
         " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " +column);   
-    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate + 
+    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate +  //<>//
         "' AND '" + endDate + "' AND Origin = '" +selectedAirport+ "' GROUP BY " +column);
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
@@ -62,9 +62,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
             "' AND SUBSTR(FlightDate, 9, 2) <= '" + String.format("%02d", maxDate) +
             "' AND Origin LIKE '%" + airport + "%'";
 
-
-    db.query(query);
-    
+ //<>//
+    db.query(query); //<>//
+     //<>//
     try {
       while (db.next()) {
           String flightDate = db.getString("FlightDate");
@@ -89,11 +89,11 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     for (float i : numFlightsYAxis) {
       if (i > maxFlights) {
           maxFlights = i;
-      }
-    }
-    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)};
-    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);
-}
+      } //<>//
+    } //<>//
+    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)}; //<>//
+    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>//
+} //<>//
 
  //<>//
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
@@ -232,9 +232,9 @@ public LocalTime timeToLocalTime(String stringTime) {
 //Kilian 27/03/24 - created function to fill ScatterPlot
 public ScatterPlotData populateScatterPlot()
 {
-  db.query("SELECT * FROM flights2k");
-  int Carriers = 10;
+  int Carriers = 10; //<>//
   int numberOfQueries = 2000;
+  String table = "flights(2k)";
   float[] flightVolume = new float[numberOfQueries];
   float[] flightDuration = new float[numberOfQueries];
   float[] actualLanding = new float[numberOfQueries];
@@ -243,21 +243,22 @@ public ScatterPlotData populateScatterPlot()
   int[] departureMinutes = new int[numberOfQueries];
   int[] arrivalHours = new int[numberOfQueries];
   int[] arrivalMinutes = new int[numberOfQueries];
-
   
-    for (int i = 0; i < numberOfQueries; i++) {
-      db.query("SELECT MKT_CARRIER, COUNT(*) AS flight_volume " + "FROM flights2k " + "GROUP BY MKT_CARRIER");
-      //   db.query("SELECT * FROM flights2k");
-      actualTakeOff[i] = db.getFloat("DEP_TIME");
-      actualLanding[i] = db.getFloat("ARR_TIME");
-      //calculating flightDuration
-      departureHours[i] = (int)actualTakeOff[i] / 100;
-      departureMinutes[i] = (int)actualTakeOff[i] % 100;
-      arrivalHours[i] = (int)actualLanding[i] / 100;
-      arrivalMinutes[i] = (int)actualLanding[i] % 100;
-      flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
-    }
+  
+    //for (int i = 0; i < numberOfQueries; i++) { //<>//
+      
+    //  actualTakeOff[i] = db.getFloat("DepTime");
+    //  actualLanding[i] = db.getFloat("ArrTime");
+    //  print(db.getFloat("ArrTime"));
+    //  //calculating flightDuration
+    //  departureHours[i] = (int)actualTakeOff[i] / 100;
+    //  departureMinutes[i] = (int)actualTakeOff[i] % 100;
+    //  arrivalHours[i] = (int)actualLanding[i] / 100;
+    //  arrivalMinutes[i] = (int)actualLanding[i] % 100;
+    //  flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
+    //}
     for (int i = 0; i < Carriers; i++) {
+      db.query("SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume " + "FROM " + table + "GROUP BY IATA_Code_Marketing_Airline");
       flightVolume[i] = db.getFloat("flight_volume");
       println(flightVolume[i]);
     }
