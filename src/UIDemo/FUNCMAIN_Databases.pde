@@ -19,7 +19,7 @@ public PieParams getPieChartData(String table)
     while (db.next())
     {
         String value = db.getString(column);
-        int frequency = db.getInt("frequency"); //<>// //<>//
+        int frequency = db.getInt("frequency");
         frequencyMap.put(value, frequency); 
     }
     
@@ -68,9 +68,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     try {
       while (db.next()) {
           String flightDate = db.getString("FlightDate");
-          int day = Integer.parseInt(flightDate.substring(8, 10)); //<>//
-          int cancelled = db.getInt("Cancelled"); //<>//
-          if (day >= minDate && day <= maxDate && cancelled == 0) { //<>//
+          int day = Integer.parseInt(flightDate.substring(8, 10));
+          int cancelled = db.getInt("Cancelled");
+          if (day >= minDate && day <= maxDate && cancelled == 0) {
               numFlightsYAxis[day - minDate] += 1; 
           }
       }
@@ -95,11 +95,10 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>//
 } //<>//
 
- //<>//
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
-{ //<>//
-    String[] dateRange = getDates(); //<>//
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM
+public HistParams populateHistFreqs(int minBin, int step, int lastBin)
+{
+    String[] dateRange = getDates();
     //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
     for (int i = 0; i < bins.length; i++)
@@ -181,37 +180,67 @@ public BubbleParams makeBubbleParams()
     return new BubbleParams(cancelledPct, divertedPct, marketShare, carriers);
 }
 
+
+// public String[] getStateAirports(String stateCode)
+// {
+//   String[] airportsInState = new String[0];
+//   String[] airportsInCountry = loadStrings("airports.txt");
+//   for (String a: airportsInCountry)
+//   {
+//     String aState = a.substring(a.length() - 2, a.length());
+//     if (aState.equals(stateCode))
+//     {
+//       airportsInState = append(airportsInState, a);
+//     }
+//   }
+//   //db.query("SELECT DISTINCT ORIGIN from flights_full WHERE ORIGIN_STATE_ABR=" + stateCode);
+//   //while(db.next()){
+//   //  airportsInState = append(airportsInState, db.getString("ORIGIN"));
+//   //}
+//   return airportsInState;
+// }
+// // Will S  finds all flights from an airport 27/3/24
+// public BarParams populateBarParams(String[] airports)
+// {
+//   float[] numOfFlights = new float[airports.length];
+//   for(int i = 0; i < airports.length; i++)
+//   {
+//     db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");
+//     numOfFlights[i] = db.getInt("freq");
+//     println(numOfFlights[i]);
+//   }
+//   return new BarParams(airports, numOfFlights);
+// }
+
 //Will S finds all airports within a select state from the scroll bar 27/3/24
-public String[] getStateAirports(String stateCode)
+CategoricalParams populateBarParamsRefined()
 {
-  String[] airportsInState = new String[0];
-  String[] airportsInCountry = loadStrings("airports.txt");
-  for (String a: airportsInCountry)
-  {
-    String aState = a.substring(a.length() - 2, a.length());
-    if (aState.equals(stateCode))
+    String query = """SELECT Origin as airport,
+    COUNT(Origin) as num_flights
+    FROM flights_full
+    """;
+
+    String[] dates = getDates();
+    query += " WHERE FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";
+
+    String airport = getAirportCode();   
+    if (!airport.equals("ALL"))
     {
-      airportsInState = append(airportsInState, a);
+        query += " AND OriginState = '" + getAirportState() + "'";
     }
-  }
-  //db.query("SELECT DISTINCT ORIGIN from flights_full WHERE ORIGIN_STATE_ABR=" + stateCode);
-  //while(db.next()){
-  //  airportsInState = append(airportsInState, db.getString("ORIGIN"));
-  //}
-  return airportsInState;
+    query += "\nGROUP BY airport";
+    db.query(query);
+    
+    String[] airports = new String[0];
+    float[] numFlights = new float[0];
+    while (db.next())
+    {
+        airports = append(airports, db.getString("airport"));   
+        numFlights = append(numFlights, db.getInt("num_flights"));
+    }
+    return new CategoricalParams(numFlights, airports);
 }
-// Will S  finds all flights from an airport 27/3/24
-public BarParams populateBarParams(String[] airports)
-{
-  float[] numOfFlights = new float[airports.length];
-  for(int i = 0; i < airports.length; i++)
-  {
-    db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");
-    numOfFlights[i] = db.getInt("freq");
-    println(numOfFlights[i]);
-  }
-  return new BarParams(airports, numOfFlights);
-}
+
 
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24

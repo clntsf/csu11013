@@ -288,11 +288,8 @@ class BarPlot extends Plot
 // Will S made minor changes to allow interactive barPlot;
 class ColorBar extends BarPlot
 {
-    String[] categories;
 
     // config attributes
-    int barWidth;
-    int gapSize;
     color[] barColors;
     float[] centers;
     ColorBar(
@@ -302,9 +299,6 @@ class ColorBar extends BarPlot
         )
     {
         super( x, y, w, h, title, axisLabelX, axisLabelY, categories, valuesY, axisMaxY);
-        this.categories = categories;
-        barWidth = 40;
-        this.gapSize = 20;
         if ( (categories.length * barWidth) + ((categories.length - 1) *gapSize) > w)
         {
             gapSize = w /((3 * categories.length)- 1);
@@ -314,19 +308,6 @@ class ColorBar extends BarPlot
         centers = xLabelCenters();
     }
 
-    float[] xLabelCenters ()
-    {
-        int numBars = valuesY.length;
-        float barSpacing = (this.barWidth+this.gapSize);                           // distance between the centers of adjacent bars;
-        int leftX = (int)( x - barSpacing*(float)(numBars-1)/2 );
-
-        float[] centers = new float[numBars];
-        for (int i=0; i<numBars; i++)
-        {
-            centers[i] = leftX + i*barSpacing;
-        }
-        return centers;
-    }
     void setCenters(float[] newCenters)
     {
         centers = newCenters;
@@ -339,11 +320,6 @@ class ColorBar extends BarPlot
         {
             barColors[i] = randomPastel(constant + (multiple * i));
         }
-    }
-
-    color[] getBarColors()
-    {
-        return barColors;
     }
 
     void plotValues()
@@ -392,7 +368,7 @@ class InteractiveBarPlot extends Container
         handles = new ReactiveWidget[categories.length];
         barOrder = new int[categories.length];
         barCenters = bar.xLabelCenters();
-        barColors = bar.getBarColors();
+        barColors = bar.barColors;
         handlesAxis = handlesY;
         if (bar.barWidth < handlesW)
         {

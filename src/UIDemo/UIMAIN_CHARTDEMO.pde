@@ -245,7 +245,10 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {return;}
           resetScreen(barPlotScr, background);
           new Thread(() -> {
-          InteractiveBarPlot b1 = demoBarPlot();
+          //InteractiveBarPlot b1 = demoBarPlot();
+          CategoricalParams params = populateBarParamsRefined();
+          println(params.categories);
+          InteractiveBarPlot b1 = barPlotPopulate(params);
           barPlotScr.addWidget(b1);
         }).start();
     });
@@ -358,17 +361,12 @@ ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData){
     s1.fontSize = 14;
     s1.labelFormatStringY = "%.1f";
     s1.labelFormatStringX = "%.0f";
-    
-    // play around with these to make the chart feel like a line chart or a scatter plot (or a line chart with points drawn)
-    s1.connect = false;
-    s1.markers = true;
-    //s1.makeLinePlot();    // Or just this, for a 1-line solution
     return s1;
     
 }
     
 
-
+/*
 InteractiveBarPlot demoBarPlot()
 {
     String[] airlines2 = new String[]{"AA","UA","DL","B6","HA"};
@@ -376,23 +374,37 @@ InteractiveBarPlot demoBarPlot()
     String state = getAirportState();
     println(state);
     String[] airports = getStateAirports(state);
-    for (int i = 0; i < airports.length; i++){
-      airports[i] = airports[i].substring(0, 3);
-    }
+    //for (int i = 0; i < airports.length; i++){
+    //  airports[i] = airports[i].substring(0, 3);
+    //}
     BarParams test1 = populateBarParams(airports);
+    // CategoricalParams test1 = populateBarParamsRefined();
     float maxHeight = 0;
-    for(float size: test1.numOfFlights){
+    for(float size : test1.valuesY){
       if (size > maxHeight)
       {
         maxHeight = size;
       }
-    }
+    } // test1.categories, test1.valuesY
     InteractiveBarPlot b1 = new InteractiveBarPlot(width/2, height/2, 450, 450,
     "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
     airports, test1.numOfFlights, int(1.05 * Math.round(maxHeight)),
     50, height - 40, 30, 30);
     return b1;
     
+}*/
+
+InteractiveBarPlot barPlotPopulate(CategoricalParams params)
+{
+    println(params.valuesY);
+    InteractiveBarPlot b1 = new InteractiveBarPlot(
+        width/2, height/2, 450, 450,
+        "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
+        params.categories, params.valuesY,
+        int(1.05 * Math.round(max(params.valuesY))),
+        50, height - 40, 30, 30
+    );
+    return b1;
 }
 
 String[] getDates()
@@ -400,7 +412,7 @@ String[] getDates()
     Screen title = screens.getNamedScreen("Title Screen");
     Widget startDate = (TextEntry)(title.getNamedChild("DATE_START"));
     Widget endDate = (TextEntry)(title.getNamedChild("DATE_END"));
-    //println(startDate.text + " | " + endDate.text);
+    //println(startDate.text + " | " + endDate.text);                   // debug
     // RSR - updated method to format automatically from dd/MM/yyyy to sqlite's standard: yyyy-MM-dd - 27/3/2024 3PM
     // CSF - rearranged functionality (guts?) so that one date could be supplied and the other left blank - 27/3/2024 8:40PM
     

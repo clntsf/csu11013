@@ -123,6 +123,7 @@ class CheckBox extends ReactiveWidget
     {
         getFill();
         stroke(0);
+        strokeWeight(1);
         rectMode(CENTER);
         rect(x,y,w,h, (isRectangular ? w/4 : w/2));
 
@@ -213,7 +214,6 @@ class RadioButtonList extends CheckBoxList
     
     void onCheck(CheckBox c)
     {
-        print("A!");
         for (CheckBox box : boxes)
         {
             box.checked = false;
