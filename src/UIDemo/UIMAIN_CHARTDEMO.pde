@@ -258,7 +258,6 @@ void Wk2Demo()
           new Thread(() -> {
           //InteractiveBarPlot b1 = demoBarPlot();
           CategoricalParams params = populateBarParamsRefined();
-          println(params.categories);
           InteractiveBarPlot b1 = barPlotPopulate(params);
           barPlotScr.addWidget(b1);
         }).start();
@@ -275,14 +274,13 @@ void Wk2Demo()
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flights per Day");
     linePlotBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
-        String[] dates = getDates();
-        if (!dates[0].trim().isEmpty() && !dates[1].trim().isEmpty()) {
-            resetScreen(linePlotScr, background);
-            new Thread(() -> {
+
+        resetScreen(linePlotScr, background);
+        new Thread(() -> {
             ScatterPlot linePlot = demoLinePlot(db); 
             linePlotScr.addWidget(linePlot);
         }).start();
-    }});
+    });
     
     
 }
@@ -361,7 +359,8 @@ Histogram demoHistogram(HistParams histParams)
 }
 
 
-ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData){
+ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData)
+{
 
     float xMax = 150;
     float yMax = 550;
@@ -407,7 +406,6 @@ InteractiveBarPlot demoBarPlot()
 
 InteractiveBarPlot barPlotPopulate(CategoricalParams params)
 {
-    println(params.valuesY);
     InteractiveBarPlot b1 = new InteractiveBarPlot(
         width/2, height/2, 450, 450,
         "Volume of Flights by Airports in a State" , "Airports", "Number of Flights",
