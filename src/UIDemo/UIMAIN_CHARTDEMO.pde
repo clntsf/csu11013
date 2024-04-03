@@ -1,3 +1,7 @@
+import de.fhpotsdam.unfolding.*;
+import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.unfolding.geo.*;
+
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
@@ -218,6 +222,8 @@ void Wk2Demo()
     mapScr.addWidget(background);
     mapScr.addWidget(titleButton);
     mapScr.addNamedChild(titleButton, "Title Button");
+    MapWidget map = new MapWidget(this, width / 2, height / 2, width, height);
+    mapScr.addWidget(map);
     
     
     // --- Screen 5: Flight Volume Heatmap -- //
@@ -335,6 +341,8 @@ ScatterPlot demoLinePlot(SQLite db)
     s1.makeLinePlot();
     return s1;
 }
+
+
 
 
 PieChart demoPie()
