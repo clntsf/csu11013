@@ -220,6 +220,27 @@ void Wk2Demo()
     mapScr.addWidget(background);
     mapScr.addWidget(titleButton);
     mapScr.addNamedChild(titleButton, "Title Button");
+    
+    
+    // --- Screen 5: Flight Volume Heatmap -- //
+    
+    Screen heatMapScr = new Screen(SCREEN_COLOR);
+    screens.addNamedScreen(heatMapScr, "Flight Volume Heatmap");
+    heatMapScr.addWidget(background);
+    heatMapScr.addWidget(titleButton);
+    heatMapScr.addNamedChild(titleButton, "Title Button");
+
+    ReactiveWidget heatmapButton = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Volume Heatmap");
+    heatmapButton.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+        new Thread(() -> {
+            resetScreen(reliabilityScr, background);
+            HeatMapParams params = generateFlightVolumeHeatmap();
+            HeatMap hm = demoHeatMap(params);
+            heatMapScr.addWidget(hm);
+        }).start();
+    });
+
 
     // --- Screen 6 - Kilian's Scatter Plot Screen  --- //
 
@@ -342,6 +363,16 @@ BubblePlot demoBubble(BubbleParams params)
     bubble.labelFormatStringY = "%.2f";
     
     return bubble;
+}
+
+HeatMap demoHeatMap(HeatMapParams params)
+{
+    HeatMap hm = new HeatMap(
+        width/2, height/2, 420, 480, 
+        "Flight Volume by Day of Week/Time of Day",
+        params.data, VIRIDIS_CG
+    );
+    return hm;
 }
 
 Histogram demoHistogram(HistParams histParams)

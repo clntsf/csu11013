@@ -135,6 +135,19 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
     return new HistParams(bins, freqs, max);
 }
 
+public HeatMapParams generateFlightVolumeHeatmap()
+{
+    float[][] data = new float[12][7];
+    for (float[] row : data)
+    {
+        for (int i=0; i<row.length; i++)
+        {
+            row[i] = random(400);
+        }
+    }
+    return new HeatMapParams(data);
+}
+
 // CSF - wrote the back-end for the bubble chart
 public BubbleParams makeBubbleParams()
 {
@@ -264,12 +277,8 @@ public ScatterPlotData populateScatterPlot()
   int carriers; //<>//
   int numberOfQueries = 2000;
   String table = "flights_full";
-  //float[] actualLanding = new float[numberOfQueries];
-  //float[] actualTakeOff = new float[numberOfQueries];
-  //int[] departureHours = new int[numberOfQueries];
-  //int[] departureMinutes = new int[numberOfQueries];
-  //int[] arrivalHours = new int[numberOfQueries];
-  //int[] arrivalMinutes = new int[numberOfQueries];
+  float[] flightVolume = new float[numberOfQueries];
+  float[] flightDuration = new float[numberOfQueries];
   String selectedAirport = getAirportCode();
   String date[] = getDates();
   String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
