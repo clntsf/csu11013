@@ -261,11 +261,9 @@ public LocalTime timeToLocalTime(String stringTime) {
 //Kilian 27/03/24 - created function to fill ScatterPlot
 public ScatterPlotData populateScatterPlot()
 {
-  int Carriers = 10; //<>//
+  int carriers; //<>//
   int numberOfQueries = 2000;
   String table = "flights_full";
-  float[] flightVolume = new float[numberOfQueries];
-  float[] flightDuration = new float[numberOfQueries];
   //float[] actualLanding = new float[numberOfQueries];
   //float[] actualTakeOff = new float[numberOfQueries];
   //int[] departureHours = new int[numberOfQueries];
@@ -287,26 +285,54 @@ public ScatterPlotData populateScatterPlot()
     //        "' AND Origin LIKE '%" + selectedAirport + "%'";
 
     //query = "SELECT DepTime, COUNT(*) FROM " + table;
-    query = "SELECT DISTANCE, COUNT(*) AS flight_duration FROM "+ table + " GROUP BY IATA_Code_Marketing_Airline";
-    db.query(query);
     
-    while(db.next()){ //<>//
-      for(int i =0; i < numberOfQueries; i++){
-      //actualTakeOff[i] = db.getFloat("DepTime");
-      //actualLanding[i] = db.getFloat("ArrTime");
-      //print(db.getFloat("ArrTime"));
-      flightDuration[i] = db.getFloat("flight_duration");
-      print(flightDuration[i]);
-      }
-    query = "SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM " + table + " GROUP BY IATA_Code_Marketing_Airline";
-    for (int i = 0; i < Carriers; i++) {
-      db.query(query);
-      while(db.next()){
-      flightVolume[i] = db.getFloat("flight_volume");
-      print(flightVolume[i]);
-      }
+    
+    db.query("SELECT COUNT(DISTINCT IATA_Code_Marketing_Airline) AS UniqueAirlines FROM " + table); //<>//
+    carriers = db.getInt("UniqueAirlines");
+    
+    db.query("SELECT COUNT(*) AS TotalRows FROM " + table);
+    numberOfQueries = db.getInt("TotalRows");
+   // print(numberOfQueries);
+     float[] flightVolume = new float[numberOfQueries];
+     float[] flightDuration = new float[0];
+    
+   
+    
+       db.query("SELECT MAX(flight_volume) AS HighestFlightVolume FROM(SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM "+ table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
+       int xMax = db.getInt("HighestFlightVolume");
+       print(xMax + " ");
+       
+       db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
+       int yMax = db.getInt("HighestFlightDuration");
+       print(yMax + " ");
+        //<>//
+     // for(int i =0; i < carriers; i++){
+      // db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table+" GROUP BY IATA_Code_Marketing_Airline");
+      ////actualTakeOff[i] = db.getFloat("DepTime");
+      ////actualLanding[i] = db.getFloat("ArrTime");
+      ////print(db.getFloat("ArrTime"));
+      //db.next();
+      //flightDuration[i] = db.getFloat("TotalDistance");
+      //// flightDuration[i] = (flightDuration[i]* (int)((Math.pow(10, 8))));
+      //print(flightDuration[i] + " ");
+      db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table+" GROUP BY IATA_Code_Marketing_Airline");
+     while(db.next()){
+      flightDuration = append(flightDuration, db.getFloat("TotalDistance")); 
+     }
+       print(flightDuration[0] + " ");
+       print(flightDuration[1]);
+     
+     db.query("SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM " + table + " GROUP BY IATA_Code_Marketing_Airline");
+    while(db.next()){
+      flightVolume  = append(flightVolume, db.getFloat("flight_volume"));
     }
-    }
+    
+    //for(int i =0; i < 9; i++){
+    //  print(flightVolume[i]);
+    //}
+       
+       
+       
     //for(int i = 0; i< numberOfQueries; i++){
     //departureHours[i] = (int)actualTakeOff[i] / 100;
     //  departureMinutes[i] = (int)actualTakeOff[i] % 100;
@@ -314,7 +340,8 @@ public ScatterPlotData populateScatterPlot()
     //  arrivalMinutes[i] = (int)actualLanding[i] % 100;
     //  flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
     //}
-  return new ScatterPlotData(flightVolume, flightDuration);
+    //db.close();
+  return new ScatterPlotData(flightVolume, flightDuration, xMax, yMax);
 }
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
          and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)

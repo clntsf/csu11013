@@ -230,7 +230,7 @@ void Wk2Demo()
     flightVolScr.addNamedChild(titleButton, "Title Button");
 
     
-    
+    // implemented listeners in main ui screen to load data once button for this graph is pressed 02/04
        ReactiveWidget scatterBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Duration vs Volume");
     scatterBtn.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) {return;}
@@ -362,8 +362,8 @@ Histogram demoHistogram(HistParams histParams)
 ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData)
 {
 
-    float xMax = 150;
-    float yMax = 550;
+    float xMax = theScatterPlotData.xMax;
+    float yMax = theScatterPlotData.yMax;
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
         "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration (minutes)",
         theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0,xMax}, new float[]{0,yMax}

@@ -80,11 +80,14 @@ class ScatterPlotData
 {
    float[] flightVolume;
    float[] flightDuration;
-   
-   ScatterPlotData(float[] flightVolume, float[] flightDuration)
+   int xMax;
+   int yMax;
+   ScatterPlotData(float[] flightVolume, float[] flightDuration, int xMax, int yMax)
    {
      this.flightVolume = flightVolume;
      this.flightDuration = flightDuration;
+     this.xMax = xMax;
+     this.yMax = yMax;
    }
 }
 
