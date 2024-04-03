@@ -5,28 +5,28 @@ import java.time.format.DateTimeFormatter;
 
 //macnalll - created method of accessing data from the database into a piechart 26/3/24
 public PieParams getPieChartData(String table)
-{    
+{
     String selectedAirport = getAirportCode();
     String date[] = getDates();
     String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
     String endDate = (date[1].equals("") ? "2022-31-01" : date[1]);
     String column = "IATA_Code_Marketing_Airline";
-    if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ 
-        " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " +column);   
-    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate +  //<>//
+    if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+
+        " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " +column);
+    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate +  
         "' AND '" + endDate + "' AND Origin = '" +selectedAirport+ "' GROUP BY " +column);
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
     {
         String value = db.getString(column);
         int frequency = db.getInt("frequency");
-        frequencyMap.put(value, frequency); 
+        frequencyMap.put(value, frequency);
     }
-    
+
     int size = frequencyMap.size();
     String[] categories = new String[size];
     float[] valuesY = new float[size];
-    
+
     int i = 0;
     for (Map.Entry<String, Integer> entry : frequencyMap.entrySet())
     {
@@ -41,9 +41,9 @@ public PieParams getPieChartData(String table)
 }
 
 // TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
-public LinePlotParams getLinePlotData(String table, SQLite db, String airport, String[] dates) 
+public LinePlotParams getLinePlotData(String table, SQLite db, String airport, String[] dates)
 {
-    
+
     int minDate = Integer.valueOf(dates[0].substring(8, 10));
     int maxDate = Integer.valueOf(dates[1].substring(8, 10));
     System.out.println("" + minDate + " to " + maxDate);
@@ -55,45 +55,46 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     }
     String query;
     if (airport.equals("ALL"))
-      query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 9, 2) >= '"+ String.format("%02d", minDate) +"' AND SUBSTR(FlightDate, 9, 2) <= '"+ String.format("%02d", maxDate)+"'";
+        query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 9, 2) >= '"+ String.format("%02d", minDate) +"' AND SUBSTR(FlightDate, 9, 2) <= '"+ String.format("%02d", maxDate)+"'";
     else
-    query = "SELECT * FROM " + table +
+        query = "SELECT * FROM " + table +
             " WHERE SUBSTR(FlightDate, 9, 2) >= '" + String.format("%02d", minDate) +
             "' AND SUBSTR(FlightDate, 9, 2) <= '" + String.format("%02d", maxDate) +
             "' AND Origin LIKE '%" + airport + "%'";
 
- //<>//
-    db.query(query); //<>//
-     //<>//
+    
+    db.query(query); 
+    
     try {
-      while (db.next()) {
-          String flightDate = db.getString("FlightDate");
-          int day = Integer.parseInt(flightDate.substring(8, 10));
-          int cancelled = db.getInt("Cancelled");
-          if (day >= minDate && day <= maxDate && cancelled == 0) {
-              numFlightsYAxis[day - minDate] += 1; 
-          }
-      }
-    } catch (Exception e) {
+        while (db.next()) {
+            String flightDate = db.getString("FlightDate");
+            int day = Integer.parseInt(flightDate.substring(8, 10));
+            int cancelled = db.getInt("Cancelled");
+            if (day >= minDate && day <= maxDate && cancelled == 0) {
+                numFlightsYAxis[day - minDate] += 1;
+            }
+        }
+    }
+    catch (Exception e) {
         e.printStackTrace();
     }
-        
+
     float[] datesRangeX = new float[]{minDate, maxDate};
     float minFlights = numFlightsYAxis[0];
     for (float i : numFlightsYAxis) {
-      if (i < minFlights) {
-          minFlights = i;
-      }
+        if (i < minFlights) {
+            minFlights = i;
+        }
     }
     float maxFlights = numFlightsYAxis[0];
     for (float i : numFlightsYAxis) {
-      if (i > maxFlights) {
-          maxFlights = i;
-      } //<>//
-    } //<>//
-    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)}; //<>//
-    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>//
-} //<>//
+        if (i > maxFlights) {
+            maxFlights = i;
+        } 
+    } 
+    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)}; 
+    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); 
+} 
 
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(int minBin, int step, int lastBin)
@@ -112,9 +113,9 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
     for (int i = 0; i < freqs.length; i++)
     {
         db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+
-                ( (i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i) )+
-                " AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\""+
-                ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
+            ( (i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i) )+
+            " AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\""+
+            ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
         println(freqs[i]);
@@ -153,11 +154,11 @@ public BubbleParams makeBubbleParams()
 {
     String query = """SELECT IATA_Code_Marketing_Airline as airline,
     COUNT(Cancelled) as len,
-    SUM(Cancelled) as cancelled,
-    SUM(Diverted) as diverted
-    FROM flights_full
-    """;
-    
+        SUM(Cancelled) as cancelled,
+        SUM(Diverted) as diverted
+        FROM flights_full
+        """;
+
     String[] dates = getDates();
     query += " WHERE FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";
 
@@ -169,7 +170,7 @@ public BubbleParams makeBubbleParams()
     query += "\nGROUP BY airline";
 
     db.query(query);
-    
+
     String[] carriers = new String[0];
     float[] cancelledPct = new float[0];
     float[] divertedPct = new float[0];
@@ -181,7 +182,7 @@ public BubbleParams makeBubbleParams()
         int numFlights = db.getInt("len");
         totalFlights += numFlights;
 
-        carriers = append(carriers, db.getString("airline"));   
+        carriers = append(carriers, db.getString("airline"));
         cancelledPct = append(cancelledPct, 100.0 * db.getInt("cancelled")/numFlights);
         divertedPct = append(divertedPct, 100.0 * db.getInt("diverted")/numFlights);
         marketShare = append(marketShare, 100.0 * numFlights);
@@ -230,30 +231,106 @@ CategoricalParams populateBarParamsRefined()
 {
     String query = """SELECT Origin as airport,
     COUNT(Origin) as num_flights
-    FROM flights_full
-    """;
+        FROM flights_full
+        """;
 
     String[] dates = getDates();
     query += " WHERE FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";
 
-    String airport = getAirportCode();   
+    String airport = getAirportCode();
     if (!airport.equals("ALL"))
     {
         query += " AND OriginState = '" + getAirportState() + "'";
     }
     query += "\nGROUP BY airport";
     db.query(query);
-    
+
     String[] airports = new String[0];
     float[] numFlights = new float[0];
     while (db.next())
     {
-        airports = append(airports, db.getString("airport"));   
+        airports = append(airports, db.getString("airport"));
         numFlights = append(numFlights, db.getInt("num_flights"));
     }
     return new CategoricalParams(numFlights, airports);
 }
 
+//Kilian 27/03/24 - created function to fill ScatterPlot
+public ScatterPlotData populateScatterPlot()
+{
+    int carriers; 
+    int numberOfQueries = 2000;
+    String table = "flights_full";
+    float[] flightVolume = new float[numberOfQueries];
+    float[] flightDuration = new float[numberOfQueries];
+    String selectedAirport = getAirportCode();
+    String date[] = getDates();
+    String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
+    String endDate = (date[1].equals("") ? "2022-31-01" : date[1]);
+
+    String query;
+    //if (selectedAirport.equals("ALL"))
+    //  query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 9, 2) >= '"+ String.format("%02d", startDate) +"' AND SUBSTR(FlightDate, 9, 2) <= '"+ String.format("%02d", endDate)+"'";
+    //else
+    //query = "SELECT * FROM " + table +
+    //        " WHERE SUBSTR(FlightDate, 9, 2) >= '" + String.format("%02d", startDate) +
+    //        "' AND SUBSTR(FlightDate, 9, 2) <= '" + String.format("%02d", endDate) +
+    //        "' AND Origin LIKE '%" + selectedAirport + "%'";
+
+    //query = "SELECT DepTime, COUNT(*) FROM " + table;
+
+    db.query("SELECT COUNT(DISTINCT IATA_Code_Marketing_Airline) AS UniqueAirlines, COUNT(*) AS TotalRows FROM " + table); 
+    carriers = db.getInt("UniqueAirlines");
+    numberOfQueries = db.getInt("TotalRows");
+    // print(numberOfQueries);
+
+
+
+    db.query("SELECT MAX(flight_volume) AS HighestFlightVolume FROM(SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM "+ table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
+    int xMax = db.getInt("HighestFlightVolume");
+    print(xMax + " ");
+
+    db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
+    int yMax = db.getInt("HighestFlightDuration");
+    print(yMax + " ");
+    
+    
+    // for(int i =0; i < carriers; i++){
+    // db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table+" GROUP BY IATA_Code_Marketing_Airline");
+    ////actualTakeOff[i] = db.getFloat("DepTime");
+    ////actualLanding[i] = db.getFloat("ArrTime");
+    ////print(db.getFloat("ArrTime"));
+    //db.next();
+    //flightDuration[i] = db.getFloat("TotalDistance");
+    //// flightDuration[i] = (flightDuration[i]* (int)((Math.pow(10, 8))));
+    //print(flightDuration[i] + " ");
+    
+    db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table+" GROUP BY IATA_Code_Marketing_Airline");
+    while (db.next()) {
+        flightDuration = append(flightDuration, db.getFloat("TotalDistance"));
+    }
+    print(flightDuration[0] + " ");
+    print(flightDuration[1]);
+
+    db.query("SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM " + table + " GROUP BY IATA_Code_Marketing_Airline");
+    while (db.next()) {
+        flightVolume  = append(flightVolume, db.getFloat("flight_volume"));
+    }
+
+    //for(int i =0; i < 9; i++){
+    //  print(flightVolume[i]);
+    //}
+
+    //for(int i = 0; i< numberOfQueries; i++){
+    //departureHours[i] = (int)actualTakeOff[i] / 100;
+    //  departureMinutes[i] = (int)actualTakeOff[i] % 100;
+    //  arrivalHours[i] = (int)actualLanding[i] / 100;
+    //  arrivalMinutes[i] = (int)actualLanding[i] % 100;
+    //  flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
+    //}
+    //db.close();
+    return new ScatterPlotData(flightVolume, flightDuration, xMax, yMax);
+}
 
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
@@ -268,114 +345,37 @@ public LocalTime timeToLocalTime(String stringTime) {
         String paddedTime = String.format("%04d", Integer.parseInt(stringTime));
         String formattedTime = paddedTime.substring(0, 2) + ":" + paddedTime.substring(2, 4);
         return LocalTime.parse(formattedTime, DateTimeFormatter.ofPattern("HH:mm"));
-    } catch( NumberFormatException e ) { return null; }
+    }
+    catch( NumberFormatException e ) {
+        return null;
+    }
     // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
 }
-//Kilian 27/03/24 - created function to fill ScatterPlot
-public ScatterPlotData populateScatterPlot()
-{
-  int carriers; //<>//
-  int numberOfQueries = 2000;
-  String table = "flights_full";
-  float[] flightVolume = new float[numberOfQueries];
-  float[] flightDuration = new float[numberOfQueries];
-  String selectedAirport = getAirportCode();
-  String date[] = getDates();
-  String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
-  String endDate = (date[1].equals("") ? "2022-31-01" : date[1]);
-  
-  String query;
-    //if (selectedAirport.equals("ALL"))
-    //  query = "SELECT * FROM " + table + " WHERE SUBSTR(FlightDate, 9, 2) >= '"+ String.format("%02d", startDate) +"' AND SUBSTR(FlightDate, 9, 2) <= '"+ String.format("%02d", endDate)+"'";
-    //else
-    //query = "SELECT * FROM " + table +
-    //        " WHERE SUBSTR(FlightDate, 9, 2) >= '" + String.format("%02d", startDate) +
-    //        "' AND SUBSTR(FlightDate, 9, 2) <= '" + String.format("%02d", endDate) +
-    //        "' AND Origin LIKE '%" + selectedAirport + "%'";
 
-    //query = "SELECT DepTime, COUNT(*) FROM " + table;
-    
-    
-    db.query("SELECT COUNT(DISTINCT IATA_Code_Marketing_Airline) AS UniqueAirlines FROM " + table); //<>//
-    carriers = db.getInt("UniqueAirlines");
-    
-    db.query("SELECT COUNT(*) AS TotalRows FROM " + table);
-    numberOfQueries = db.getInt("TotalRows");
-   // print(numberOfQueries);
-     float[] flightVolume = new float[0];
-     float[] flightDuration = new float[0];
-    
-   
-    
-       db.query("SELECT MAX(flight_volume) AS HighestFlightVolume FROM(SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM "+ table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
-       int xMax = db.getInt("HighestFlightVolume");
-       print(xMax + " ");
-       
-       db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
-       int yMax = db.getInt("HighestFlightDuration");
-       print(yMax + " ");
-        //<>//
-     // for(int i =0; i < carriers; i++){
-      // db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table+" GROUP BY IATA_Code_Marketing_Airline");
-      ////actualTakeOff[i] = db.getFloat("DepTime");
-      ////actualLanding[i] = db.getFloat("ArrTime");
-      ////print(db.getFloat("ArrTime"));
-      //db.next();
-      //flightDuration[i] = db.getFloat("TotalDistance");
-      //// flightDuration[i] = (flightDuration[i]* (int)((Math.pow(10, 8))));
-      //print(flightDuration[i] + " ");
-      db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table+" GROUP BY IATA_Code_Marketing_Airline");
-     while(db.next()){
-      flightDuration = append(flightDuration, db.getFloat("TotalDistance")); 
-     }
-       print(flightDuration[0] + " ");
-       print(flightDuration[1]);
-     
-     db.query("SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM " + table + " GROUP BY IATA_Code_Marketing_Airline");
-    while(db.next()){
-      flightVolume  = append(flightVolume, db.getFloat("flight_volume"));
-    }
-    
-    //for(int i =0; i < 9; i++){
-    //  print(flightVolume[i]);
-    //}
-       
-       
-       
-    //for(int i = 0; i< numberOfQueries; i++){
-    //departureHours[i] = (int)actualTakeOff[i] / 100;
-    //  departureMinutes[i] = (int)actualTakeOff[i] % 100;
-    //  arrivalHours[i] = (int)actualLanding[i] / 100;
-    //  arrivalMinutes[i] = (int)actualLanding[i] % 100;
-    //  flightDuration[i] = (arrivalHours[i]*60 + arrivalMinutes[i])-(departureHours[i]*60 + departureMinutes[i]);
-    //}
-    //db.close();
-  return new ScatterPlotData(flightVolume, flightDuration, xMax, yMax);
-}
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
-         and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
-*/
+ and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
+ */
 
 // Made by Tim
 /*void printText() {
-    int y = 10;
-    final int TEXT_X = 20;
-    fill(0);
-    textFont(font);
-    db.query("SELECT * FROM flights2k LIMIT "+y);
-    for (int i = 0; i < 10; i++)
-    {
-        if (db.next())
-        { 
-            String flightDate = db.getString("FlightDate");
-            String origin = db.getString("Origin");
-            String destination = db.getString("Dest");
-            text("Flight Date: " + flightDate + ", Origin: " + origin + ", Destination: " + destination, TEXT_X, y+150);
-        }
-        else
-        {
-            text("No data found.", TEXT_X, y);
-        }
-        y += 15;
-    }
-}*/
+ int y = 10;
+ final int TEXT_X = 20;
+ fill(0);
+ textFont(font);
+ db.query("SELECT * FROM flights2k LIMIT "+y);
+ for (int i = 0; i < 10; i++)
+ {
+ if (db.next())
+ {
+ String flightDate = db.getString("FlightDate");
+ String origin = db.getString("Origin");
+ String destination = db.getString("Dest");
+ text("Flight Date: " + flightDate + ", Origin: " + origin + ", Destination: " + destination, TEXT_X, y+150);
+ }
+ else
+ {
+ text("No data found.", TEXT_X, y);
+ }
+ y += 15;
+ }
+ }*/
