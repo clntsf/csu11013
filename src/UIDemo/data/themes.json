@@ -1,10 +1,20 @@
 {
     "lightTheme":{
         "screen": -8943463,
-        "background": -984833
+        "background": -984833,
+        "text": 0,
+        "selectorFrame": -8943463
     },
     "darkTheme":{
         "screen": -984833,
-        "background": -8943463
+        "background": -8943463,
+        "text": -2039584,
+        "selectorFrame": -984833
+    },
+    "grapefruitTheme":{
+        "screen": -8225,
+        "background": -16192,
+        "text": -9054123,
+        "selectorFrame": -8225
     }
 }

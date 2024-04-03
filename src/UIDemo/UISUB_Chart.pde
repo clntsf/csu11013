@@ -48,31 +48,6 @@ abstract class Chart extends Widget
     }
 }
 
-color applyAlpha(color c, int alpha)
-{
-    return (alpha << 24) + c;
-}
-
-/* CSF 19/3/24 7:30PM - Added Random Pastel color generator loosely inspired
- by https://mdigi.tools/random-pastel-color/ (see "How to Generate Random Pastel Colors?")
- */
-int channelToPastel(float orig, float rm)
-{
-    return (int)(orig-rm+255)/2;
-}
-
-int randomPastel(float seed)
-{
-    float r = 255*pow(sin(seed), 2);
-    float g = 255*pow(sin(seed+PI/3), 2);
-    float b = 255*pow(sin(seed+TAU/3), 2);
-
-    float gray = (float) min(r, g, b);
-    float saturation_amt = 0.8;
-    float rm = gray*saturation_amt;
-
-    return color(channelToPastel(r, rm), channelToPastel(g, rm), channelToPastel(b, rm));
-}
 
 // Macnalll - added pie chart subclass 19/3/24
 class PieChart extends Chart
@@ -438,14 +413,7 @@ class InteractiveBarPlot extends Container
             }
         }
     }
-    //void handlesPlace()
-    //{
-    //  for(int i = 0; i < handles.length; i++)
-    //  {
-    //    handles[i].setX(int(barCenters[i]));
-    //    handles[i].setY(handlesAxis);
-    //  }
-    //}
+
     void handlesDraw()
     {
         for (ReactiveWidget h : handles)

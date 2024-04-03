@@ -1,4 +1,5 @@
 // CSF - Implemented Widget by extending Exercise 6 reponse/challenge 12/3/2024 5PM
+// don't touch this this is perfect
 class Widget
 {
     int x;
@@ -11,7 +12,7 @@ class Widget
     Color backgroundColor;
     boolean hasStroke = false;
     color strokeColor;
-    color textColor;
+    Color textColor;
     ArrayList<Widget> children;
     
     Widget(int x, int y, int w, int h)
@@ -20,6 +21,7 @@ class Widget
         this.y = y;
         this.w = w;
         this.h = h;
+        textColor = new StaticColor(0);
         this.isHovered = false;
         this.children = new ArrayList<>();
     }
@@ -36,7 +38,7 @@ class Widget
         this.text = text;
     }
     
-    Widget(int x, int y, int w, int h, Color backgroundColor, String text, color textColor)
+    Widget(int x, int y, int w, int h, Color backgroundColor, String text, Color textColor)
     {
         this(x,y,w,h,backgroundColor);
         this.text = text;
@@ -83,14 +85,6 @@ class Widget
             child.onEvent(e);
         }
     }
-
-    // void onMouseEvent(MouseEvent e)
-    // {
-    //     for (Widget child : children)
-    //     {
-    //         child.onMouseEvent(e);
-    //     }
-    // }
     
     void drawChildren()
     {
@@ -110,7 +104,7 @@ class Widget
         
         if (text != null)
         {
-            fill(textColor);
+            fill(textColor.getColor());
             textAlign(CENTER,CENTER);
             textSize(fontSize);
             text(text,x,y);

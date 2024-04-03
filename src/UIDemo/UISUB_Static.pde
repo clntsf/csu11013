@@ -8,7 +8,7 @@ class Label extends Widget
         this.text = text;
     }
     
-    Label(int x, int y, String text, color textColor)
+    Label(int x, int y, String text, Color textColor)
     {
         this(x,y,text);
         this.textColor = textColor;
@@ -18,7 +18,7 @@ class Label extends Widget
     {
         textAlign(justify, CENTER);
         textSize(fontSize);
-        fill(textColor);
+        fill(textColor.getColor());
         text(text,x,y);
     }
 }

@@ -25,7 +25,7 @@ class ReactiveWidget extends Widget
         super(x, y, w, h, backgroundColor, text);
         initListeners();
     }
-    ReactiveWidget(int x, int y, int w, int h, Color backgroundColor, String text, color textColor) {
+    ReactiveWidget(int x, int y, int w, int h, Color backgroundColor, String text, Color textColor) {
         super(x, y, w, h, backgroundColor, text, textColor);
         initListeners();
     }
@@ -126,12 +126,12 @@ class CheckBox extends ReactiveWidget
     void draw()
     {
         getFill();
-        stroke(0);
+        stroke(textColor.getColor());
         strokeWeight(1);
         rectMode(CENTER);
         rect(x, y, w, h, (isRectangular ? w/4 : w/2));
 
-        fill(0);
+        fill(textColor.getColor());
         textSize(fontSize);
         text(text, x+10, y);
     }
@@ -180,6 +180,14 @@ class CheckBoxList extends Container
     CheckBoxList(int x, int y, String labelText, String[] options)
     {
         this(x, y, labelText, options, 14, 12);
+    }
+    
+    void setTextColor(Color newColor)
+    {
+        for (Widget child : children)
+        {
+            child.textColor = newColor;
+        }
     }
 
     boolean[] getValues()
@@ -284,7 +292,8 @@ class ScrollSelector extends ReactiveWidget
 
     int scrollY;
 
-    final int SELECTED_COLOR = #6464C8, ODD_COLOR = #FFFFFF, EVEN_COLOR = #f0f2f4, FRAME_COLOR = #778899;
+    final int SELECTED_COLOR = #6464C8, ODD_COLOR = #FFFFFF, EVEN_COLOR = #f0f2f4;
+    final Color FRAME_COLOR = new ThemedColor(themes, "selectorFrame");
 
     ScrollSelector(int x, int y, int w, int h, String[] entries)
     {
@@ -331,7 +340,7 @@ class ScrollSelector extends ReactiveWidget
         rect(
             BLEFT, yd,
             BRIGHT, yd + LINE_HEIGHT
-            );
+        );
     }
 
     void draw()
@@ -341,10 +350,11 @@ class ScrollSelector extends ReactiveWidget
         rectMode(CORNERS);
         textAlign(LEFT, TOP);
 
+        fill(textColor.getColor());
         text("SELECTED: " + entries[selected], BLEFT - LINE_HEIGHT, BTOP - 2*LINE_HEIGHT);
 
         // outer rect
-        fill(FRAME_COLOR);
+        fill(FRAME_COLOR.getColor());
         rect(BLEFT-LINE_HEIGHT, BTOP-LINE_HEIGHT, BRIGHT+LINE_HEIGHT, BBOTTOM+LINE_HEIGHT);
 
         for (int i = max(0, (BTOP-scrollY)/LINE_HEIGHT); i<min(entries.length, (BBOTTOM-scrollY)/LINE_HEIGHT + 1); i++)
@@ -366,7 +376,7 @@ class ScrollSelector extends ReactiveWidget
         }
 
         // hide overlapping text with 'mountains'
-        fill(FRAME_COLOR);
+        fill(FRAME_COLOR.getColor());
         rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
         rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
     }

@@ -4,6 +4,7 @@ void Wk2Demo()
     
     final Color SCREEN_COLOR = new ThemedColor(themes, "screen");
     final Color BACKGROUND_COLOR = new ThemedColor(themes, "background");
+    final Color TEXT_COLOR = new ThemedColor(themes, "text");
     
     final String MAIN_TITLE = "Flight Data Visualisation App";
     surface.setTitle(MAIN_TITLE);
@@ -28,11 +29,13 @@ void Wk2Demo()
     screens.addNamedScreen(titleScreen, "Title Screen");   
     titleScreen.addWidget(background);
 
-    Label titleLabel = new Label(width/2, BG_MARGIN + 25, "Flight Data Visualisation App");
+    Label titleLabel = new Label(width/2, BG_MARGIN + 25, "Flight Data Visualisation App", TEXT_COLOR);
     titleLabel.fontSize = 36;
     titleLabel.justify = CENTER;
     titleScreen.addWidget(titleLabel);
     
+   // day/night theme buttons
+   
     Image dayNightImage = new Image(width-70, height-40, 60, 35, loadImage("theme_buttons.png"));
     titleScreen.addWidget(dayNightImage);
     
@@ -49,22 +52,24 @@ void Wk2Demo()
     titleScreen.addWidget(nightButton);
     nightButton.addListener((e,w) -> {
         if (e.getAction() != MouseEvent.PRESS) { return; }
-        themes.setActive("darkTheme");
+        themes.setActive("grapefruitTheme");
     });
+
+ // main UI
 
     final int COLUMN_SIDE_PAD = 40;   
     final int COLUMN_VERT_PAD = 80; 
     final int INDENT = 15;
 
-    // left side
+  // left side
 
-    // Date restriction
+   // Date restriction
     final String DATE_REGEX = "[0-9/]";
     
     Label dateRestrictLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD,
         BG_MARGIN+COLUMN_VERT_PAD,
-        "Restrict Date Range:"
+        "Restrict Date Range:", TEXT_COLOR
     );
     dateRestrictLabel.fontSize = 24;
     titleScreen.addWidget(dateRestrictLabel);
@@ -72,7 +77,7 @@ void Wk2Demo()
     Label startDateLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD+INDENT,
         BG_MARGIN+COLUMN_VERT_PAD+30,
-        "Start Date:"
+        "Start Date:", TEXT_COLOR
     );
     startDateLabel.fontSize = 20;
     titleScreen.addWidget(startDateLabel);
@@ -89,7 +94,7 @@ void Wk2Demo()
     Label endDateLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD+INDENT,
         BG_MARGIN+COLUMN_VERT_PAD+90,
-        "End Date:"
+        "End Date:", TEXT_COLOR
     );
     endDateLabel.fontSize = 20;
     titleScreen.addWidget(endDateLabel);
@@ -103,11 +108,11 @@ void Wk2Demo()
     titleScreen.addNamedChild(endDateEntry, "DATE_END");
     endDateEntry.regex = DATE_REGEX;
 
-    // Airport selection
+   // Airport selection
     Label airportSelectorLabel = new Label(
         BG_MARGIN+COLUMN_SIDE_PAD,
         BG_MARGIN+COLUMN_VERT_PAD+150,
-        "Select Airport:"
+        "Select Airport:", TEXT_COLOR
     );
     airportSelectorLabel.fontSize = 24;
     titleScreen.addWidget(airportSelectorLabel);
@@ -118,6 +123,7 @@ void Wk2Demo()
         BG_MARGIN + COLUMN_SIDE_PAD + 305,
         250, 160, airports
     );
+    airportSelector.textColor = TEXT_COLOR;
     titleScreen.addWidget(airportSelector);
     titleScreen.addNamedChild(airportSelector, "Airport Selector");
 
@@ -129,10 +135,11 @@ void Wk2Demo()
         "Select Table to Query:",
         tables, 24, 20
     );
+    tableSelector.setTextColor(TEXT_COLOR);
     titleScreen.addWidget(tableSelector);
     titleScreen.addNamedChild(tableSelector, "Table Selector");
 
-    // Right side
+  // Right side
     final int COLUMN_RIGHT = 3*width/4;
     final int BTN_WIDTH = 200, BTN_HEIGHT = 40, BTN_MARGIN = 10;
 
@@ -141,18 +148,19 @@ void Wk2Demo()
         "Departure Delay Times",
         "Reliability vs Market Share",
         "Flight Map",
+        "Data Display",
         "Flight Volume Heatmap",
         "Flight Duration vs Volume",
         "Volume of State Flights",
         "Flights per Day",
-        "Data Display"
     };
-    final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24, #f90b24 };
+    final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #b7fffa, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24 };
 
-    Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:");
+    Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:", TEXT_COLOR);
     dataQueryLabel.fontSize = 24;
     dataQueryLabel.justify = CENTER;
     titleScreen.addWidget(dataQueryLabel);
+
 
     for (int i=0; i<BTN_NAMES.length; i++)
     {
@@ -242,8 +250,28 @@ void Wk2Demo()
     MapWidget map = new MapWidget(this, width / 2, height / 2, width, height);
     mapScr.addWidget(map);
     
-    
-   // --- Screen 5: Flight Volume Heatmap -- //
+   // --- Screen 5 - Data Display --- //
+   
+     // --- Screen 9 - Data Display --- //
+     Screen dataScr = new Screen(SCREEN_COLOR);
+     screens.addNamedScreen(dataScr, "Data Display");
+     dataScr.addWidget(background);
+     dataScr.addWidget(titleButton);
+     dataScr.addNamedChild(titleButton, "Title Button");
+     
+     ReactiveWidget displayBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Data Display");
+     displayBtn.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+          resetScreen(dataScr, background);
+          new Thread(() -> {
+          ScrollTableParams params = populateDataList();
+          ScrollTable sT1 = scrollTablePopulate(params);
+          dataScr.addWidget(sT1);
+          dataScr.addNamedChild(sT1, "Airport Selector");
+        }).start();
+    });
+     
+   // --- Screen 6: Flight Volume Heatmap -- //
     
     Screen heatMapScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(heatMapScr, "Flight Volume Heatmap");
@@ -263,7 +291,7 @@ void Wk2Demo()
     });
 
 
-   // --- Screen 6 - Kilian's Scatter Plot Screen  --- //
+   // --- Screen 7 - Kilian's Scatter Plot Screen  --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
@@ -285,7 +313,7 @@ void Wk2Demo()
         }).start();
     });
     
-   // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
+   // --- Screen 8 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
 
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(barPlotScr, "Volume of State Flights");
@@ -305,7 +333,7 @@ void Wk2Demo()
         }).start();
     });
 
-   // --- Screen 8 - Tim's Line Plot --- //
+   // --- Screen 9 - Tim's Line Plot --- //
 
     Screen linePlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(linePlotScr, "Flights per Day");
@@ -323,24 +351,7 @@ void Wk2Demo()
             linePlotScr.addWidget(linePlot);
         }).start();
     });
-    
-     // --- Screen 9 - Data Display --- //
-     Screen dataScr = new Screen(SCREEN_COLOR);
-     screens.addNamedScreen(dataScr, "Data Display");
-     dataScr.addWidget(background);
-     dataScr.addWidget(titleButton);
-     dataScr.addNamedChild(titleButton, "Title Button");
-     ReactiveWidget displayBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Data Display");
-     displayBtn.addListener((e,w) -> {
-        if (e.getAction() != MouseEvent.PRESS) {return;}
-          resetScreen(dataScr, background);
-          new Thread(() -> {
-          ScrollTableParams params = populateDataList();
-          ScrollTable sT1 = scrollTablePopulate(params);
-          dataScr.addWidget(sT1);
-          dataScr.addNamedChild(sT1, "Airport Selector");
-        }).start();
-    });
+
 }
 
 boolean loadScreenWithArgs(String screenName)
@@ -374,9 +385,6 @@ ScatterPlot demoLinePlot(SQLite db)
     s1.makeLinePlot();
     return s1;
 }
-
-
-
 
 PieChart demoPie()
 {
