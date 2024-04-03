@@ -4,8 +4,9 @@ import java.time.format.DateTimeFormatter;
 //import java.util.Arrays;
 
 //macnalll - created method of accessing data from the database into a piechart 26/3/24
-public PieParams getPieChartData(String table)
+public PieParams getPieChartData()
 {
+    String table = getTable();
     String selectedAirport = getAirportCode();
     String date[] = getDates();
     String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);

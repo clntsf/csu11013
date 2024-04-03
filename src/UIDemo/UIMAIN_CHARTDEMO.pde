@@ -341,7 +341,7 @@ ScatterPlot demoLinePlot(SQLite db)
 
 PieChart demoPie()
 {
-    PieParams test = getPieChartData("flights10k");
+    PieParams test = getPieChartData();
     return new PieChart(
         width/2,height/2,width/2,height/2,
         "Market Share by Airline",
