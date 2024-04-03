@@ -508,7 +508,7 @@ class ScatterPlot extends Plot
         this.axisRangeX = axisRangeX;
         connect = false;
         markers = true;
-        numAxisTicksX = 5;
+        numAxisTicksX = 20;
     }
 
     void drawAxisTicksX()
@@ -609,8 +609,73 @@ class BubblePlot extends ScatterPlot
             float[] screenCoords = getScreenCoords((float)valuesX[i], (float)valuesY[i]);
             circle(screenCoords[0], screenCoords[1], maxSize*pow(valuesZ[i]/maxZ, 0.5));
             fill(0);
-            // textAlign(LEFT,TOP);
             text(labels[i], screenCoords[0], screenCoords[1]);
+        }
+    }
+}
+
+class HeatMap extends Chart
+{
+    float[][] data;
+    float dataMin;
+    float dataMax;
+    float dataRange;
+    int tileWidth;
+    int tileHeight;
+    CustomGradient grad;
+
+    HeatMap(int x, int y, int w, int h, String title, float[][] data, CustomGradient grad)
+    {
+        super(x,y,w,h,title,null);
+        this.tileWidth = w/data[0].length;
+        this.tileHeight = h/data.length;
+        this.data = data;
+        this.grad = grad;
+        
+        dataMin = min(data[0]);
+        dataMax = max(data[0]);
+        for (float[] row : data)
+        {
+            dataMin = min(dataMin, min(row));
+            dataMax = max(dataMax, max(row));
+        }
+        dataRange = dataMax - dataMin;
+    }
+
+    void draw()
+    {
+        rectMode(CENTER);
+        textAlign(CENTER, CENTER);
+        
+        int marg = 2;
+        fill(0);
+        noStroke();
+        rect(x, y, w+2*marg, h+2*marg);
+
+        for (int idxY = 0; idxY < data.length; idxY++)
+        {
+            for (int idxX = 0; idxX < data[0].length; idxX++)
+            {
+                float dataPoint = data[idxY][idxX];
+                color dataColor = grad.getColor((dataPoint-dataMin)/(dataRange));
+                int centerX = (int)(x - w/2 + (idxX + 0.5) * tileWidth);
+                int centerY = (int)(y - h/2 + (idxY + 0.5) * tileHeight);
+                fill(dataColor);
+                rect( centerX, centerY, tileWidth, tileHeight );
+                
+                fill(complement(dataColor));
+                text( String.format("%.2f", dataPoint), centerX, centerY); 
+            }
+        }
+        
+        // handle legend
+        float legendMax = 100.0, legendBarW = 20;
+        rectMode(CORNER); fill(0);
+        rect(x + w/2 + legendBarW - marg, y - h/2 - marg, legendBarW + 2*marg, legendMax + 2*marg);
+        for (float barY=legendMax-1; barY>=0; barY--)
+        {
+            fill(grad.getColor(1 - barY/legendMax));
+            rect(x + w/2 + legendBarW, y - h/2 + barY, legendBarW, 1);
         }
     }
 }

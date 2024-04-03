@@ -3,43 +3,27 @@ import java.util.Map;
 
 ScreenList screens = new ScreenList();
 PFont font;
+String DB_NAME;
 SQLite db;
 
 void setup()
 {
     size(640, 640);
     font = createFont("Outfit-Regular.ttf", 13);
-
-    //chartDemo();
-    //navDemo();
-    //weekOneDemo();
-
+    DB_NAME = "tables";
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
-    //Table table = loadTable("flights_full.csv", "header");
-    //String tableName = "flights_full";
-
-    // println(LocalDate.parse("01/06/2022",DateTimeFormatter.ofPattern("MM/dd/yyyy")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
-    if (createDBFile("tables"))
+    if (createDBFile())
     {
-        initDB("tables");
+        initDB();
     }
-    db = new SQLite(this, "tables.db");
+    db = new SQLite(this, DB_NAME+".db");
     if (db.connect())
     {
         println("Connected to DB!");
     } else println("ERROR connecting to DB!");
 
     Wk2Demo();
-
-    //Table delays = loadTable("delaysdemo.csv", "header");
-    //if (db.connect())
-    //{
-    //new Thread(() -> populateFlightDBs(table, tableName)).start(); // shouldn't have to do always but we'll add a check later
-    //new Thread(() -> populateDelays(delays)).start();
-    //}
-    //else println("Error connecting to database!");
 }
 
 void draw()

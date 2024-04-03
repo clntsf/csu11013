@@ -1,4 +1,6 @@
-//import java.util.concurrent.atomic.AtomicReference;
+import de.fhpotsdam.unfolding.*;
+import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.unfolding.geo.*;
 
 void Wk2Demo()
 {
@@ -221,6 +223,29 @@ void Wk2Demo()
     mapScr.addWidget(background);
     mapScr.addWidget(titleButton);
     mapScr.addNamedChild(titleButton, "Title Button");
+    MapWidget map = new MapWidget(this, width / 2, height / 2, width, height);
+    mapScr.addWidget(map);
+    
+    
+    // --- Screen 5: Flight Volume Heatmap -- //
+    
+    Screen heatMapScr = new Screen(SCREEN_COLOR);
+    screens.addNamedScreen(heatMapScr, "Flight Volume Heatmap");
+    heatMapScr.addWidget(background);
+    heatMapScr.addWidget(titleButton);
+    heatMapScr.addNamedChild(titleButton, "Title Button");
+
+    ReactiveWidget heatmapButton = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Volume Heatmap");
+    heatmapButton.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+        new Thread(() -> {
+            resetScreen(reliabilityScr, background);
+            HeatMapParams params = generateFlightVolumeHeatmap();
+            HeatMap hm = demoHeatMap(params);
+            heatMapScr.addWidget(hm);
+        }).start();
+    });
+
 
     // --- Screen 6 - Kilian's Scatter Plot Screen  --- //
 
@@ -329,9 +354,11 @@ ScatterPlot demoLinePlot(SQLite db)
 }
 
 
+
+
 PieChart demoPie()
 {
-    PieParams test = getPieChartData("flights10k");
+    PieParams test = getPieChartData();
     return new PieChart(
         width/2,height/2,width/2,height/2,
         "Market Share by Airline",
@@ -353,6 +380,16 @@ BubblePlot demoBubble(BubbleParams params)
     bubble.labelFormatStringY = "%.2f";
     
     return bubble;
+}
+
+HeatMap demoHeatMap(HeatMapParams params)
+{
+    HeatMap hm = new HeatMap(
+        width/2, height/2, 420, 480, 
+        "Flight Volume by Day of Week/Time of Day",
+        params.data, VIRIDIS_CG
+    );
+    return hm;
 }
 
 Histogram demoHistogram(HistParams histParams)
