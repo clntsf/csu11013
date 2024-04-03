@@ -378,9 +378,9 @@ class ScrollTable extends ScrollSelector
     int bLength = 90;
     int bWidth = 40;
 
-    ScrollTable(int x, int y, int w, int h, String entries[], color buttonColor)
+    ScrollTable(int x, int y, int w, int h, String[] dates, String[] carriers, String[] origins, String[] dests, color buttonColor)
     {
-        super(x, y, w, h, entries);
+        super(x, y, w, h, dates);
         sortButtons = new ReactiveWidget[1];
         for (int i = 0; i < sortButtons.length; i++)
         {
@@ -400,6 +400,15 @@ class ScrollTable extends ScrollSelector
         for (ReactiveWidget b : sortButtons) {
             b.draw();
         }
+    }
+    void sortByOrigin()
+    {
+    }
+    void sortByDestination()
+    {
+    }
+    void sortByDate()
+    {
     }
     void draw()
     {

@@ -254,7 +254,24 @@ CategoricalParams populateBarParamsRefined()
     }
     return new CategoricalParams(numFlights, airports);
 }
-
+//WS
+ScrollTableParams populateDataList()
+{
+  String query = "SELECT FlightDate, IATA_Code_Marketing_Airline, OriginCityName, DestCityName FROM flights2k";
+  db.query(query);
+  String[] dates = new String[0];
+  String[] carriers = new String[0];
+  String[] origins = new String[0];
+  String[] dests = new String[0];
+  while(db.next())
+  {
+    dates = append(dates, db.getString("FlightDate"));
+    carriers = append(carriers, db.getString("IATA_Code_Marketing_Airline"));
+    origins = append(origins, db.getString("OriginCityName"));
+    dests = append(dests, db.getString("DestCityName"));
+  }
+  return new ScrollTableParams(dates, carriers, origins, dests);
+}
 //Kilian 27/03/24 - created function to fill ScatterPlot
 public ScatterPlotData populateScatterPlot()
 {

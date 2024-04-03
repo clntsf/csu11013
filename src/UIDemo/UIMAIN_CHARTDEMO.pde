@@ -335,11 +335,10 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {return;}
           resetScreen(dataScr, background);
           new Thread(() -> {
-          ScrollTable tempdata = new ScrollTable(
-          width/2, height/2, 450, 450, airports, #ef6b6b
-           );
-          dataScr.addWidget(tempdata);
-          dataScr.addNamedChild(tempdata, "Airport Selector");
+          ScrollTableParams params = populateDataList();
+          ScrollTable sT1 = scrollTablePopulate(params);
+          dataScr.addWidget(sT1);
+          dataScr.addNamedChild(sT1, "Airport Selector");
         }).start();
     });
 }
@@ -485,6 +484,13 @@ InteractiveBarPlot barPlotPopulate(CategoricalParams params)
         50, height - 40, 30, 30
     );
     return b1;
+}
+ScrollTable scrollTablePopulate(ScrollTableParams params)
+{
+  ScrollTable sT1 = new ScrollTable(
+          width/2, height/2, 450, 450, params.dates, params.carriers, params.origins, params.dests, #ef6b6b
+           );
+  return sT1;
 }
 
 String[] getDates()

@@ -114,7 +114,22 @@ class BarParams
     this.numOfFlights = numOfFlights;
   }
 }
-
+//WS
+class ScrollTableParams
+{
+  String[] dates;
+  String[] carriers;
+  String[] origins;
+  String[] dests;
+  ScrollTableParams(String[] dates, String[] carriers, String[] origins, String[] dests)
+  {
+    this.dates = dates;
+    this.carriers = carriers;
+    this.origins = origins;
+    this.dests = dests;
+  }
+  
+}
 class HeatMapParams
 {
     float[][] data;
