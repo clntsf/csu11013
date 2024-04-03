@@ -314,11 +314,18 @@ void Wk2Demo()
      dataScr.addWidget(background);
      dataScr.addWidget(titleButton);
      dataScr.addNamedChild(titleButton, "Title Button");
-     ScrollTable tempdata = new ScrollTable(
-        width/2, height/2, 450, 450, airports, #ef6b6b
-     );
-     dataScr.addWidget(tempdata);
-     dataScr.addNamedChild(tempdata, "Airport Selector");
+     ReactiveWidget displayBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Data Display");
+     displayBtn.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) {return;}
+          resetScreen(dataScr, background);
+          new Thread(() -> {
+          ScrollTable tempdata = new ScrollTable(
+          width/2, height/2, 450, 450, airports, #ef6b6b
+           );
+          dataScr.addWidget(tempdata);
+          dataScr.addNamedChild(tempdata, "Airport Selector");
+        }).start();
+    });
 }
 
 boolean loadScreenWithArgs(String screenName)
