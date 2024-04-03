@@ -13,7 +13,7 @@ C. Simon-Fellowes, L. MacNally
 
 ## 1. `Chart` (Abstract Base Class)
 
-```
+```java
 abstract class Chart
 extends Widget
 implements None
@@ -24,13 +24,13 @@ implements None
 A Chart only has the minimum standard functionality - a frame and a title. This is to allow for non-plot charts (see below for Plot), such as a pie chart, which do not avail of axis labels, ticks, etc. and instead just need the above. This class is also abstract, as it is not intended to be used directly in code, only its subclasses.
 
 ### Constructor Summary:
-```
+```java
 Chart(int x,
     int y,
     int w,
     int h,
     String title,
-    double[] valuesY
+    float[] valuesY
 )
 ```
 
@@ -43,7 +43,7 @@ Chart(int x,
 |w|`int`|width (in pixels) of the chart's frame|
 |h|`int`|height (in pixels) of the chart's frame|
 |title|`String`|The chart's title|
-|valuesY|`double[]`|A list of y-values for the chart|
+|valuesY|`float[]`|A list of y-values for the chart|
 
 ### Non-Constructor fields:
 
@@ -55,7 +55,7 @@ Chart(int x,
 
 ## 2. `PieChart`
 
-```
+```java
 class PieChart
 extends Chart
 implements None
@@ -66,13 +66,13 @@ implements None
 A subclass of `Chart`, with a primary focus on visual representation of data, describing only one type of variable and showing the frequencies graphically rather than numerically.
 
 ### Constructor Summary:
-```
+```java
 PieChart(int x,
     int y,
     int w,
     int h,
     String title,
-    double[] valuesY,
+    float[] valuesY,
     String[] labels
 )
 ```
@@ -90,7 +90,7 @@ None
 
 ## 3. `Plot`
 
-```
+```java
 abstract class Plot
 extends Chart
 implements None
@@ -102,7 +102,7 @@ Plots have somewhat more functionality, supporting axis labels and a y-axis limi
 Again, Plot is abstract because it should not be used in favor of one of its subclasses.
 
 ### Constructor Summary:
-```
+```java
 Plot(int x,
     int y,
     int w,
@@ -110,18 +110,18 @@ Plot(int x,
     String title,
     String axisLabelX,
     String axisLabelY,
-    double[] valuesY,
-    int[] axisRangeY
+    float[] valuesY,
+    float[] axisRangeY
 )
 ```
 
 An alternative version of this constructor exists:
 
-```
+```java
 Plot(int x, int y, int w, int h,
     String title, String axisLabelX,
-    String axisLabelY, double[] valuesY,
-    int axisMaxY
+    String axisLabelY, float[] valuesY,
+    float axisMaxY
 )
 ```
 
@@ -133,7 +133,7 @@ In which only the maximum value for the y-axis is passed: the minimum is taken a
 |----|----|-----------|
 |axisLabelX|`String`|Label to be displayed on the plot's x-axis|
 |axisLabelY|`String`|Label to be displayed on the plot's y-axis|
-|axisRangeY|`int[2]`|range of values to be displayed on the plot's<br>y-axis.|
+|axisRangeY|`float[2]`|range of values to be displayed on the plot's<br>y-axis.|
 
 <span id="plot-nCons"></span>
 ### Non-Constructor fields:
@@ -148,7 +148,7 @@ In which only the maximum value for the y-axis is passed: the minimum is taken a
 
 ## 4. `BarPlot`
 
-```
+```java
 class BarPlot
 extends Plot
 implements None
@@ -157,7 +157,7 @@ implements None
 > A typical Bar Plot, with categorical labels on the x-axis and quantities on the y-axis.
 
 ### Constructor Summary:
-```
+```java
 BarPlot(int x,
     int y,
     int w,
@@ -166,7 +166,7 @@ BarPlot(int x,
     String axisLabelX,
     String axisLabelY,
     String[] categories,
-    double[] valuesY,
+    float[] valuesY,
     int axisMaxY
 )
 ```
@@ -188,7 +188,7 @@ BarPlot(int x,
 
 ## 5. `Histogram`
 
-```
+```java
 class Histogram
 extends BarPlot
 implements None
@@ -199,7 +199,7 @@ implements None
 A closely-derived subclass of `BarPlot`, `Histogram`'s only unique behaviors are different values for its non-constructor fields (see below) and its `makeCategories` function, which turns the `Integer[]` provided in the constructor (see below) to `String[]` (see `BarPlot.categories`) allowing for open-ended bins (i.e. a...inf). 
 
 ### Constructor Summary:
-```
+```java
 Histogram(int x,
     int y,
     int w,
@@ -208,7 +208,7 @@ Histogram(int x,
     String axisLabelX,
     String axisLabelY,
     Integer[] binStarts,
-    double[] valuesY,
+    float[] valuesY,
     int axisMaxY
 )
 ```
@@ -230,7 +230,7 @@ Histogram(int x,
 
 ## 6. `ScatterPlot`
 
-```
+```java
 class ScatterPlot
 extends Plot
 implements None
@@ -241,7 +241,7 @@ implements None
 Despite being nominally a scatter-plot (as this is the simplest form of this chart), instances of `ScatterPlot` can have a variety of appearances depending on the values of their non-constructor fields (see below). The most common use-case for this is setting `markers=false` and `connect=true` to create a line plot, but `markers` can also be left as true for a dotted line. In the case both are turned to false no values will render, so this configuration is discouraged.
 
 ### Constructor Summary:
-```
+```java
 ScatterPlot(int x,
     int y,
     int w,
@@ -249,10 +249,10 @@ ScatterPlot(int x,
     String title,
     String axisLabelX,
     String axisLabelY,
-    double[] valuesX,
-    double[] valuesY,
-    int[] axisRangeX,
-    int[] axisRangeY
+    float[] valuesX,
+    float[] valuesY,
+    float[] axisRangeX,
+    float[] axisRangeY
 )
 ```
 
@@ -261,7 +261,7 @@ ScatterPlot(int x,
 |Name|Type|Description|
 |----|----|-----------|
 |valuesX|`double[]`|A list of x-values for the plot|
-|axisRangeX|`int[2]`|range of values to be displayed on the plot's<br>x-axis|
+|axisRangeX|`float[2]`|range of values to be displayed on the plot's<br>x-axis|
 
 ### Non-Constructor fields:
 
