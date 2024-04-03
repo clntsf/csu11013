@@ -70,9 +70,9 @@ class Screen
 {
     ArrayList<Widget> widgets;
     HashMap<String, Widget> namedChildren;
-    color bgColor;
+    Color bgColor;
     
-    Screen(color bgColor)
+    Screen(Color bgColor)
     {
         widgets = new ArrayList<>();
         namedChildren = new HashMap<>();
@@ -104,7 +104,7 @@ class Screen
     
     void draw()
     {
-        background(bgColor);
+        background(bgColor.getColor());
         for (Widget w : widgets)
         {
             w.draw();

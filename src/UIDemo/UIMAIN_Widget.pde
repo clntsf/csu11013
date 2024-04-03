@@ -1,4 +1,4 @@
-// CSF - Implemented Widget by extending Exercise 6 reponse/challenge 12/4/2024 5PM
+// CSF - Implemented Widget by extending Exercise 6 reponse/challenge 12/3/2024 5PM
 class Widget
 {
     int x;
@@ -8,7 +8,7 @@ class Widget
     String text;
     int fontSize = 16;
     boolean isHovered;
-    color backgroundColor;
+    Color backgroundColor;
     boolean hasStroke = false;
     color strokeColor;
     color textColor;
@@ -24,19 +24,19 @@ class Widget
         this.children = new ArrayList<>();
     }
     
-    Widget(int x, int y, int w, int h, color backgroundColor)
+    Widget(int x, int y, int w, int h, Color backgroundColor)
     {
         this(x,y,w,h);
         this.backgroundColor = backgroundColor;
     }
     
-    Widget(int x, int y, int w, int h, color backgroundColor, String text)
+    Widget(int x, int y, int w, int h, Color backgroundColor, String text)
     {
         this(x,y,w,h,backgroundColor);
         this.text = text;
     }
     
-    Widget(int x, int y, int w, int h, color backgroundColor, String text, color textColor)
+    Widget(int x, int y, int w, int h, Color backgroundColor, String text, color textColor)
     {
         this(x,y,w,h,backgroundColor);
         this.text = text;
@@ -60,7 +60,7 @@ class Widget
     
     void applyFill()
     {
-        fill(backgroundColor);
+        fill(backgroundColor.getColor());
     }
     
     void addChild(Widget child)

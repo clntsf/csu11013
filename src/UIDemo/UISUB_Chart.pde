@@ -20,7 +20,7 @@ abstract class Chart extends Widget
         String title, float[] valuesY
         )
     {
-        super(x, y, w, h, #FAF9F6);
+        super(x, y, w, h, new StaticColor(#FAF9F6));
         this.title = title;
         this.valuesY = valuesY;
         setStroke(0);
@@ -376,7 +376,7 @@ class InteractiveBarPlot extends Container
         }
         for (int i = 0; i < handles.length; i++)
         {
-            handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, barColors[i]);
+            handles[i]= new ReactiveWidget(int(barCenters[i]), handlesY, handlesW, handlesH, new StaticColor(barColors[i]));
             barOrder[i] = i;
             int index = i;
             handles[i].addListener((e, widg) -> {

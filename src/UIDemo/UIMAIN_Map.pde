@@ -1,3 +1,7 @@
+import de.fhpotsdam.unfolding.*;
+import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.unfolding.geo.*;
+
 class MapWidget extends Widget {
     UnfoldingMap map;
     PApplet parent; 

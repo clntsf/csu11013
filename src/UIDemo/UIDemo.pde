@@ -1,7 +1,9 @@
 import de.bezier.data.sql.SQLite;
 import java.util.Map;
+import processing.data.JSONObject;
 
 ScreenList screens = new ScreenList();
+ThemeSet themes;
 PFont font;
 String DB_NAME;
 SQLite db;
@@ -11,6 +13,7 @@ void setup()
     size(640, 640);
     font = createFont("Outfit-Regular.ttf", 13);
     DB_NAME = "tables";
+    themes = loadThemeJSON("themes.json");
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     if (createDBFile())
