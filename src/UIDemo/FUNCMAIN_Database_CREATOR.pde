@@ -1,12 +1,12 @@
 // RSR - If .db does not exist in data folder, it will be created and filled. - 21/3/24 10PM
 
-public void initDB(String dbName)
+public void initDB()
 {
     String[] flightTableNames = {"flights2k", "flights10k", "flights_full"};
-    db = new SQLite(this, dbName+".db");
+    db = new SQLite(this, DB_NAME+".db");
     if (db.connect())
     {
-        initSchema(dbName, flightTableNames);
+        initSchema(flightTableNames);
         populateWacDB(); // must populate this before flights!!!
         populateFlightDBs(flightTableNames);
         populateDelays();
@@ -14,16 +14,16 @@ public void initDB(String dbName)
 }
 
 // RSR - creates database file if it does not already exist - 21/3/24 7PM
-public boolean createDBFile(String fileName)
+public boolean createDBFile()
 {
-    File dbFile = new File(dataPath(fileName+".db"));
+    File dbFile = new File(dataPath(DB_NAME+".db"));
     try
     {
         return dbFile.createNewFile();
     } catch (IOException e) {e.printStackTrace(); return false;}
 }
 
-public void initSchema(String dbName, String[] flightTableNames)
+public void initSchema(String[] flightTableNames)
 {
     db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Origin\" TEXT NOT NULL, \"Delay\"  INTEGER)");
     db.query("""CREATE TABLE "wac_codes" (
