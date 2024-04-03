@@ -126,9 +126,10 @@ void Wk2Demo()
         "Flight Volume Heatmap",
         "Flight Duration vs Volume",
         "Volume of State Flights",
-        "Flights per Day"
+        "Flights per Day",
+        "Data Display"
     };
-    final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24 };
+    final int[] BTN_COLORS = new int[]{ #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #8686af, #c3b1e1, #ffd1dc, #f90b24, #f90b24 };
 
     Label dataQueryLabel = new Label(COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD, "Visualize Query Data:");
     dataQueryLabel.fontSize = 24;
@@ -282,7 +283,17 @@ void Wk2Demo()
         }).start();
     });
     
-    
+     // --- Screen 9 - Data Display --- //
+     Screen dataScr = new Screen(SCREEN_COLOR);
+     screens.addNamedScreen(dataScr, "Data Display");
+     dataScr.addWidget(background);
+     dataScr.addWidget(titleButton);
+     dataScr.addNamedChild(titleButton, "Title Button");
+     ScrollTable tempdata = new ScrollTable(
+        width/2, height/2, 450, 450, airports, #ef6b6b
+     );
+     dataScr.addWidget(tempdata);
+     dataScr.addNamedChild(tempdata, "Airport Selector");
 }
 
 boolean loadScreenWithArgs(String screenName)

@@ -363,3 +363,35 @@ class ScrollSelector extends ReactiveWidget
     }
 
 }
+//WS cooking a storm 3/4/24
+class ScrollTable extends ScrollSelector{
+  ReactiveWidget[] sortButtons;
+  int bLength = 90;
+  int bWidth = 40;
+  ScrollTable(int x, int y, int w, int h, String entries[], color buttonColor){
+    super(x, y, w, h, entries);
+    sortButtons = new ReactiveWidget[1];
+    for (int i = 0; i < sortButtons.length; i++)
+    {
+          sortButtons[0] = new ReactiveWidget(80 + i * bLength, 40, bLength, bWidth, buttonColor);
+          int index = i;
+          sortButtons[i].addListener((e, widg) -> {
+              if (e.getAction() != MouseEvent.PRESS) {
+                  return;
+              }
+              println("hit");
+          }
+          );
+          children.add(sortButtons[i]);
+    }
+  }
+  void buttonsDraw(){
+    for(ReactiveWidget b: sortButtons){
+      b.draw(); 
+    }
+  }
+  void draw(){
+    super.draw();
+    buttonsDraw();
+  }
+}
