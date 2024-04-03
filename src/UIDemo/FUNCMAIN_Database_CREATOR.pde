@@ -110,7 +110,6 @@ public void populateFlightDBs(String[] flightTableNames)
 // RSR - demo function to populate a delay table in the database - 19/3/24 7PM
 public void populateDelays()
 {
-    //db.query("DELETE FROM delays");
     Table table = loadTable("delaysdemo.csv", "header");
     db.query("BEGIN TRANSACTION;");
     for (int i = 0; i < table.getRowCount(); i++)

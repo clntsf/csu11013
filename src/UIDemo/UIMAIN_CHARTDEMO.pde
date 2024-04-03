@@ -1,5 +1,3 @@
-//import java.util.concurrent.atomic.AtomicReference;
-
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;

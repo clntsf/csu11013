@@ -1,7 +1,6 @@
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-//import java.util.Arrays;
 
 //macnalll - created method of accessing data from the database into a piechart 26/3/24
 public PieParams getPieChartData()
