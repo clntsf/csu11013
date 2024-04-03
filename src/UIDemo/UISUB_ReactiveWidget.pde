@@ -10,39 +10,39 @@ class ReactiveWidget extends Widget
 {
     ArrayList<MouseListener> eventListeners;
     boolean drawn = true;
-    
+
     // borrowing all the parent constructors, seems there isn't a much
     // better way to do this because constructors can't be inherited
-    ReactiveWidget(int x, int y, int w, int h){
-        super(x,y,w,h);
+    ReactiveWidget(int x, int y, int w, int h) {
+        super(x, y, w, h);
         initListeners();
     }
     ReactiveWidget(int x, int y, int w, int h, Color backgroundColor) {
-        super(x,y,w,h,backgroundColor);
+        super(x, y, w, h, backgroundColor);
         initListeners();
     }
     ReactiveWidget(int x, int y, int w, int h, Color backgroundColor, String text) {
-        super(x,y,w,h,backgroundColor,text);
+        super(x, y, w, h, backgroundColor, text);
         initListeners();
     }
     ReactiveWidget(int x, int y, int w, int h, Color backgroundColor, String text, color textColor) {
-        super(x,y,w,h,backgroundColor,text,textColor);
+        super(x, y, w, h, backgroundColor, text, textColor);
         initListeners();
     }
     //Will S to allow their position to be updated.
-    void setX(int xPos){
-      x = xPos;
+    void setX(int xPos) {
+        x = xPos;
     }
-    void setY(int yPos){
-      y = yPos;
+    void setY(int yPos) {
+        y = yPos;
     }
-    
+
     void updateHover()
     {
         this.isHovered = (
             x-w/2 <= mouseX && x+w/2 > mouseX &&
             y-h/2 <= mouseY && y+h/2 > mouseY
-        );
+            );
         super.updateHover();
     }
 
@@ -50,12 +50,12 @@ class ReactiveWidget extends Widget
     {
         eventListeners.add(listener);
     }
-    
+
     void initListeners()
     {
         eventListeners = new ArrayList<>();
     }
-    
+
     public void onEvent(Event e)
     {
 
@@ -63,20 +63,24 @@ class ReactiveWidget extends Widget
         {
             return;
         }
-        
+
         MouseEvent mev = (MouseEvent) e;
-        if (!isHovered) { return; }
-        
-        for (MouseListener listener: eventListeners)
+        if (!isHovered) {
+            return;
+        }
+
+        for (MouseListener listener : eventListeners)
         {
             listener.performAction(mev, this);
         }
         super.onEvent(e);
     }
-    
+
     void draw()
     {
-        if (!drawn) { return; }
+        if (!drawn) {
+            return;
+        }
         super.draw();
     }
 }
@@ -85,12 +89,12 @@ class CheckBox extends ReactiveWidget
 {
     final color CHECKED_COLOR = #6495ED;
     final color UNCHECKED_COLOR = 225;
-    
+
     CheckBoxList parent;
     boolean checked;
     boolean isRectangular;
 
-    MouseListener onClick = (e,w) -> {
+    MouseListener onClick = (e, w) -> {
         CheckBox widg = (CheckBox) w;
         widg.checked = !widg.checked;
         widg.parent.onCheck(widg);
@@ -98,34 +102,34 @@ class CheckBox extends ReactiveWidget
 
     CheckBox(int x, int y, String text)
     {
-        super(x,y,10,10,null,text);
+        super(x, y, 10, 10, null, text);
         this.addListener(onClick);
         isRectangular = true;
     }
-    
+
     CheckBox(int x, int y, String text, boolean checked)
     {
-        this(x,y,text);
+        this(x, y, text);
         this.checked = checked;
     }
-    
+
     void setParent(CheckBoxList parent)
     {
-        this.parent = parent; 
+        this.parent = parent;
     }
-    
+
     void getFill()
     {
         fill(checked ? CHECKED_COLOR : UNCHECKED_COLOR);
     }
-    
+
     void draw()
     {
         getFill();
         stroke(0);
         strokeWeight(1);
         rectMode(CENTER);
-        rect(x,y,w,h, (isRectangular ? w/4 : w/2));
+        rect(x, y, w, h, (isRectangular ? w/4 : w/2));
 
         fill(0);
         textSize(fontSize);
@@ -138,27 +142,28 @@ class CheckBoxList extends Container
     final int BOX_FONT_SIZE;
     final int BOX_SIZE = 10;
     final int HORIZ_PAD = 5;
-    
+
     ArrayList<CheckBox> boxes;
-    
-    void onCheck(CheckBox c){}
-    
+
+    void onCheck(CheckBox c) {
+    }
+
     CheckBoxList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
     {
         super();
-        
+
         LABEL_FONT_SIZE = labelFontSize;
         BOX_FONT_SIZE = boxFontSize;
-        
-        Label listLabel = new Label(x,y+LABEL_FONT_SIZE/2,labelText);
+
+        Label listLabel = new Label(x, y+LABEL_FONT_SIZE/2, labelText);
         listLabel.fontSize = LABEL_FONT_SIZE;
         addChild(listLabel);
-        
+
         boxes = new ArrayList<>();
         y += LABEL_FONT_SIZE * 2;
         for (String option : options)
         {
-            CheckBox cb = new CheckBox(x+BOX_SIZE/2+HORIZ_PAD,y,option);
+            CheckBox cb = new CheckBox(x+BOX_SIZE/2+HORIZ_PAD, y, option);
             cb.setParent(this);
             cb.fontSize = BOX_FONT_SIZE;
             addChild(cb);
@@ -169,19 +174,19 @@ class CheckBoxList extends Container
 
     CheckBoxList(int x, int y, String labelText, String[] options, int labelFontSize)
     {
-        this(x,y,labelText,options,labelFontSize,labelFontSize-2);
+        this(x, y, labelText, options, labelFontSize, labelFontSize-2);
     }
-    
+
     CheckBoxList(int x, int y, String labelText, String[] options)
     {
-        this(x,y,labelText,options,14,12);
+        this(x, y, labelText, options, 14, 12);
     }
-    
+
     boolean[] getValues()
     {
         boolean[] values = new boolean[boxes.size()];
         for (int boxIdx = 0; boxIdx < boxes.size(); boxIdx++)
-        { 
+        {
             values[boxIdx] = boxes.get(boxIdx).checked;
         }
         return values;
@@ -190,10 +195,10 @@ class CheckBoxList extends Container
 class RadioButtonList extends CheckBoxList
 {
     int selected;
-    
+
     RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
     {
-        super(x,y,labelText,options,labelFontSize,boxFontSize);
+        super(x, y, labelText, options, labelFontSize, boxFontSize);
         for (CheckBox box : boxes)
         {
             box.isRectangular = false;
@@ -201,17 +206,17 @@ class RadioButtonList extends CheckBoxList
         selected = 0;
         boxes.get(0).checked = true;
     }
-    
+
     RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize)
     {
-        this(x,y,labelText,options,labelFontSize,labelFontSize-2);
+        this(x, y, labelText, options, labelFontSize, labelFontSize-2);
     }
-    
+
     RadioButtonList(int x, int y, String labelText, String[] options)
     {
-        this(x,y,labelText,options,14,12);
+        this(x, y, labelText, options, 14, 12);
     }
-    
+
     void onCheck(CheckBox c)
     {
         for (CheckBox box : boxes)
@@ -228,31 +233,29 @@ class TextEntry extends ReactiveWidget
     boolean isFocused;
     String regex;
     int maxLength;
-    
+
     public void onEvent(Event e)
     {
         if (e instanceof MouseEvent && e.getAction() == MouseEvent.PRESS)
         {
             isFocused = isHovered;
-        }
-        else if (e instanceof KeyEvent && isFocused)
+        } else if (e instanceof KeyEvent && isFocused)
         {
             KeyEvent kev = (KeyEvent) e;
             if (kev.getKeyCode() == BACKSPACE)
             {
                 text = text.substring(0, max(text.length()-1, 0));
-            }
-            else if ( match("" + kev.getKey(), regex) != null && text.length() < maxLength )
+            } else if ( match("" + kev.getKey(), regex) != null && text.length() < maxLength )
             {
                 text += kev.getKey();
             }
         }
         super.onEvent(e);
     }
-    
+
     TextEntry(int x, int y, int w, int h)
     {
-        super(x,y,w,h,new StaticColor(#FFFFFF));
+        super(x, y, w, h, new StaticColor(#FFFFFF));
         text = "";
         setStroke(0);
         isFocused = false;
@@ -262,8 +265,9 @@ class TextEntry extends ReactiveWidget
 
     void applyStroke()
     {
-        if (!hasStroke) { noStroke(); }
-        else {
+        if (!hasStroke) {
+            noStroke();
+        } else {
             stroke(strokeColor);
             strokeWeight(isFocused ? 2 : 1);
         }
@@ -284,7 +288,7 @@ class ScrollSelector extends ReactiveWidget
 
     ScrollSelector(int x, int y, int w, int h, String[] entries)
     {
-        super(x,y,w,h);
+        super(x, y, w, h);
         BTOP = y-h/2 + LINE_HEIGHT;
         BLEFT = x-w/2 + LINE_HEIGHT;
         BBOTTOM = y+h/2 - LINE_HEIGHT;
@@ -295,24 +299,30 @@ class ScrollSelector extends ReactiveWidget
         scrollY = BTOP;
 
         // mouseWheel handler
-        addListener((e,widg) -> {
-            if ( e.getAction() != MouseEvent.WHEEL ) { return; }
+        addListener((e, widg) -> {
+            if ( e.getAction() != MouseEvent.WHEEL ) {
+                return;
+            }
             if (mouseX >= BLEFT && mouseX <= BRIGHT && mouseY >= BTOP && mouseY <= BBOTTOM)
             {
                 scrollY = constrain(scrollY - 2*e.getCount(), BBOTTOM - entries.length*LINE_HEIGHT, BTOP);
             }
-        });
+        }
+        );
 
         // click handler
-        addListener((e,widg) -> {
-            if ( e.getAction() != MouseEvent.PRESS ) { return; }
+        addListener((e, widg) -> {
+            if ( e.getAction() != MouseEvent.PRESS ) {
+                return;
+            }
             ScrollSelector ss = (ScrollSelector) widg;
             if (mouseX >= ss.BLEFT && mouseX <= ss.BRIGHT && mouseY >= ss.BTOP && mouseY <= ss.BBOTTOM)
             {
                 int row = (mouseY - ss.scrollY)/LINE_HEIGHT;
                 ss.selected = row;
             }
-        });
+        }
+        );
     }
 
     void drawBox(int row)
@@ -321,7 +331,7 @@ class ScrollSelector extends ReactiveWidget
         rect(
             BLEFT, yd,
             BRIGHT, yd + LINE_HEIGHT
-        );
+            );
     }
 
     void draw()
@@ -330,13 +340,13 @@ class ScrollSelector extends ReactiveWidget
         textSize(LINE_HEIGHT);
         rectMode(CORNERS);
         textAlign(LEFT, TOP);
-        
+
         text("SELECTED: " + entries[selected], BLEFT - LINE_HEIGHT, BTOP - 2*LINE_HEIGHT);
-        
+
         // outer rect
         fill(FRAME_COLOR);
         rect(BLEFT-LINE_HEIGHT, BTOP-LINE_HEIGHT, BRIGHT+LINE_HEIGHT, BBOTTOM+LINE_HEIGHT);
-        
+
         for (int i = max(0, (BTOP-scrollY)/LINE_HEIGHT); i<min(entries.length, (BBOTTOM-scrollY)/LINE_HEIGHT + 1); i++)
         {
             fill(i%2 == 0 ? EVEN_COLOR : ODD_COLOR );
@@ -348,8 +358,7 @@ class ScrollSelector extends ReactiveWidget
                 fill(SELECTED_COLOR);
                 drawBox(i);
                 fill(255);
-            }
-            else
+            } else
             {
                 fill(0);
             }
@@ -361,37 +370,40 @@ class ScrollSelector extends ReactiveWidget
         rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
         rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
     }
-
 }
 //WS cooking a storm 3/4/24
-class ScrollTable extends ScrollSelector{
-  ReactiveWidget[] sortButtons;
-  int bLength = 90;
-  int bWidth = 40;
-  ScrollTable(int x, int y, int w, int h, String entries[], color buttonColor){
-    super(x, y, w, h, entries);
-    sortButtons = new ReactiveWidget[1];
-    for (int i = 0; i < sortButtons.length; i++)
+class ScrollTable extends ScrollSelector
+{
+    ReactiveWidget[] sortButtons;
+    int bLength = 90;
+    int bWidth = 40;
+
+    ScrollTable(int x, int y, int w, int h, String entries[], color buttonColor)
     {
-          sortButtons[0] = new ReactiveWidget(80 + i * bLength, 40, bLength, bWidth, buttonColor);
-          int index = i;
-          sortButtons[i].addListener((e, widg) -> {
-              if (e.getAction() != MouseEvent.PRESS) {
-                  return;
-              }
-              println("hit");
-          }
-          );
-          children.add(sortButtons[i]);
+        super(x, y, w, h, entries);
+        sortButtons = new ReactiveWidget[1];
+        for (int i = 0; i < sortButtons.length; i++)
+        {
+            sortButtons[0] = new ReactiveWidget(80 + i * bLength, 40, bLength, bWidth, new StaticColor(buttonColor));
+            int index = i;
+            sortButtons[i].addListener((e, widg) -> {
+                if (e.getAction() != MouseEvent.PRESS) {
+                    return;
+                }
+                println("hit");
+            });
+            children.add(sortButtons[i]);
+        }
     }
-  }
-  void buttonsDraw(){
-    for(ReactiveWidget b: sortButtons){
-      b.draw(); 
+    void buttonsDraw()
+    {
+        for (ReactiveWidget b : sortButtons) {
+            b.draw();
+        }
     }
-  }
-  void draw(){
-    super.draw();
-    buttonsDraw();
-  }
+    void draw()
+    {
+        super.draw();
+        buttonsDraw();
+    }
 }

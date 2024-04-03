@@ -49,12 +49,12 @@ class Image extends Shape
 {
     Image(int x, int y, PImage image)
     {
-        super(x,y,null,null);
+        super(x,y,new StaticColor(0),null);
         this.onDraw = ()->{imageMode(CENTER); image(image,0,0);};
     }
     Image(int x, int y, int w, int h, PImage image)
     {
-        super(x,y,null,null);
+        super(x,y,new StaticColor(0),null);
         this.onDraw = ()->{imageMode(CENTER); image(image,0,0,w,h);};
     }
 }

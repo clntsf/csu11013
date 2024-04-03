@@ -1,11 +1,6 @@
-import de.fhpotsdam.unfolding.*;
-import de.fhpotsdam.unfolding.utils.*;
-import de.fhpotsdam.unfolding.geo.*;
-
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
-    
     
     final Color SCREEN_COLOR = new ThemedColor(themes, "screen");
     final Color BACKGROUND_COLOR = new ThemedColor(themes, "background");
@@ -28,7 +23,7 @@ void Wk2Demo()
         screens.setActiveScreen("Title Screen");
         surface.setTitle(MAIN_TITLE);
     });
-
+    
     final Screen titleScreen = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(titleScreen, "Title Screen");   
     titleScreen.addWidget(background);
@@ -37,6 +32,25 @@ void Wk2Demo()
     titleLabel.fontSize = 36;
     titleLabel.justify = CENTER;
     titleScreen.addWidget(titleLabel);
+    
+    Image dayNightImage = new Image(width-70, height-40, 60, 35, loadImage("theme_buttons.png"));
+    titleScreen.addWidget(dayNightImage);
+    
+    ReactiveWidget dayButton = new ReactiveWidget(width-85, height-40, 25, 25, new StaticColor(#20FF0000));
+    dayButton.drawn = false;
+    titleScreen.addWidget(dayButton);
+    dayButton.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) { return; }
+        themes.setActive("lightTheme");
+    });
+    
+    ReactiveWidget nightButton = new ReactiveWidget(width-55, height-40, 25, 25, new StaticColor(#20FF0000));
+    nightButton.drawn = false;
+    titleScreen.addWidget(nightButton);
+    nightButton.addListener((e,w) -> {
+        if (e.getAction() != MouseEvent.PRESS) { return; }
+        themes.setActive("darkTheme");
+    });
 
     final int COLUMN_SIDE_PAD = 40;   
     final int COLUMN_VERT_PAD = 80; 
@@ -156,7 +170,7 @@ void Wk2Demo()
         titleScreen.addWidget(btn);
         titleScreen.addNamedChild(btn, "button: " + NAME);
     }
-    // --- SCREEN 1: Market Share Pie Chart --- //
+   // --- SCREEN 1: Market Share Pie Chart --- //
 
     Screen mktShareScr = new Screen(SCREEN_COLOR);        // these 5 lines should go more or less unchanged at the beginning of each screen        
     screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'mktShareScr' for the name of the screen
@@ -174,7 +188,7 @@ void Wk2Demo()
             }).start();
     });
 
-    // --- SCREEN 2: HISTOGRAM DEMO --- //
+   // --- SCREEN 2: HISTOGRAM DEMO --- //
 
     Screen histScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(histScr, "Departure Delay Times");
@@ -197,7 +211,7 @@ void Wk2Demo()
         }).start();
     });
 
-    // --- Screen 3: Bubble Plot --- //
+   // --- Screen 3: Bubble Plot --- //
 
     Screen reliabilityScr = new Screen(SCREEN_COLOR);        
     screens.addNamedScreen(reliabilityScr, "Reliability vs Market Share");
@@ -218,7 +232,7 @@ void Wk2Demo()
         }).start();
     });
 
-    // --- Screen 4: Flight Map --- //
+   // --- Screen 4: Flight Map --- //
     
     Screen mapScr = new Screen(SCREEN_COLOR);        
     screens.addNamedScreen(mapScr, "Flight Map");
@@ -229,7 +243,7 @@ void Wk2Demo()
     mapScr.addWidget(map);
     
     
-    // --- Screen 5: Flight Volume Heatmap -- //
+   // --- Screen 5: Flight Volume Heatmap -- //
     
     Screen heatMapScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(heatMapScr, "Flight Volume Heatmap");
@@ -249,7 +263,7 @@ void Wk2Demo()
     });
 
 
-    // --- Screen 6 - Kilian's Scatter Plot Screen  --- //
+   // --- Screen 6 - Kilian's Scatter Plot Screen  --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
@@ -271,7 +285,7 @@ void Wk2Demo()
         }).start();
     });
     
-    // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
+   // --- Screen 7 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
 
     Screen barPlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(barPlotScr, "Volume of State Flights");
@@ -291,7 +305,7 @@ void Wk2Demo()
         }).start();
     });
 
-    // --- Screen 8 - Tim's Line Plot --- //
+   // --- Screen 8 - Tim's Line Plot --- //
 
     Screen linePlotScr = new Screen(SCREEN_COLOR);      
     screens.addNamedScreen(linePlotScr, "Flights per Day");

@@ -1,4 +1,4 @@
-// CSF - Implemented Widget by extending Exercise 6 reponse/challenge 12/4/2024 5PM
+// CSF - Implemented Widget by extending Exercise 6 reponse/challenge 12/3/2024 5PM
 class Widget
 {
     int x;
