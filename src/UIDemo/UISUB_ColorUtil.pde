@@ -56,3 +56,89 @@ final CustomGradient VIRIDIS_CG = new CustomGradient(
     new float[]{0,3,6,9,12,15,17,19},
     new color[]{#450C54, #453681, #31648D, #218A8D, #28AF7F, #75D056, #B9DE28, #FDE724}
 );
+
+class ThemeSet
+{
+    HashMap<String, IntDict> themes;
+    String active;
+    
+    ThemeSet()
+    {
+        themes = new HashMap<>();
+    }
+    
+    public void addTheme(String name, IntDict theme)
+    {
+        themes.put(name, theme);
+        if (active == null) { setActive(name); }
+        return;
+    }
+    
+    IntDict getActive()
+    {
+        return themes.get(active);
+    }
+    
+    void setActive(String newActive)
+    {
+        if (!themes.containsKey(newActive)) { return; }
+        active = newActive;
+    }
+}
+
+public ThemeSet loadThemeJSON(String filepath)
+{
+    JSONObject fileJSON = loadJSONObject(filepath);
+    ThemeSet themeSet = new ThemeSet();
+
+    for (Object k : fileJSON.keys())
+    {
+        String name = (String) k;
+        IntDict theme = new IntDict();
+        
+        JSONObject themeJSON = fileJSON.getJSONObject(name);
+        for (Object subKey : themeJSON.keys())
+        {
+            String subKeyName = (String) subKey;
+            int value = (int) themeJSON.get(subKeyName);
+            theme.set(subKeyName, value);
+        }
+        themeSet.addTheme(name, theme);
+    }
+    return themeSet;
+}
+
+public interface Color
+{
+    public color getColor();
+}
+
+class StaticColor implements Color
+{
+    color c;
+    StaticColor(color c)
+    {
+        this.c = c;
+    }
+    public color getColor()
+    {
+        return c;
+    }
+}
+
+class ThemedColor implements Color
+{
+    ThemeSet themes;
+    String themeKey;
+    
+    ThemedColor(ThemeSet themes, String themeKey)
+    {
+        this.themes = themes;
+        this.themeKey = themeKey;
+    }
+    
+    color getColor()
+    {
+        return themes.getActive().get(themeKey);
+    }
+}

@@ -5,9 +5,11 @@ import de.fhpotsdam.unfolding.geo.*;
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
-    final int SCREEN_COLOR = #778899;
-    final int BACKGROUND_COLOR = #F0F8FF;
-
+    
+    
+    final Color SCREEN_COLOR = new ThemedColor(themes, "screen");
+    final Color BACKGROUND_COLOR = new ThemedColor(themes, "background");
+    
     final String MAIN_TITLE = "Flight Data Visualisation App";
     surface.setTitle(MAIN_TITLE);
 
@@ -143,7 +145,7 @@ void Wk2Demo()
         final String NAME = BTN_NAMES[i];
         ReactiveWidget btn = new ReactiveWidget(
             COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD + (BTN_HEIGHT+BTN_MARGIN)*(i+1),
-            BTN_WIDTH, BTN_HEIGHT, BTN_COLORS[i], NAME
+            BTN_WIDTH, BTN_HEIGHT, new StaticColor(BTN_COLORS[i]), NAME
         );
         btn.setStroke(0);
         btn.addListener((e,w) -> {

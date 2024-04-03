@@ -27,7 +27,7 @@ class Shape extends Widget
 {
     Runnable onDraw;
 
-    Shape(int x, int y, color backgroundColor, Runnable onDraw)
+    Shape(int x, int y, Color backgroundColor, Runnable onDraw)
     {
         super(x,y,0,0,backgroundColor);
         this.onDraw = onDraw;
@@ -36,7 +36,7 @@ class Shape extends Widget
     void draw()
     {
         applyStroke();
-        fill(backgroundColor);
+        fill(backgroundColor.getColor());
 
         pushMatrix();
         translate(x,y);
@@ -49,12 +49,12 @@ class Image extends Shape
 {
     Image(int x, int y, PImage image)
     {
-        super(x,y,0,null);
+        super(x,y,null,null);
         this.onDraw = ()->{imageMode(CENTER); image(image,0,0);};
     }
     Image(int x, int y, int w, int h, PImage image)
     {
-        super(x,y,0,null);
+        super(x,y,null,null);
         this.onDraw = ()->{imageMode(CENTER); image(image,0,0,w,h);};
     }
 }

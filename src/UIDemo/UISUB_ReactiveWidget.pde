@@ -17,15 +17,15 @@ class ReactiveWidget extends Widget
         super(x,y,w,h);
         initListeners();
     }
-    ReactiveWidget(int x, int y, int w, int h, color backgroundColor) {
+    ReactiveWidget(int x, int y, int w, int h, Color backgroundColor) {
         super(x,y,w,h,backgroundColor);
         initListeners();
     }
-    ReactiveWidget(int x, int y, int w, int h, color backgroundColor, String text) {
+    ReactiveWidget(int x, int y, int w, int h, Color backgroundColor, String text) {
         super(x,y,w,h,backgroundColor,text);
         initListeners();
     }
-    ReactiveWidget(int x, int y, int w, int h, color backgroundColor, String text, color textColor) {
+    ReactiveWidget(int x, int y, int w, int h, Color backgroundColor, String text, color textColor) {
         super(x,y,w,h,backgroundColor,text,textColor);
         initListeners();
     }
@@ -98,7 +98,7 @@ class CheckBox extends ReactiveWidget
 
     CheckBox(int x, int y, String text)
     {
-        super(x,y,10,10,0,text);
+        super(x,y,10,10,null,text);
         this.addListener(onClick);
         isRectangular = true;
     }
@@ -252,7 +252,7 @@ class TextEntry extends ReactiveWidget
     
     TextEntry(int x, int y, int w, int h)
     {
-        super(x,y,w,h,color(255));
+        super(x,y,w,h,new StaticColor(#FFFFFF));
         text = "";
         setStroke(0);
         isFocused = false;

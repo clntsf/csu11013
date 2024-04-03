@@ -5,12 +5,15 @@ ScreenList screens = new ScreenList();
 PFont font;
 String DB_NAME;
 SQLite db;
+ThemeSet themes;
 
 void setup()
 {
     size(640, 640);
     font = createFont("Outfit-Regular.ttf", 13);
     DB_NAME = "tables";
+    themes = loadThemeJSON("themes.json");
+    themes.setActive("darkTheme");
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     if (createDBFile())
