@@ -114,3 +114,13 @@ class BarParams
     this.numOfFlights = numOfFlights;
   }
 }
+
+class HeatMapParams
+{
+    float[][] data;
+
+    HeatMapParams(float[][] data)
+    {
+        this.data = data;
+    }
+}
