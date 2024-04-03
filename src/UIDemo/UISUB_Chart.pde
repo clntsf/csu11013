@@ -121,6 +121,10 @@ class PieChart extends Chart
             fill(0);
             text(labels[i], xpos+20, ypos + 20*i);
         }
+        if (lastAngle == 0)
+        {
+            text("No data available within \n these parameters", x, y);
+        }
     }
 
     void draw()
