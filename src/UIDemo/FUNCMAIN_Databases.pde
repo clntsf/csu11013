@@ -293,7 +293,7 @@ public ScatterPlotData populateScatterPlot()
     db.query("SELECT COUNT(*) AS TotalRows FROM " + table);
     numberOfQueries = db.getInt("TotalRows");
    // print(numberOfQueries);
-     float[] flightVolume = new float[numberOfQueries];
+     float[] flightVolume = new float[0];
      float[] flightDuration = new float[0];
     
    

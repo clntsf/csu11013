@@ -508,7 +508,7 @@ class ScatterPlot extends Plot
         this.axisRangeX = axisRangeX;
         connect = false;
         markers = true;
-        numAxisTicksX = 5;
+        numAxisTicksX = 20;
     }
 
     void drawAxisTicksX()
