@@ -7,7 +7,7 @@ ThemeSet themes;
 PFont font;
 String DB_NAME;
 SQLite db;
-Table coordTable = loadTable("states.csv", "header");
+Table coordTable;
 
 void setup()
 {
@@ -15,6 +15,7 @@ void setup()
     font = createFont("Outfit-Regular.ttf", 13);
     DB_NAME = "tables";
     themes = loadThemeJSON("themes.json");
+    coordTable = loadTable("states.csv", "header");
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
     if (createDBFile())
