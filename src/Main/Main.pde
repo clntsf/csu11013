@@ -5,15 +5,16 @@ import processing.data.JSONObject;
 ScreenList screens = new ScreenList();
 ThemeSet themes;
 PFont font;
-String DB_NAME;
+
+final String DB_NAME = "tables";
 SQLite db;
+
 Table coordTable;
 
 void setup()
 {
     size(640, 640);
     font = createFont("Outfit-Regular.ttf", 13);
-    DB_NAME = "tables";
     themes = loadThemeJSON("themes.json");
 
     // RSR - added SQLite functionality and font - 12/3/24 7PM
@@ -27,7 +28,7 @@ void setup()
         println("Connected to DB!");
     } else println("ERROR connecting to DB!");
     coordTable = loadTable("states.csv", "header");
-    Wk2Demo();
+    AppMain();
 }
 
 void draw()

@@ -105,17 +105,7 @@ class BubbleParams extends NumericalParams
         this.categories = categories;
     }
 }
-//WS - added class to return params for barChart 27/3/24
-class BarParams
-{
-  String[] categories;
-  float[] numOfFlights;
-  BarParams(String[] categories, float[] numOfFlights)
-  {
-    this.categories = categories;
-    this.numOfFlights = numOfFlights;
-  }
-}
+
 //WS
 class ScrollTableParams
 {

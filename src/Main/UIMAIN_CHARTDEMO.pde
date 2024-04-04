@@ -1,5 +1,5 @@
 
-void Wk2Demo()
+void AppMain()
 {
     final int BG_MARGIN = 20;
 
@@ -436,8 +436,11 @@ void resetScreen(Screen s, Widget background)
 }
 
 MapWidget demoMap() {
+    PImage mapImage = loadImage("map2.jpeg");
     ArrayList<FlightPath> paths = getFlightPaths("flights10k", getAirportCode(), getDates());
-    return new MapWidget(width/2, height/2, (int)(width/1.25), (int)(height/1.25), "map2.jpeg", paths);
+    float mapW = (width/1.25);
+    float mapH = mapW * (float) mapImage.height / (float) mapImage.width;
+    return new MapWidget(width/2, height/2, (int)mapW, (int)mapH, mapImage, paths);
 }
 
 

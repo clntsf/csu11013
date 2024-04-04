@@ -1,5 +1,5 @@
 # Documentation: `Chart` Classes
-C. Simon-Fellowes, L. MacNally
+C. Simon-Fellowes, L. MacNally, R. Riggi
 
 ## Table of Contents:
 1. [`Chart`](#1-chart-abstract-base-class)

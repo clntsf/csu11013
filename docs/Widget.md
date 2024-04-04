@@ -1,5 +1,5 @@
 # Documentation: `ScreenList`, `Screen`, `Widget` and its Descendants
-C. Simon-Fellowes
+C. Simon-Fellowes, R. Riggi
 
 ## Table of Contents:
 1. [Toplevel Organisation of Program UI: `ScreenList`](#1-toplevel-organisation-of-program-ui-screenlist)
