@@ -391,7 +391,12 @@ class ScrollTable extends ScrollSelector
     String[] carriers;
     String[] origins;
     String[] dests;
-    ScrollTable(int x, int y, int w, int h, String[] dates, String[] carriers, String[] origins, String[] dests, color buttonColor)
+    ScrollTable(
+        int x, int y, int w, int h,
+        String[] dates, String[] carriers,
+        String[] origins, String[] dests,
+        color buttonColor
+    )
     {
         super(x, y, w, h, dates);
         this.dates = dates;
@@ -404,9 +409,7 @@ class ScrollTable extends ScrollSelector
             sortButtons[0] = new ReactiveWidget(80 + i * bLength, 40, bLength, bWidth, new StaticColor(buttonColor));
             int index = i;
             sortButtons[i].addListener((e, widg) -> {
-                if (e.getAction() != MouseEvent.PRESS) {
-                    return;
-                }
+                if (e.getAction() != MouseEvent.PRESS) { return; }
                 println("hit");
             });
             children.add(sortButtons[i]);
@@ -427,56 +430,47 @@ class ScrollTable extends ScrollSelector
     void sortByDate()
     {
     }
-    void drawBox(int row, int columnNumber)
+
+    void draw()
     {
-        int yd = scrollY + LINE_HEIGHT*row;
-        rect(
-            BLEFT + (BRIGHT/2)*columnNumber, yd,
-            BRIGHT/2, yd + LINE_HEIGHT
-        );
-    }
-    void drawRow(String[] rowEntries, int columnNumber){
-              noStroke();
+        noStroke();
         textSize(LINE_HEIGHT);
         rectMode(CORNERS);
         textAlign(LEFT, TOP);
 
         fill(textColor.getColor());
-        text("SELECTED: " + rowEntries[selected], BLEFT - LINE_HEIGHT, BTOP - 2*LINE_HEIGHT);
+        String selectedStr = String.format(
+            "%s - %s Flight from %s to %s", dates[selected],
+            carriers[selected], origins[selected], dests[selected]
+        );
+        text("SELECTED: " + selectedStr, BLEFT - LINE_HEIGHT, BTOP - 2*LINE_HEIGHT);
 
         // outer rect
         fill(FRAME_COLOR.getColor());
         rect(BLEFT-LINE_HEIGHT, BTOP-LINE_HEIGHT, BRIGHT+LINE_HEIGHT, BBOTTOM+LINE_HEIGHT);
-        
-        for (int i = max(0, (BTOP-scrollY)/LINE_HEIGHT); i<min(rowEntries.length, (BBOTTOM-scrollY)/LINE_HEIGHT + 1); i++)
-        {
-            fill(i%2 == 0 ? EVEN_COLOR : ODD_COLOR );
-            drawBox(i);
 
+        rectMode(CORNERS);
+        for (int i = max(0, (BTOP-scrollY)/LINE_HEIGHT); i<min(carriers.length, (BBOTTOM-scrollY)/LINE_HEIGHT + 1); i++)
+        {
+            fill(selected == i ? SELECTED_COLOR : i%2 == 0 ? EVEN_COLOR : ODD_COLOR );
             int yd = scrollY + LINE_HEIGHT*i;
-            if (selected == i)
-            {
-                fill(SELECTED_COLOR);
-                drawBox(i, columnNumber);
-                fill(255);
-            } else
-            {
-                fill(0);
-            }
-            //fill(0);
-            text(rowEntries[i], (BLEFT + 2) * (columnNumber+1), yd + 1);
+            rect(
+                BLEFT, yd,
+                BRIGHT, yd + LINE_HEIGHT
+            );
+
+            fill(selected == i ? 255 : 0);
+            text(dates[i], BLEFT, yd + 1);
+            text(carriers[i], BLEFT + w/4, yd + 1);
+            text(origins[i], BLEFT + w/3, yd + 1);
+            text(dests[i], BLEFT + 2*w/3, yd + 1);
         }
-    }
-    void draw()
-    {
-        drawRow(dates, 0);
-        //drawRow(carriers, 1);
-        //drawRow(origins, 2);
-        //drawRow(dests, 3);
+
         // hide overlapping text with 'mountains'
         fill(FRAME_COLOR.getColor());
         rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
         rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
         buttonsDraw();
     }
+
 }
