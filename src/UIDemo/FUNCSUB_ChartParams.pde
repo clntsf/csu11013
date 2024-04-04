@@ -75,19 +75,21 @@ class PieParams
         this.categories = categories;
     }
 }
-// Kilian - created ScatterPlotData Class - 25/03/24 changed to work with floats 28/03
+// Kilian - created ScatterPlotData Class - 25/03/24 changed to work with floats 28/03, 04/04 added labels
 class ScatterPlotData
 {
    float[] flightVolume;
    float[] flightDuration;
    int xMax;
    int yMax;
-   ScatterPlotData(float[] flightVolume, float[] flightDuration, int xMax, int yMax)
+   String[] carriersName;
+   ScatterPlotData(float[] flightVolume, float[] flightDuration, int xMax, int yMax, String[] carriersName)
    {
      this.flightVolume = flightVolume;
      this.flightDuration = flightDuration;
      this.xMax = xMax;
      this.yMax = yMax;
+     this.carriersName = carriersName;
    }
 }
 
