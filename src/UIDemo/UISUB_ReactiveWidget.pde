@@ -393,6 +393,7 @@ class ScrollTable extends ScrollSelector
     String[] dests;
     String[] buttonText= {"Sort by Date", "Sort by Carrier", "Sort by Origins", "Sort by Dests"};
     int[] order;
+    Table table;
     ScrollTable(
         int x, int y, int w, int h,
         String[] dates, String[] carriers,
@@ -406,11 +407,21 @@ class ScrollTable extends ScrollSelector
         this.origins = origins;
         this.dests = dests;        
         sortButtons = new ReactiveWidget[buttonText.length];
+        table = new Table();
+        table.addColumn("dates");
+        table.addColumn("carriers");
+        table.addColumn("origins");
+        table.addColumn("dests"); 
+        
         for (int i =0; i < dates.length; i++)
         {
           order[i] = i;
+          TableRow newRow = table.addRow();
+          newRow.setString("dates", dates[i]);
+          newRow.setString("carriers", carriers[i]);
+          newRow.setString("origins", origins[i]);
+          newRow.setString("dests", dests[i]);
         }
-        
         for (int i = 0; i < sortButtons.length; i++)
         {
             sortButtons[i] = new ReactiveWidget(110 + (i * (bLength + 10)), 50, bLength, bWidth, new StaticColor(buttonColor), buttonText[i]);
@@ -419,16 +430,16 @@ class ScrollTable extends ScrollSelector
                 if (e.getAction() != MouseEvent.PRESS) { return; }
                 switch (index){
                   case 0:
-                    sortByDate();
+                    //sortByDate();
                     break;
                   case 1:
-                    sortByCarrier();
+                    //sortByCarrier();
                     break;
                   case 2:
-                    sortByOrigin();
+                    //sortByOrigin();
                     break;
                   case 3:
-                    sortByDestination();
+                    //sortByDestination();
                 }
             });
         }
@@ -439,40 +450,40 @@ class ScrollTable extends ScrollSelector
             b.draw();
         }
     }
-     void sortByDate()
-    {
+    // void sortByDate()
+    //{
       
-    }
-    void sortByCarrier()
-    {
-    }
-    void sortByOrigin()
-    {
-      String[] copyOrigins = origins;
-      tableSort(copyOrigins);
-    }
-    void sortByDestination()
-    {
-    }
-    void tableSort(String[] copy){
-      boolean swapped = true;
-      while(swapped){
-        swapped = false;
-        for(int i = 0; i < copy.length -1; i++)
-        {
-          if(copy[i] > copy[i +1])
-          {
-            String temp = copy[i];
-            int tempO = order[i];
-            copy[i] = copy[i + 1];
-            order[i] = order[i + 1];
-            copy[i + 1] = temp;
-            order[i + 1] = tempO;
-            swapped = true;
-          }
-        }
-      }
-    }
+    //}
+    //void sortByCarrier()
+    //{
+    //}
+    //void sortByOrigin()
+    //{
+    //  String[] copyOrigins = origins;
+    //  tableSort(copyOrigins);
+    //}
+    //void sortByDestination()
+    //{
+    //}
+    //void tableSort(String[] copy){
+    //  boolean swapped = true;
+    //  while(swapped){
+    //    swapped = false;
+    //    for(int i = 0; i < copy.length -1; i++)
+    //    {
+    //      if(copy[i] > copy[i +1])
+    //      {
+    //        String temp = copy[i];
+    //        int tempO = order[i];
+    //        copy[i] = copy[i + 1];
+    //        order[i] = order[i + 1];
+    //        copy[i + 1] = temp;
+    //        order[i + 1] = tempO;
+    //        swapped = true;
+    //      }
+    //    }
+    //  }
+    //}
    
 
     void draw()
