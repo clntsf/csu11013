@@ -1,3 +1,4 @@
+
 void Wk2Demo()
 {
     final int BG_MARGIN = 20;
@@ -361,10 +362,9 @@ void Wk2Demo()
 
         resetScreen(flightVolScr, background);
         new Thread(() -> {
-            ScatterPlot s1 = demoScatterPlot(populateScatterPlot());
-            String[] carriers = new String[] {"0","1","2","3","4","5","6","7","8","9"};
-            s1.setLabels(carriers);
-            resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
+            ScatterPlotData params = populateScatterPlot();
+            ScatterPlot s1 = demoScatterPlot(params);
+            resetScreen(flightVolScr, background);    // reset one more time in case the user has spammed the exit button
             flightVolScr.addWidget(s1);
         }
         ).start();
@@ -517,6 +517,7 @@ ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData)
         "Total Flight Distance Vs Volume by Carrier", "Total Volume by Carrier", "Total Flight Distance (Miles)",
         theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0, xMax + 50}, new float[]{0, yMax + 50}
         );
+    s1.setLabels(theScatterPlotData.carriersName);
     s1.fontSize = 12;
     s1.labelFormatStringY = "%.0f";
     s1.labelFormatStringX = "%.0f";

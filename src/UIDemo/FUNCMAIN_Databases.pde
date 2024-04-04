@@ -338,7 +338,7 @@ ScrollTableParams populateDataList()
   return new ScrollTableParams(dates, carriers, origins, dests);
 }
 
-//Kilian 27/03/24 - created function to fill ScatterPlot, 04/04 fixed to use actual data and populate delayed to start of program, also added ability to query data
+//Kilian 27/03/24 - created function to fill ScatterPlot, 04/04 fixed to use actual data and populate delayed to start of program, also added ability to query data also now has real time labels
 public ScatterPlotData populateScatterPlot()
 {
    
@@ -382,11 +382,10 @@ public ScatterPlotData populateScatterPlot()
     }
     String[] carriersName = new String[0];
     db.query("SELECT DISTINCT IATA_Code_Marketing_Airline AS airline FROM "+ table + query);
-    while (db.next()){
-    carriersName = append(carriersName, db.getString("airline"));
+    while (db.next())
+    {
+      carriersName = append(carriersName, db.getString("airline"));
     }
-    print(carriersName[1]);
-   
     return new ScatterPlotData(flightVolume, flightDuration, xMax, yMax, carriersName);
 }
 
