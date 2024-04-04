@@ -303,7 +303,7 @@ MapWidget(int x,
 |Name|Type|Description|Default|
 |----|----|-----------|-------|
 |mapImage|`PImage`|The loaded map image|`loadImage(mapImagePath)`|
-|originalAspectRatio|`float`|Aspect ratio used to calculate display dimensions|Loaded image's width / loaded image's height|
+|originalAspectRatio|`float`|Aspect ratio used to<br>calculate display dimensions|Loaded image's width / loaded image's height|
 |displayWidth|`float`|Display width|If `originalAspectRatio > w/h`: equal to `w`. Else: equal to `h * originalAspectRatio`|
 |displayHeight|`float`|Display height|If `originalAspectRatio > w/h`: equal to `w / originalAspectRatio`. Else: equal to `h`|
 
@@ -326,3 +326,20 @@ HeatMap(int x,
     CustomGradient grad
 )
 ```
+
+### Constructor Parameters not inherited from parent (`Chart`) constructor(s):
+
+|Name|Type|Description|
+|----|----|-----------|
+|data|`float[][]`|Array where rows: **time of day**, columns: **day of the week**|
+|grad|`CustomGradient`|VIRIDIS_CG (a custom gradient found in `UISUB_ColorUtil.pde`).<br>Colour depends on **flight volume**|
+
+### Non-Constructor fields:
+
+|Name|Type|Description|Default|
+|----|----|-----------|-------|
+|dataMin|`float`|Lowest flight volume|Lowest flight volume provided in `data`|
+|dataMax|`float`|Highest flight volume|Highest flight volume provided in `data`|
+|dataRange|`float`|Range of data's flight volume|`dataMax` - `dataMin`|
+|tileWidth|`int`|Each cell's width|`w` / row length|
+|tileHeight|`int`|Each cell's height|`h` / column length|
