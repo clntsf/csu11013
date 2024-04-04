@@ -265,7 +265,7 @@ class TextEntry extends ReactiveWidget
     {
         super(x, y, w, h, new StaticColor(#FFFFFF));
         text = "";
-        setStroke(0);
+        setStroke(new ThemedColor(themes, "outline"));
         isFocused = false;
         regex = ".";
         maxLength = 10;
@@ -276,7 +276,7 @@ class TextEntry extends ReactiveWidget
         if (!hasStroke) {
             noStroke();
         } else {
-            stroke(strokeColor);
+            stroke(strokeColor.getColor());
             strokeWeight(isFocused ? 2 : 1);
         }
     }
@@ -431,7 +431,6 @@ class ScrollTable extends ScrollSelector
                     sortByDestination();
                 }
             });
-            children.add(sortButtons[i]);
         }
     }
     void buttonsDraw()
@@ -515,6 +514,7 @@ class ScrollTable extends ScrollSelector
         fill(FRAME_COLOR.getColor());
         rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
         rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
+
         buttonsDraw();
         drawChildren();
     }

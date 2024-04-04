@@ -11,7 +11,7 @@ class Widget
     boolean isHovered;
     Color backgroundColor;
     boolean hasStroke = false;
-    color strokeColor;
+    Color strokeColor;
     Color textColor;
     ArrayList<Widget> children;
     
@@ -45,7 +45,7 @@ class Widget
         this.textColor = textColor;
     }
     
-    void setStroke(color strokeColor)
+    void setStroke(Color strokeColor)
     {
         this.strokeColor = strokeColor;
         this.hasStroke = true;
@@ -55,7 +55,7 @@ class Widget
     {
         if (!hasStroke) { noStroke(); }
         else {
-            stroke(strokeColor);
+            stroke(strokeColor.getColor());
             strokeWeight(1);
         }
     }

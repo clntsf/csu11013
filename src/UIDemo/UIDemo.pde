@@ -7,6 +7,7 @@ ThemeSet themes;
 PFont font;
 String DB_NAME;
 SQLite db;
+Table coordTable = loadTable("states.csv", "header");
 
 void setup()
 {

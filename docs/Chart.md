@@ -3,11 +3,13 @@ C. Simon-Fellowes, L. MacNally
 
 ## Table of Contents:
 1. [`Chart`](#1-chart-abstract-base-class)
-1. [`PieChart`](#2-piechart)
-1. [`Plot`](#3-plot)
-1. [`BarPlot`](#4-barplot)
-1. [`Histogram`](#5-histogram)
-1. [`ScatterPlot`](#6-scatterplot)
+2. [`PieChart`](#2-piechart)
+3. [`Plot`](#3-plot)
+4. [`BarPlot`](#4-barplot)
+5. [`Histogram`](#5-histogram)
+6. [`ScatterPlot`](#6-scatterplot)
+7. [`MapWidget`](#7-mapwidget)
+8. [`HeatMap`](#8-heatmap)
 
 ---
 
@@ -271,3 +273,73 @@ ScatterPlot(int x,
 |connect|`boolean`|whether to connect points in order<br>of appearance in valuesX/valuesY|false|
 |markers|`boolean`|whether to draw markers at each<br>point|true|
 |numAxisTicksX|`int`|see y-axis [counterpart](#plot-nCons) in `Plot`|5|
+
+## 7. `MapWidget`
+
+```java
+class MapWidget
+extends Widget
+implements None
+```
+
+### Constructor Summary:
+```java
+MapWidget(int x,
+    int y,
+    int w,
+    int h,
+    String mapImagePath
+)
+```
+
+### Constructor Parameters not inherited from parent (`Widget`) constructor(s):
+
+|Name|Type|Description|
+|----|----|-----------|
+|mapImagePath|`String`|Path to map image|
+
+### Non-Constructor fields:
+
+|Name|Type|Description|Default|
+|----|----|-----------|-------|
+|mapImage|`PImage`|The loaded map image|`loadImage(mapImagePath)`|
+|originalAspectRatio|`float`|Aspect ratio used to<br>calculate display dimensions|Loaded image's width / loaded image's height|
+|displayWidth|`float`|Display width|If `originalAspectRatio > w/h`: equal to `w`. Else: equal to `h * originalAspectRatio`|
+|displayHeight|`float`|Display height|If `originalAspectRatio > w/h`: equal to `w / originalAspectRatio`. Else: equal to `h`|
+
+## 8. `HeatMap`
+
+```java
+class HeatMap
+extends Chart
+implements None
+```
+
+### Constructor Summary:
+```java
+HeatMap(int x,
+    int y,
+    int w,
+    int h,
+    String title,
+    float[][] data,
+    CustomGradient grad
+)
+```
+
+### Constructor Parameters not inherited from parent (`Chart`) constructor(s):
+
+|Name|Type|Description|
+|----|----|-----------|
+|data|`float[][]`|Array where rows: **time of day**, columns: **day of the week**|
+|grad|`CustomGradient`|VIRIDIS_CG (a custom gradient found in `UISUB_ColorUtil.pde`).<br>Colour depends on **flight volume**|
+
+### Non-Constructor fields:
+
+|Name|Type|Description|Default|
+|----|----|-----------|-------|
+|dataMin|`float`|Lowest flight volume|Lowest flight volume provided in `data`|
+|dataMax|`float`|Highest flight volume|Highest flight volume provided in `data`|
+|dataRange|`float`|Range of data's flight volume|`dataMax` - `dataMin`|
+|tileWidth|`int`|Each cell's width|`w` / row length|
+|tileHeight|`int`|Each cell's height|`h` / column length|

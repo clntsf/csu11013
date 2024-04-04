@@ -2,7 +2,9 @@ class MapWidget extends Widget {
     PImage mapImage;
     float originalAspectRatio;
     float displayWidth, displayHeight;
-    MapWidget(int x, int y, int w, int h, String mapImagePath) {
+    ArrayList<FlightPath> paths = new ArrayList<FlightPath>();
+    MapWidget(int x, int y, int w, int h, String mapImagePath)
+    {
 
         super(x, y, w, h, new StaticColor(#FAF9F6));
         mapImage = loadImage(mapImagePath);
@@ -11,7 +13,8 @@ class MapWidget extends Widget {
         calculateDisplayDimensions();
     }
     
-    void calculateDisplayDimensions() {
+    void calculateDisplayDimensions()
+    {
         float widgetAspectRatio = (float)w / (float)h;
         
         if (originalAspectRatio > widgetAspectRatio) {
@@ -22,12 +25,24 @@ class MapWidget extends Widget {
             displayWidth = h * originalAspectRatio;
         }
     }
+    
+    
+    void addPath(float originX, float originY, float destX, float destY) {
+        paths.add(new FlightPath(originX, originY, destX, destY));
+    }
 
     @Override
     void draw() {
     
-    image(mapImage, x, y, displayWidth, displayHeight);
-
+        image(mapImage, x, y, displayWidth, displayHeight);
+        for (FlightPath path : paths) {
+            line(x+path.originX*displayWidth, y+path.originY*displayHeight, x+path.destX*displayWidth, y+path.destY*displayHeight);
+            fill(0, 255, 0);
+            circle(x+path.originX*displayWidth, y+path.originY*displayHeight, 5);
+            fill(0, 0, 255);
+            circle(x+path.destX*displayWidth, y+path.destY*displayHeight, 5);
+        }
+      
     }
 
 }
