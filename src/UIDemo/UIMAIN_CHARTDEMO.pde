@@ -273,7 +273,7 @@ void Wk2Demo()
     mapScr.addWidget(background);
     mapScr.addWidget(titleButton);
     mapScr.addNamedChild(titleButton, "Title Button");
-    MapWidget map = new MapWidget(this, width / 2, height / 2, width, height);
+    MapWidget map = new MapWidget(width/2, height/2, (int)(width/1.25), (int)(height/1.25), "map2.jpeg");
     mapScr.addWidget(map);
 
     // --- Screen 5 - Data Display --- //
