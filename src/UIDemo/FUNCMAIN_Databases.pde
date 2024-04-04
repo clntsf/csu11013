@@ -40,6 +40,58 @@ public PieParams getPieChartData()
     return new PieParams(valuesY, categories);
 }
 
+public String getStateFromAirport(String airport) {
+    String query;
+    if (airport.equals("ALL")) {
+        System.out.println("Cannot attribute ALL to a state");
+        return null;
+    }
+    else {
+        query =  "SELECT * FROM flights_full WHERE Origin = '" + airport + "' LIMIT 1";
+        
+        if (db.next()) {
+            return db.getString("OriginState"); 
+        }
+        else {
+            println("No matching airport found.");
+        }  
+    }
+}
+
+
+float[] getCoordinates(String state) {
+      TableRow row = coordTable.findRow(state, "state");
+      float x = row.getFloat("x");
+      float y = row.getFloat("y");
+      return new float[]{x, y};
+}
+
+public ArrayList<FlightPath> getFlightPaths(String table, String airport, String[] dates)
+{
+     String query; String destState; float[] destCoords;
+     ArrayList<FlightPath> paths = new ArrayList<FlightPath>();
+     String state = getStateFromAirport(airport);
+     float[] originCoords = getCoordinates(state);
+     int minDate = Integer.valueOf(dates[0].substring(8, 10));
+     int maxDate = Integer.valueOf(dates[1].substring(8, 10));
+     query = "SELECT * FROM " + table +
+          " WHERE SUBSTR(FlightDate, 9, 2) >= '" + String.format("%02d", minDate) +
+          "' AND SUBSTR(FlightDate, 9, 2) <= '" + String.format("%02d", maxDate) +
+          "' AND OriginState LIKE '%" + state + "%'";
+     db.query(query);  
+    try { 
+        while (db.next()) {
+            destState = db.getString("DestState");
+            destCoords = getCoordinates(destState);
+            paths.add(new FlightPath(originCoords[0], originCoords[1], destCoords[0], destCoords[1]));
+        }
+    }
+    catch (Exception e) {
+        e.printStackTrace();
+    }
+    return paths;
+}
+
 // TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
 public LinePlotParams getLinePlotData(String table, SQLite db, String airport, String[] dates)
 {

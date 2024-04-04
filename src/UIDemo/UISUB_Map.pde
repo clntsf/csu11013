@@ -24,6 +24,7 @@ class MapWidget extends Widget {
         }
     }
     
+    
     void addPath(float originX, float originY, float destX, float destY) {
         paths.add(new FlightPath(originX, originY, destX, destY));
     }

@@ -522,6 +522,8 @@ ScrollTable scrollTablePopulate(ScrollTableParams params)
     return sT1;
 }
 
+  
+
 String[] getDates()
 {
     Screen title = screens.getNamedScreen("Title Screen");

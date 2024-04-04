@@ -62,6 +62,8 @@ public void initSchema(String[] flightTableNames)
     }
 }
 
+
+
 public void populateWacDB()
 {
     Table table = loadTable("wac_codes.csv", "header");
