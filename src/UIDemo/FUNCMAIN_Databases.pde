@@ -60,6 +60,7 @@ public String getStateFromAirport(String airport) {
         }
         else {
             println("No matching airport found.");
+            return null;
         }  
     }
 }
