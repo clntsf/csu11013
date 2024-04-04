@@ -385,12 +385,14 @@ class ScrollSelector extends ReactiveWidget
 class ScrollTable extends ScrollSelector
 {
     ReactiveWidget[] sortButtons;
-    int bLength = 90;
+    int bLength = 130;
     int bWidth = 40;
     String[] dates;
     String[] carriers;
     String[] origins;
     String[] dests;
+    String[] buttonText= {"Sort by Date", "Sort by Carrier", "Sort by Origins", "Sort by Dests"};
+    int[] order;
     ScrollTable(
         int x, int y, int w, int h,
         String[] dates, String[] carriers,
@@ -402,15 +404,32 @@ class ScrollTable extends ScrollSelector
         this.dates = dates;
         this.carriers = carriers;
         this.origins = origins;
-        this.dests = dests;
-        sortButtons = new ReactiveWidget[1];
+        this.dests = dests;        
+        sortButtons = new ReactiveWidget[buttonText.length];
+        for (int i =0; i < dates.length; i++)
+        {
+          order[i] = i;
+        }
+        
         for (int i = 0; i < sortButtons.length; i++)
         {
-            sortButtons[0] = new ReactiveWidget(80 + i * bLength, 40, bLength, bWidth, new StaticColor(buttonColor));
+            sortButtons[i] = new ReactiveWidget(110 + (i * (bLength + 10)), 50, bLength, bWidth, new StaticColor(buttonColor), buttonText[i]);
             int index = i;
             sortButtons[i].addListener((e, widg) -> {
                 if (e.getAction() != MouseEvent.PRESS) { return; }
-                println("hit");
+                switch (index){
+                  case 0:
+                    sortByDate();
+                    break;
+                  case 1:
+                    sortByCarrier();
+                    break;
+                  case 2:
+                    sortByOrigin();
+                    break;
+                  case 3:
+                    sortByDestination();
+                }
             });
             children.add(sortButtons[i]);
         }
@@ -421,15 +440,41 @@ class ScrollTable extends ScrollSelector
             b.draw();
         }
     }
+     void sortByDate()
+    {
+      
+    }
+    void sortByCarrier()
+    {
+    }
     void sortByOrigin()
     {
+      String[] copyOrigins = origins;
+      tableSort(copyOrigins);
     }
     void sortByDestination()
     {
     }
-    void sortByDate()
-    {
+    void tableSort(String[] copy){
+      boolean swapped = true;
+      while(swapped){
+        swapped = false;
+        for(int i = 0; i < copy.length -1; i++)
+        {
+          if(copy[i] > copy[i +1])
+          {
+            String temp = copy[i];
+            int tempO = order[i];
+            copy[i] = copy[i + 1];
+            order[i] = order[i + 1];
+            copy[i + 1] = temp;
+            order[i + 1] = tempO;
+            swapped = true;
+          }
+        }
+      }
     }
+   
 
     void draw()
     {
@@ -471,6 +516,7 @@ class ScrollTable extends ScrollSelector
         rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
         rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
         buttonsDraw();
+        drawChildren();
     }
 
 }
