@@ -63,9 +63,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
             "' AND Origin LIKE '%" + airport + "%'";
 
     
-    db.query(query);  //<>// //<>//
-     //<>// //<>//
-    try { //<>// //<>//
+    db.query(query); //<>//
+     //<>//
+    try { //<>//
         while (db.next()) {
             String flightDate = db.getString("FlightDate");
             int day = Integer.parseInt(flightDate.substring(8, 10));
@@ -91,25 +91,24 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
         if (i > maxFlights) {
             maxFlights = i;
         } 
-    }  //<>// //<>//
-    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)};  //<>// //<>//
-    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY);  //<>// //<>//
-}  //<>// //<>//
- //<>// //<>//
+    } //<>//
+    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)}; //<>//
+    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>//
+} //<>//
+ //<>//
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(int minBin, int step, int lastBin)
 {
     String[] dateRange = getDates();
-    //if (dateRange[0] == "" || dateRange[1] == "") {println("null");}
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
     for (int i = 0; i < bins.length; i++)
     {
         if (i == bins.length-1) bins[i] = null;
         else bins[i] = minBin+step*i;
     }
-    //println(bins);
-    float[] freqs = new float[bins.length-1];
+    
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM
+    float[] freqs = new float[bins.length-1];
     for (int i = 0; i < freqs.length; i++)
     {
         db.query("SELECT COUNT(Delay) AS freq FROM delays WHERE Delay >= "+(minBin+step*i)+
@@ -120,19 +119,21 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
         freqs[i] = db.getInt("freq");
         println(freqs[i]);
     }
+    
     int max = 0;
     for (int i = 0; i < freqs.length; i++) {
         if (freqs[i] > max) {
             max = (int) freqs[i];
         }
     }
+    
     int mag = 1;
     while (max > mag*10)
     {
         mag *= 10;
     }
     max = (max/mag + 1) * mag;
-    //println("maxFreq is "+max);
+    
     return new HistParams(bins, freqs, max);
 }
 

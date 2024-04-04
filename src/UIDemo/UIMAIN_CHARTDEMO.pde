@@ -230,10 +230,18 @@ void Wk2Demo()
         }
         resetScreen(histScr, background);
         new Thread(() -> {
-            HistParams hp = populateHistFreqs(-60, 10, 70);
-            Histogram h = demoHistogram(hp);
-            resetScreen(histScr, background);
-            histScr.addWidget(h);
+            if (getTable() == "flights_full")
+            {
+                HistParams hp = populateHistFreqs(-60, 10, 70);
+                Histogram h = demoHistogram(hp);
+                resetScreen(histScr, background);
+                histScr.addWidget(h);
+            }
+            else
+            {
+                resetScreen(histScr, background);
+                histScr.addWidget(new Label(220, 320, "No data available for this table."));
+            }
         }
         ).start();
     }
