@@ -13,6 +13,16 @@ class MapWidget extends Widget {
         calculateDisplayDimensions();
     }
     
+    MapWidget(int x, int y, int w, int h, String mapImagePath, ArrayList<FlightPath> paths)
+    {
+
+        super(x, y, w, h, new StaticColor(#FAF9F6));
+        mapImage = loadImage(mapImagePath);
+        originalAspectRatio = (float)mapImage.width / (float)mapImage.height;
+        this.paths = paths;
+        calculateDisplayDimensions();
+    }
+    
     void calculateDisplayDimensions()
     {
         float widgetAspectRatio = (float)w / (float)h;
