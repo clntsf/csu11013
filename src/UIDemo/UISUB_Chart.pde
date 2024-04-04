@@ -20,10 +20,10 @@ abstract class Chart extends Widget
         String title, float[] valuesY
         )
     {
-        super(x, y, w, h, new StaticColor(#FAF9F6));
+        super(x, y, w, h, new ThemedColor(themes, "chartBackground"));
         this.title = title;
         this.valuesY = valuesY;
-        setStroke(0);
+        setStroke(new ThemedColor(themes, "outline"));
         textColor = new ThemedColor(themes, "text");
     }
 
@@ -136,7 +136,7 @@ abstract class Plot extends Chart
         this.axisLabelX = axisLabelX;
         this.axisLabelY = axisLabelY;
         this.axisRangeY = axisRangeY;
-        setStroke(0);
+        //setStroke(new ThemedColor(themes, "outline"));
     }
     Plot(
         int x, int y, int w, int h,
