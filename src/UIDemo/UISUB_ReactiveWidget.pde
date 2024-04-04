@@ -392,7 +392,7 @@ class ScrollTable extends ScrollSelector
     String[] origins;
     String[] dests;
     String[] buttonText= {"Sort by Date", "Sort by Carrier", "Sort by Origins", "Sort by Dests"};
-    int[] order;
+    //int[] order;
     Table table;
     ScrollTable(
         int x, int y, int w, int h,
@@ -415,7 +415,7 @@ class ScrollTable extends ScrollSelector
         
         for (int i =0; i < dates.length; i++)
         {
-          order[i] = i;
+          //order[i] = i;
           TableRow newRow = table.addRow();
           newRow.setString("dates", dates[i]);
           newRow.setString("carriers", carriers[i]);
@@ -428,20 +428,23 @@ class ScrollTable extends ScrollSelector
             int index = i;
             sortButtons[i].addListener((e, widg) -> {
                 if (e.getAction() != MouseEvent.PRESS) { return; }
+                println("first");
                 switch (index){
                   case 0:
-                    //sortByDate();
+                    table.sort("dates");
+                    println("hit");
                     break;
                   case 1:
-                    //sortByCarrier();
+                    table.sort("carriers");
                     break;
                   case 2:
-                    //sortByOrigin();
+                    table.sort("origins");
                     break;
                   case 3:
-                    //sortByDestination();
+                    table.sort("dests");
                 }
-            });
+                });
+                
         }
     }
     void buttonsDraw()
@@ -515,10 +518,10 @@ class ScrollTable extends ScrollSelector
             );
 
             fill(selected == i ? 255 : 0);
-            text(dates[i], BLEFT, yd + 1);
-            text(carriers[i], BLEFT + w/4, yd + 1);
-            text(origins[i], BLEFT + w/3, yd + 1);
-            text(dests[i], BLEFT + 2*w/3, yd + 1);
+            text(table.getString(i, "dates"), BLEFT, yd + 1);
+            text(table.getString(i, "carriers"), BLEFT + w/4, yd + 1);
+            text(table.getString(i, "origins"), BLEFT + w/3, yd + 1);
+            text(table.getString(i, "dests"), BLEFT + 2*w/3, yd + 1);
         }
 
         // hide overlapping text with 'mountains'
