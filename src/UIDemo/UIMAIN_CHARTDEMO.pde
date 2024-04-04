@@ -241,7 +241,7 @@ void Wk2Demo()
             else
             {
                 resetScreen(histScr, background);
-                histScr.addWidget(new Label(220, 320, "No data available for this table."));
+                histScr.addWidget(new Label(220, 320, "No data available for this table.", new ThemedColor(themes, "text")));
             }
         }
         ).start();
