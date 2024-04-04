@@ -500,11 +500,11 @@ ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData)
     float xMax = theScatterPlotData.xMax;
     float yMax = theScatterPlotData.yMax;
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
-        "Flight Duration Vs Volume by Carrier", "Volume by Carrier", "Average Flight Duration (minutes)",
-        theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0, xMax}, new float[]{0, yMax}
+        "Total Flight Duration Vs Volume by Carrier", "Total Volume by Carrier", "Total Flight Duration (minutes)",
+        theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0, xMax + 50}, new float[]{0, yMax + 50}
         );
-    s1.fontSize = 14;
-    s1.labelFormatStringY = "%.1f";
+    s1.fontSize = 12;
+    s1.labelFormatStringY = "%.0f";
     s1.labelFormatStringX = "%.0f";
     return s1;
 }
