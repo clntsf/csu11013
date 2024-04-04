@@ -366,11 +366,7 @@ class InteractiveBarPlot extends Container
                 holding = false;
             }
             );
-            // handles[i].addListener((e,widg) -> {
-            //  if (e.getAction() != MouseEvent.PRESS) { return; }
-            //    println("held");
-            //    holding = true;
-            //});
+            
             handles[i].addListener((e, widg) -> {
                 if (e.getAction() != MouseEvent.DRAG) {
                     return;
@@ -550,7 +546,7 @@ class ScatterPlot extends Plot
         }
         if ((axisRangeX[1] - axisRangeX[0] == 0) && connect == true) 
         {
-            fill(0);
+            fill(textColor.getColor());
             textSize(fontSize+2);
             text("No data available within \nthese parameters", x, y);
         }

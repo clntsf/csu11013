@@ -441,41 +441,6 @@ class ScrollTable extends ScrollSelector
             b.draw();
         }
     }
-    // void sortByDate()
-    //{
-      
-    //}
-    //void sortByCarrier()
-    //{
-    //}
-    //void sortByOrigin()
-    //{
-    //  String[] copyOrigins = origins;
-    //  tableSort(copyOrigins);
-    //}
-    //void sortByDestination()
-    //{
-    //}
-    //void tableSort(String[] copy){
-    //  boolean swapped = true;
-    //  while(swapped){
-    //    swapped = false;
-    //    for(int i = 0; i < copy.length -1; i++)
-    //    {
-    //      if(copy[i] > copy[i +1])
-    //      {
-    //        String temp = copy[i];
-    //        int tempO = order[i];
-    //        copy[i] = copy[i + 1];
-    //        order[i] = order[i + 1];
-    //        copy[i + 1] = temp;
-    //        order[i + 1] = tempO;
-    //        swapped = true;
-    //      }
-    //    }
-    //  }
-    //}
-   
 
     void draw()
     {

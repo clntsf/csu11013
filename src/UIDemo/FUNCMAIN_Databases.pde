@@ -127,9 +127,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
             "' AND Origin LIKE '%" + airport + "%'";
 
     
-    db.query(query); //<>// //<>//
-     //<>// //<>//
-    try { //<>// //<>//
+    db.query(query); //<>//
+     //<>//
+    try { //<>//
         while (db.next()) {
             String flightDate = db.getString("FlightDate");
             int day = Integer.parseInt(flightDate.substring(8, 10));
@@ -218,7 +218,7 @@ public HeatMapParams generateFlightVolumeHeatmap()
 public BubbleParams makeBubbleParams()
 {
     String query = """SELECT IATA_Code_Marketing_Airline as airline,
-    COUNT(Cancelled) as len,
+        COUNT(Cancelled) as len,
         SUM(Cancelled) as cancelled,
         SUM(Diverted) as diverted
         FROM flights_full
@@ -258,38 +258,6 @@ public BubbleParams makeBubbleParams()
     }
     return new BubbleParams(cancelledPct, divertedPct, marketShare, carriers);
 }
-
-
-// public String[] getStateAirports(String stateCode)
-// {
-//   String[] airportsInState = new String[0];
-//   String[] airportsInCountry = loadStrings("airports.txt");
-//   for (String a: airportsInCountry)
-//   {
-//     String aState = a.substring(a.length() - 2, a.length());
-//     if (aState.equals(stateCode))
-//     {
-//       airportsInState = append(airportsInState, a);
-//     }
-//   }
-//   //db.query("SELECT DISTINCT ORIGIN from flights_full WHERE ORIGIN_STATE_ABR=" + stateCode);
-//   //while(db.next()){
-//   //  airportsInState = append(airportsInState, db.getString("ORIGIN"));
-//   //}
-//   return airportsInState;
-// }
-// // Will S  finds all flights from an airport 27/3/24
-// public BarParams populateBarParams(String[] airports)
-// {
-//   float[] numOfFlights = new float[airports.length];
-//   for(int i = 0; i < airports.length; i++)
-//   {
-//     db.query("SELECT COUNT(Origin) AS freq FROM flights_full WHERE Origin='" + airports[i] + "';");
-//     numOfFlights[i] = db.getInt("freq");
-//     println(numOfFlights[i]);
-//   }
-//   return new BarParams(airports, numOfFlights);
-// }
 
 //Will S finds all airports within a select state from the scroll bar 27/3/24
 CategoricalParams populateBarParamsRefined()
@@ -412,27 +380,3 @@ public LocalTime timeToLocalTime(String stringTime) {
 /* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
  and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
  */
-
-// Made by Tim
-/*void printText() {
- int y = 10;
- final int TEXT_X = 20;
- fill(0);
- textFont(font);
- db.query("SELECT * FROM flights2k LIMIT "+y);
- for (int i = 0; i < 10; i++)
- {
- if (db.next())
- {
- String flightDate = db.getString("FlightDate");
- String origin = db.getString("Origin");
- String destination = db.getString("Dest");
- text("Flight Date: " + flightDate + ", Origin: " + origin + ", Destination: " + destination, TEXT_X, y+150);
- }
- else
- {
- text("No data found.", TEXT_X, y);
- }
- y += 15;
- }
- }*/
