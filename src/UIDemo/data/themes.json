@@ -18,9 +18,9 @@
     "grapefruitTheme":{
         "screen": -8225,
         "background": -16192,
-        "text": -9054123,
+        "text": -7656124,
         "selectorFrame": -8225,
         "chartBackground": -13082,
-        "outline": -9054123
+        "outline": -7656124
     }
 }
