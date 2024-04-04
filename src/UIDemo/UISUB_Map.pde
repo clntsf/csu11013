@@ -34,6 +34,10 @@ class MapWidget extends Widget {
         image(mapImage, x, y, displayWidth, displayHeight);
         for (FlightPath path : paths) {
             line(x+path.originX*displayWidth, y+path.originY*displayHeight, x+path.destX*displayWidth, y+path.destY*displayHeight);
+            fill(0, 255, 0);
+            circle(x+path.originX*displayWidth, y+path.originY*displayHeight, 5);
+            fill(0, 0, 255);
+            circle(x+path.destX*displayWidth, y+path.destY*displayHeight, 5);
         }
       
     }
