@@ -298,7 +298,6 @@ void Wk2Demo()
 
     // --- Screen 5 - Data Display --- //
 
-    // --- Screen 9 - Data Display --- //
     Screen dataScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(dataScr, "Data Display");
     dataScr.addWidget(background);
@@ -360,13 +359,13 @@ void Wk2Demo()
             return;
         }
 
-        resetScreen(reliabilityScr, background);
+        resetScreen(flightVolScr, background);
         new Thread(() -> {
             ScatterPlot s1 = demoScatterPlot(populateScatterPlot());
             String[] carriers = new String[] {"0","1","2","3","4","5","6","7","8","9"};
             s1.setLabels(carriers);
-            flightVolScr.addWidget(s1);
             resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
+            flightVolScr.addWidget(s1);
         }
         ).start();
     }

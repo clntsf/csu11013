@@ -94,7 +94,7 @@ class PieChart extends Chart
             // draw key
             rect(xpos, ypos + 20*i, 10, 10);
             textSize(fontSize - 4);
-            fill(0);
+            fill(textColor.getColor());
             text(labels[i], xpos+20, ypos + 20*i);
         }
         if (lastAngle == 0) text("No data available within \nthese parameters", x, y);
