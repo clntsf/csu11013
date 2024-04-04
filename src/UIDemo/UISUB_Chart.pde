@@ -550,7 +550,7 @@ class ScatterPlot extends Plot
         }
         if ((axisRangeX[1] - axisRangeX[0] == 0) && connect == true) 
         {
-            fill(0);
+            fill(textColor.getColor());
             textSize(fontSize+2);
             text("No data available within \nthese parameters", x, y);
         }
