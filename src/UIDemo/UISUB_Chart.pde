@@ -20,10 +20,11 @@ abstract class Chart extends Widget
         String title, float[] valuesY
         )
     {
-        super(x, y, w, h, new StaticColor(#FAF9F6));
+        super(x, y, w, h, new ThemedColor(themes, "chartBackground"));
         this.title = title;
         this.valuesY = valuesY;
-        setStroke(0);
+        setStroke(new ThemedColor(themes, "outline"));
+        textColor = new ThemedColor(themes, "text");
     }
 
     int[] genColors(int len)
@@ -41,8 +42,8 @@ abstract class Chart extends Widget
         strokeWeight(2);
         super.draw();
         textAlign(CENTER, CENTER);
-        fill(0);
 
+        fill(textColor.getColor());
         textSize(fontSize+2);
         text(title, x, y-h/2-fontSize-labelMargin);
     }
@@ -98,7 +99,7 @@ class PieChart extends Chart
         }
         if (lastAngle == 0)
         {
-            text("No data available within \n these parameters", x, y);
+            text("No data available within \nthese parameters", x, y);
         }
     }
 
@@ -135,7 +136,7 @@ abstract class Plot extends Chart
         this.axisLabelX = axisLabelX;
         this.axisLabelY = axisLabelY;
         this.axisRangeY = axisRangeY;
-        setStroke(0);
+        //setStroke(new ThemedColor(themes, "outline"));
     }
     Plot(
         int x, int y, int w, int h,
@@ -166,6 +167,7 @@ abstract class Plot extends Chart
     void drawAxisNames()
     {
         textSize(fontSize);
+        fill(textColor.getColor());
         text(axisLabelX, x, y+h/2+labelMargin + fontSize);
         transformToYAxis();
         text(axisLabelY, 0, 0);
@@ -175,6 +177,7 @@ abstract class Plot extends Chart
     void drawAxisTicks(float[] range, String fmtString, int numAxisTicks)
     {
         textSize((int)(0.8*fontSize));
+        fill(textColor.getColor());
         for (int i=0; i<numAxisTicks; i++)
         {
             float proportion = (float)i/(numAxisTicks-1);
@@ -247,7 +250,7 @@ class BarPlot extends Plot
         {
             float yVal = valuesY[i];
             float barHeight = h * (yVal/axisRangeY[1]);
-            fill(0);
+            fill(textColor.getColor());
             text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
 
             strokeWeight(1);

@@ -5,6 +5,7 @@ void Wk2Demo()
     final Color SCREEN_COLOR = new ThemedColor(themes, "screen");
     final Color BACKGROUND_COLOR = new ThemedColor(themes, "background");
     final Color TEXT_COLOR = new ThemedColor(themes, "text");
+    final Color OUTLINE = new ThemedColor(themes, "outline");
 
     final String MAIN_TITLE = "Flight Data Visualisation App";
     surface.setTitle(MAIN_TITLE);
@@ -18,7 +19,7 @@ void Wk2Demo()
         width-BG_MARGIN-60, height-BG_MARGIN-25, 100, 30,
         SCREEN_COLOR, "Back to Title"
         );
-    titleButton.setStroke(0);
+    titleButton.setStroke(OUTLINE);
     titleButton.addListener((e, w) -> {
         if (e.getAction() != MouseEvent.PRESS) {
             return;
@@ -178,7 +179,7 @@ void Wk2Demo()
             COLUMN_RIGHT, BG_MARGIN+COLUMN_VERT_PAD + (BTN_HEIGHT+BTN_MARGIN)*(i+1),
             BTN_WIDTH, BTN_HEIGHT, new StaticColor(BTN_COLORS[i]), NAME
             );
-        btn.setStroke(0);
+        btn.setStroke(OUTLINE);
         btn.addListener((e, w) -> {
             if (e.getAction() != MouseEvent.PRESS) {
                 return;
@@ -228,14 +229,20 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        //AtomicReference<HistParams> hP = new AtomicReference<>(null);
         resetScreen(histScr, background);
         new Thread(() -> {
-            HistParams hp = populateHistFreqs(-60, 10, 70);
-            //hP.set(populateHistFreqs(-60, 10, 70));//bins, new float[bins.length-1]));
-            Histogram h = demoHistogram(hp);
-            resetScreen(histScr, background);
-            histScr.addWidget(h);
+            if (getTable() == "flights_full")
+            {
+                HistParams hp = populateHistFreqs(-60, 10, 70);
+                Histogram h = demoHistogram(hp);
+                resetScreen(histScr, background);
+                histScr.addWidget(h);
+            }
+            else
+            {
+                resetScreen(histScr, background);
+                histScr.addWidget(new Label(220, 320, "No data available for this table."));
+            }
         }
         ).start();
     }

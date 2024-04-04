@@ -8,6 +8,8 @@ C. Simon-Fellowes
     1. [`ReactiveWidget`](#3i-reactivewidget)
         1. [The `MouseEventListener` interface](#3ia-the-mouseeventlistener-interface)
         2. [`Checkbox`, `CheckBoxList` and `RadioButtonList`](#3ib-checkbox-checkboxlist-and-radiobuttonlist)
+        3. [`ScrollSelector`](#3ic-scrollselector)
+        4. [`ScrollTable`](#3id-scrolltable)
     2. [Static Children](#3ii-static-children)
         1. [`Label`](#3iia-label)
         2. [`Shape`](#3iib-shape)
@@ -200,13 +202,50 @@ btn.addListener((e,w) -> {
 ```
 (see [here][github-mevent] for a list of MouseEvent events)
 
-#### 3.i.b. `Checkbox`, `CheckBoxList` and `RadioButtonList`
+#### 3.i.b. `Checkbox`, `CheckBoxList`, `RadioButtonList`, `TextEntry`
 
+##### Constructor Summary:
+```java
+CheckBox(int x, int y, String text)
+CheckBox(int x, int y, String text, boolean checked)
+```
+```java
+CheckBoxList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
+```
+```java
+RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
+```
+```java
+TextEntry(int x, int y, int w, int h)
+```
 
+#### 3.i.c. `ScrollSelector`
+```java
+class ScrollSelector
+extends ReactiveWidget
+implements none
+```
+
+##### Constructor Summary:
+```java
+ScrollSelector(int x, int y, int w, int h, String[] entries)
+```
+
+#### 3.i.d. `ScrollTable`
+```java
+class ScrollTable
+extends ScrollSelector
+implements none
+```
+
+##### Constructor Summary:
+```java
+ScrollTable(int x, int y, int w, int h, String[] dates, String[] carriers, String[] origins, String[] dests, color buttonColor)
+```
 
 ### 3.ii. Static Children
 
-There are several compelling use cases for widgets even without reactive functionality, and so several 'static' (in the english sense, not the java sense) subclasses of `Widget` exist. They are outlined below:
+There are several compelling use cases for widgets even without reactive functionality, and so several 'static' (in the English sense, not the Java sense) subclasses of `Widget` exist. They are outlined below:
 
 
 #### 3.ii.a. Label
@@ -275,7 +314,7 @@ extends Widget
 implements None
 ```
 
-`Container` strips `Widget` down to the bare-bones, preserving only its functionality as a member of a tree of parent/child widgets. This can be quite useful when the user wants to 'package' a tree of widgets and allow them to be added to mutiple screens (e.g. nav buttons), or just be a reference point as a named child of a screen.
+`Container` strips `Widget` down to the bare-bones, preserving only its functionality as a member of a tree of parent/child widgets. This can be quite useful when the user wants to 'package' a tree of widgets and allow them to be added to multiple screens (e.g. nav buttons), or just be a reference point as a named child of a screen.
 
 ##### Constructor Summary:
 ```java
@@ -283,6 +322,8 @@ Container()
 ```
 
 Container takes no arguments, as it has no relevant features other than being a parent/child object.
+
+
 
 [func-inter]: https://www.geeksforgeeks.org/functional-interfaces-java/
 [github-mevent]: https://github.com/processing/processing/blob/master/core/src/processing/event/MouseEvent.java
