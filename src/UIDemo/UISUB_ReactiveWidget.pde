@@ -392,7 +392,7 @@ class ScrollTable extends ScrollSelector
     String[] origins;
     String[] dests;
     String[] buttonText= {"Sort by Date", "Sort by Carrier", "Sort by Origins", "Sort by Dests"};
-    int[] order;
+    //int[] order;
     Table table;
     ScrollTable(
         int x, int y, int w, int h,
@@ -415,7 +415,7 @@ class ScrollTable extends ScrollSelector
         
         for (int i =0; i < dates.length; i++)
         {
-          order[i] = i;
+          //order[i] = i;
           TableRow newRow = table.addRow();
           newRow.setString("dates", dates[i]);
           newRow.setString("carriers", carriers[i]);
@@ -428,9 +428,11 @@ class ScrollTable extends ScrollSelector
             int index = i;
             sortButtons[i].addListener((e, widg) -> {
                 if (e.getAction() != MouseEvent.PRESS) { return; }
+                println("first");
                 switch (index){
                   case 0:
                     table.sort("dates");
+                    println("hit");
                     break;
                   case 1:
                     table.sort("carriers");
@@ -441,7 +443,8 @@ class ScrollTable extends ScrollSelector
                   case 3:
                     table.sort("dests");
                 }
-            });
+                });
+                
         }
     }
     void buttonsDraw()
