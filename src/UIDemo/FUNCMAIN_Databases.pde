@@ -47,8 +47,8 @@ public String getStateFromAirport(String airport) {
         return null;
     }
     else {
-        query =  "SELECT * FROM flights_full WHERE Origin = '" + airport + "' LIMIT 1";
-        
+        query =  "SELECT * FROM flights_full WHERE Origin LIKE '%" + airport + "%' LIMIT 1";
+        db.query(query);
         if (db.next()) {
             return db.getString("OriginState"); 
         }
@@ -74,7 +74,7 @@ public ArrayList<FlightPath> getFlightPaths(String table, String airport, String
 {
      String query; String destState; float[] destCoords;
      ArrayList<FlightPath> paths = new ArrayList<FlightPath>();
-     String state = "NY";
+     String state = getStateFromAirport(airport);
      float[] originCoords = getCoordinates(state);
      int minDate = Integer.valueOf(dates[0].substring(8, 10));
      int maxDate = Integer.valueOf(dates[1].substring(8, 10));
