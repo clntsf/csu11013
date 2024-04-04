@@ -387,10 +387,17 @@ class ScrollTable extends ScrollSelector
     ReactiveWidget[] sortButtons;
     int bLength = 90;
     int bWidth = 40;
-
+    String[] dates;
+    String[] carriers;
+    String[] origins;
+    String[] dests;
     ScrollTable(int x, int y, int w, int h, String[] dates, String[] carriers, String[] origins, String[] dests, color buttonColor)
     {
         super(x, y, w, h, dates);
+        this.dates = dates;
+        this.carriers = carriers;
+        this.origins = origins;
+        this.dests = dests;
         sortButtons = new ReactiveWidget[1];
         for (int i = 0; i < sortButtons.length; i++)
         {
@@ -420,9 +427,56 @@ class ScrollTable extends ScrollSelector
     void sortByDate()
     {
     }
+    void drawBox(int row, int columnNumber)
+    {
+        int yd = scrollY + LINE_HEIGHT*row;
+        rect(
+            BLEFT + (BRIGHT/2)*columnNumber, yd,
+            BRIGHT/2, yd + LINE_HEIGHT
+        );
+    }
+    void drawRow(String[] rowEntries, int columnNumber){
+              noStroke();
+        textSize(LINE_HEIGHT);
+        rectMode(CORNERS);
+        textAlign(LEFT, TOP);
+
+        fill(textColor.getColor());
+        text("SELECTED: " + rowEntries[selected], BLEFT - LINE_HEIGHT, BTOP - 2*LINE_HEIGHT);
+
+        // outer rect
+        fill(FRAME_COLOR.getColor());
+        rect(BLEFT-LINE_HEIGHT, BTOP-LINE_HEIGHT, BRIGHT+LINE_HEIGHT, BBOTTOM+LINE_HEIGHT);
+        
+        for (int i = max(0, (BTOP-scrollY)/LINE_HEIGHT); i<min(rowEntries.length, (BBOTTOM-scrollY)/LINE_HEIGHT + 1); i++)
+        {
+            fill(i%2 == 0 ? EVEN_COLOR : ODD_COLOR );
+            drawBox(i);
+
+            int yd = scrollY + LINE_HEIGHT*i;
+            if (selected == i)
+            {
+                fill(SELECTED_COLOR);
+                drawBox(i, columnNumber);
+                fill(255);
+            } else
+            {
+                fill(0);
+            }
+            //fill(0);
+            text(rowEntries[i], (BLEFT + 2) * (columnNumber+1), yd + 1);
+        }
+    }
     void draw()
     {
-        super.draw();
+        drawRow(dates, 0);
+        //drawRow(carriers, 1);
+        //drawRow(origins, 2);
+        //drawRow(dests, 3);
+        // hide overlapping text with 'mountains'
+        fill(FRAME_COLOR.getColor());
+        rect(BLEFT, BTOP-LINE_HEIGHT, BRIGHT, BTOP);
+        rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
         buttonsDraw();
     }
 }
