@@ -108,6 +108,8 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
 
     int minDate = Integer.valueOf(dates[0].substring(8, 10));
     int maxDate = Integer.valueOf(dates[1].substring(8, 10));
+    if (table == "flights10k" && maxDate >= 07) maxDate = 6;
+    if (table == "flights2k" && maxDate >= 01) maxDate = 1;
     System.out.println("" + minDate + " to " + maxDate);
     float[] datesXAxis = new float[maxDate-minDate+1];
     float[] numFlightsYAxis = new float[maxDate-minDate+1];

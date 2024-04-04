@@ -443,8 +443,8 @@ MapWidget demoMap() {
 
 
 ScatterPlot demoLinePlot(SQLite db)
-{
-    LinePlotParams testParams = getLinePlotData("flights_full", db, getAirportCode(), getDates());
+{  
+    LinePlotParams testParams = getLinePlotData(getTable(), db, getAirportCode(), getDates());
     ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
         "Flights per day of the month",
         "Day of month", "Count of flights",

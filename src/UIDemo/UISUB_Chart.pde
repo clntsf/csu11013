@@ -97,10 +97,7 @@ class PieChart extends Chart
             fill(0);
             text(labels[i], xpos+20, ypos + 20*i);
         }
-        if (lastAngle == 0)
-        {
-            text("No data available within \nthese parameters", x, y);
-        }
+        if (lastAngle == 0) text("No data available within \nthese parameters", x, y);
     }
 
     void draw()
@@ -550,6 +547,12 @@ class ScatterPlot extends Plot
                 textAlign(LEFT,TOP);
                 text(labels[i], sx+2, sy+2);
             }
+        }
+        if ((axisRangeX[1] - axisRangeX[0] == 0) && connect == true) 
+        {
+            fill(0);
+            textSize(fontSize+2);
+            text("No data available within \nthese parameters", x, y);
         }
     }
 
