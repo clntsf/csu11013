@@ -160,7 +160,7 @@ void Wk2Demo()
         "Flight Map",
         "Data Display",
         "Flight Volume Heatmap",
-        "Flight Duration vs Volume",
+        "Flight Distance vs Volume",
         "Volume of State Flights",
         "Flights per Day",
     };
@@ -320,7 +320,6 @@ void Wk2Demo()
         ).start();
     }
     );
-
     // --- Screen 6: Flight Volume Heatmap -- //
 
     Screen heatMapScr = new Screen(SCREEN_COLOR);
@@ -348,14 +347,14 @@ void Wk2Demo()
     // --- Screen 7 - Kilian's Scatter Plot Screen  --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);
-    screens.addNamedScreen(flightVolScr, "Flight Duration vs Volume");
+    screens.addNamedScreen(flightVolScr, "Flight Distance vs Volume");
     flightVolScr.addWidget(background);
     flightVolScr.addWidget(titleButton);
     flightVolScr.addNamedChild(titleButton, "Title Button");
 
 
-    // implemented listeners in main ui screen to load data once button for this graph is pressed 02/04
-    ReactiveWidget scatterBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Duration vs Volume");
+    //  Kilian implemented listeners in main ui screen to load data once button for this graph is pressed 02/04
+    ReactiveWidget scatterBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Distance vs Volume");
     scatterBtn.addListener((e, w) -> {
         if (e.getAction() != MouseEvent.PRESS) {
             return;
@@ -514,7 +513,7 @@ ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData)
     float xMax = theScatterPlotData.xMax;
     float yMax = theScatterPlotData.yMax;
     ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
-        "Total Flight Duration Vs Volume by Carrier", "Total Volume by Carrier", "Total Flight Duration (minutes)",
+        "Total Flight Distance Vs Volume by Carrier", "Total Volume by Carrier", "Total Flight Distance (Miles)",
         theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0, xMax + 50}, new float[]{0, yMax + 50}
         );
     s1.fontSize = 12;

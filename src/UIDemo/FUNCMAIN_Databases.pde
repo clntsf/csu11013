@@ -339,10 +339,6 @@ public ScatterPlotData populateScatterPlot()
     String table = "flights10k";
     String selectedAirport = getAirportCode();
    
-    //String date[] = getDates();
-    //String startDate = (date[0].equals("") ? "2022-01-01" : date[0]);
-    //String endDate = (date[1].equals("") ? "2022-31-01" : date[1]);
-   
     String query = "";
     
     String[] dates = getDates();
@@ -353,12 +349,7 @@ public ScatterPlotData populateScatterPlot()
     {
         query += " AND OriginState = '" + getAirportState() + "'";
     }
-    
-    
-
-    //db.query("SELECT COUNT(DISTINCT IATA_Code_Marketing_Airline) AS UniqueAirlines, COUNT(*) AS TotalRows FROM " + table);  //<>//
-    //carriers = db.getInt("UniqueAirlines");
-    //numberOfQueries = db.getInt("TotalRows");
+     //<>//
     float[] flightVolume = new float[0];
     float[] flightDuration = new float[0];
 
