@@ -274,6 +274,7 @@ void Wk2Demo()
     mapScr.addWidget(titleButton);
     mapScr.addNamedChild(titleButton, "Title Button");
     MapWidget map = new MapWidget(width/2, height/2, (int)(width/1.25), (int)(height/1.25), "map2.jpeg");
+    map.addPath(0.1765625, 0.11875, 0.19375, 0.009375);
     mapScr.addWidget(map);
 
     // --- Screen 5 - Data Display --- //
@@ -414,6 +415,8 @@ void resetScreen(Screen s, Widget background)
         s.addWidget(s.getNamedChild("Title Button"));
     }
 }
+
+
 
 ScatterPlot demoLinePlot(SQLite db)
 {

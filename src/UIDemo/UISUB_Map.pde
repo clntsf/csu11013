@@ -2,6 +2,7 @@ class MapWidget extends Widget {
     PImage mapImage;
     float originalAspectRatio;
     float displayWidth, displayHeight;
+    ArrayList<FlightPath> paths = new ArrayList<FlightPath>();
     MapWidget(int x, int y, int w, int h, String mapImagePath) {
 
         super(x, y, w, h, new StaticColor(#FAF9F6));
@@ -22,12 +23,19 @@ class MapWidget extends Widget {
             displayWidth = h * originalAspectRatio;
         }
     }
+    
+    void addPath(float originX, float originY, float destX, float destY) {
+        paths.add(new FlightPath(originX, originY, destX, destY));
+    }
 
     @Override
     void draw() {
     
-    image(mapImage, x, y, displayWidth, displayHeight);
-
+        image(mapImage, x, y, displayWidth, displayHeight);
+        for (FlightPath path : paths) {
+            line(x+path.originX*displayWidth, y+path.originY*displayHeight, x+path.destX*displayWidth, y+path.destY*displayHeight);
+        }
+      
     }
 
 }
