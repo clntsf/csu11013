@@ -366,11 +366,7 @@ class InteractiveBarPlot extends Container
                 holding = false;
             }
             );
-            // handles[i].addListener((e,widg) -> {
-            //  if (e.getAction() != MouseEvent.PRESS) { return; }
-            //    println("held");
-            //    holding = true;
-            //});
+            
             handles[i].addListener((e, widg) -> {
                 if (e.getAction() != MouseEvent.DRAG) {
                     return;
