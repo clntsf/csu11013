@@ -44,7 +44,7 @@ public String getStateFromAirport(String airport) {
     String query;
     if (airport.equals("ALL")) {
         System.out.println("Cannot attribute ALL to a state");
-        return null;
+        return "NY";
     }
     else {
         query =  "SELECT * FROM flights_full WHERE Origin LIKE '%" + airport + "%' LIMIT 1";
@@ -56,7 +56,7 @@ public String getStateFromAirport(String airport) {
             println("No matching airport found.");
         }  
     }
-    return "Error";
+    return "NY";
 }
 
 

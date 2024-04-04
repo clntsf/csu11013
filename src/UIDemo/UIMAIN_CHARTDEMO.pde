@@ -436,7 +436,7 @@ void resetScreen(Screen s, Widget background)
 }
 
 MapWidget demoMap() {
-    ArrayList<FlightPath> paths = getFlightPaths("flights2k", getAirportCode(), getDates());
+    ArrayList<FlightPath> paths = getFlightPaths("flights10k", getAirportCode(), getDates());
     return new MapWidget(width/2, height/2, (int)(width/1.25), (int)(height/1.25), "map2.jpeg", paths);
 }
 
