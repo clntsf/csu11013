@@ -228,11 +228,9 @@ void Wk2Demo()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        //AtomicReference<HistParams> hP = new AtomicReference<>(null);
         resetScreen(histScr, background);
         new Thread(() -> {
             HistParams hp = populateHistFreqs(-60, 10, 70);
-            //hP.set(populateHistFreqs(-60, 10, 70));//bins, new float[bins.length-1]));
             Histogram h = demoHistogram(hp);
             resetScreen(histScr, background);
             histScr.addWidget(h);

@@ -98,7 +98,7 @@ class PieChart extends Chart
         }
         if (lastAngle == 0)
         {
-            text("No data available within \n these parameters", x, y);
+            text("No data available within \nthese parameters", x, y);
         }
     }
 
