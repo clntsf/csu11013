@@ -24,6 +24,7 @@ abstract class Chart extends Widget
         this.title = title;
         this.valuesY = valuesY;
         setStroke(0);
+        textColor = new ThemedColor(themes, "text");
     }
 
     int[] genColors(int len)
@@ -41,8 +42,8 @@ abstract class Chart extends Widget
         strokeWeight(2);
         super.draw();
         textAlign(CENTER, CENTER);
-        fill(0);
 
+        fill(textColor.getColor());
         textSize(fontSize+2);
         text(title, x, y-h/2-fontSize-labelMargin);
     }
@@ -166,6 +167,7 @@ abstract class Plot extends Chart
     void drawAxisNames()
     {
         textSize(fontSize);
+        fill(textColor.getColor());
         text(axisLabelX, x, y+h/2+labelMargin + fontSize);
         transformToYAxis();
         text(axisLabelY, 0, 0);
@@ -175,6 +177,7 @@ abstract class Plot extends Chart
     void drawAxisTicks(float[] range, String fmtString, int numAxisTicks)
     {
         textSize((int)(0.8*fontSize));
+        fill(textColor.getColor());
         for (int i=0; i<numAxisTicks; i++)
         {
             float proportion = (float)i/(numAxisTicks-1);
@@ -247,7 +250,7 @@ class BarPlot extends Plot
         {
             float yVal = valuesY[i];
             float barHeight = h * (yVal/axisRangeY[1]);
-            fill(0);
+            fill(textColor.getColor());
             text(categories[i], centers[i], y+h/2 + fontSize/2 + labelMargin/3);
 
             strokeWeight(1);

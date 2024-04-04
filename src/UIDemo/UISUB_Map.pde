@@ -3,7 +3,8 @@ class MapWidget extends Widget {
     float originalAspectRatio;
     float displayWidth, displayHeight;
     ArrayList<FlightPath> paths = new ArrayList<FlightPath>();
-    MapWidget(int x, int y, int w, int h, String mapImagePath) {
+    MapWidget(int x, int y, int w, int h, String mapImagePath)
+    {
 
         super(x, y, w, h, new StaticColor(#FAF9F6));
         mapImage = loadImage(mapImagePath);
@@ -12,7 +13,8 @@ class MapWidget extends Widget {
         calculateDisplayDimensions();
     }
     
-    void calculateDisplayDimensions() {
+    void calculateDisplayDimensions()
+    {
         float widgetAspectRatio = (float)w / (float)h;
         
         if (originalAspectRatio > widgetAspectRatio) {
