@@ -363,6 +363,8 @@ void Wk2Demo()
         resetScreen(reliabilityScr, background);
         new Thread(() -> {
             ScatterPlot s1 = demoScatterPlot(populateScatterPlot());
+            String[] carriers = new String[] {"0","1","2","3","4","5","6","7","8","9"};
+            s1.setLabels(carriers);
             flightVolScr.addWidget(s1);
             resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
         }

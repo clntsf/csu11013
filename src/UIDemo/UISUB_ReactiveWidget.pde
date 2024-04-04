@@ -58,7 +58,7 @@ class ReactiveWidget extends Widget
 
     public void onEvent(Event e)
     {
-
+        super.onEvent(e);
         if (!(e instanceof MouseEvent))
         {
             return;
@@ -73,7 +73,6 @@ class ReactiveWidget extends Widget
         {
             listener.performAction(mev, this);
         }
-        super.onEvent(e);
     }
 
     void draw()
@@ -415,41 +414,30 @@ class ScrollTable extends ScrollSelector
         
         for (int i =0; i < dates.length; i++)
         {
-          //order[i] = i;
           TableRow newRow = table.addRow();
           newRow.setString("dates", dates[i]);
           newRow.setString("carriers", carriers[i]);
           newRow.setString("origins", origins[i]);
           newRow.setString("dests", dests[i]);
         }
+        String[] cols = new String[]{"dates", "carriers", "origins", "dests"};
         for (int i = 0; i < sortButtons.length; i++)
         {
-            sortButtons[i] = new ReactiveWidget(110 + (i * (bLength + 10)), 50, bLength, bWidth, new StaticColor(buttonColor), buttonText[i]);
-            int index = i;
-            sortButtons[i].addListener((e, widg) -> {
+            final String COL = cols[i];
+            ReactiveWidget button = new ReactiveWidget(
+                110 + (i * (bLength + 10)), 50, bLength, bWidth,
+                new StaticColor(buttonColor), buttonText[i]
+            );
+            button.addListener((e, widg) -> {
                 if (e.getAction() != MouseEvent.PRESS) { return; }
-                println("first");
-                switch (index){
-                  case 0:
-                    table.sort("dates");
-                    println("hit");
-                    break;
-                  case 1:
-                    table.sort("carriers");
-                    break;
-                  case 2:
-                    table.sort("origins");
-                    break;
-                  case 3:
-                    table.sort("dests");
-                }
-                });
-                
+                table.sort(COL);
+            });
+            children.add(button);
         }
     }
     void buttonsDraw()
     {
-        for (ReactiveWidget b : sortButtons) {
+        for (Widget b : children) {
             b.draw();
         }
     }

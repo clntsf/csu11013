@@ -465,6 +465,7 @@ class ScatterPlot extends Plot
 {
     float[] valuesX;
     float[] axisRangeX;
+    String[] labels;
 
     // config
     String labelFormatStringX;
@@ -493,6 +494,11 @@ class ScatterPlot extends Plot
         translate(x-w/2, y+h/2+labelMargin);    // translate to the bottom-left corner of the chart
         drawAxisTicks(axisRangeX, fmtString, numAxisTicksX);
         popMatrix();
+    }
+
+    void setLabels(String[] labels)
+    {
+        this.labels = labels;
     }
 
     float[] getScreenCoords(float absX, float absY)
@@ -537,6 +543,12 @@ class ScatterPlot extends Plot
             if (markers)
             {
                 circle(screenCoords[0], screenCoords[1], 5);
+            }
+            if (labels != null)
+            {
+                fill(textColor.getColor());
+                textAlign(LEFT,TOP);
+                text(labels[i], sx+2, sy+2);
             }
         }
     }
