@@ -430,16 +430,16 @@ class ScrollTable extends ScrollSelector
                 if (e.getAction() != MouseEvent.PRESS) { return; }
                 switch (index){
                   case 0:
-                    //sortByDate();
+                    table.sort("dates");
                     break;
                   case 1:
-                    //sortByCarrier();
+                    table.sort("carriers");
                     break;
                   case 2:
-                    //sortByOrigin();
+                    table.sort("origins");
                     break;
                   case 3:
-                    //sortByDestination();
+                    table.sort("dests");
                 }
             });
         }
@@ -515,10 +515,10 @@ class ScrollTable extends ScrollSelector
             );
 
             fill(selected == i ? 255 : 0);
-            text(dates[i], BLEFT, yd + 1);
-            text(carriers[i], BLEFT + w/4, yd + 1);
-            text(origins[i], BLEFT + w/3, yd + 1);
-            text(dests[i], BLEFT + 2*w/3, yd + 1);
+            text(table.getString(i, "dates"), BLEFT, yd + 1);
+            text(table.getString(i, "carriers"), BLEFT + w/4, yd + 1);
+            text(table.getString(i, "origins"), BLEFT + w/3, yd + 1);
+            text(table.getString(i, "dests"), BLEFT + 2*w/3, yd + 1);
         }
 
         // hide overlapping text with 'mountains'
