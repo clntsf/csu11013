@@ -290,7 +290,7 @@ CategoricalParams populateBarParamsRefined()
 //WS
 ScrollTableParams populateDataList()
 {
-  String query = "SELECT FlightDate, IATA_Code_Marketing_Airline, OriginCityName, DestCityName FROM flights2k";
+  String query = "SELECT FlightDate, IATA_Code_Marketing_Airline, OriginCityName, DestCityName FROM "+getTable();
   db.query(query);
   String[] dates = new String[0];
   String[] carriers = new String[0];
