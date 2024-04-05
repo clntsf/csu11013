@@ -306,13 +306,15 @@ ScrollTableParams populateDataList()
   return new ScrollTableParams(dates, carriers, origins, dests);
 }
 
-//Kilian 27/03/24 - created function to fill ScatterPlot, 04/04 fixed to use actual data and populate delayed to start of program, also added ability to query data also now has real time labels
+//Kilian 27/03/24 - created function to fill ScatterPlot,
+//       04/04    - fixed to use actual data and populate delayed to start of program,
+//                  also added ability to query data also now has real time labels
 public ScatterPlotData populateScatterPlot()
 {
    
     int carriers;  //<>//
     int numberOfQueries; //<>//
-    String table = "flights10k";
+    String table = getTable();
     String selectedAirport = getAirportCode();
    
     String query = "";
