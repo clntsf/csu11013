@@ -209,7 +209,7 @@ void AppMain()
         }
         resetScreen(mktShareScr, background);
         new Thread(() -> {
-            PieChart p1 = demoPie();
+            PieChart p1 = makePie();
             mktShareScr.addWidget(p1);
         }
         ).start();
@@ -235,7 +235,7 @@ void AppMain()
             if (getTable() == "flights_full")
             {
                 HistParams hp = populateHistFreqs(-60, 10, 70);
-                Histogram h = demoHistogram(hp);
+                Histogram h = makeHistogram(hp);
                 resetScreen(histScr, background);
                 histScr.addWidget(h);
             }
@@ -266,7 +266,7 @@ void AppMain()
         resetScreen(reliabilityScr, background);
         new Thread(() -> {
             BubbleParams bp = makeBubbleParams();
-            BubblePlot bubble = demoBubble(bp);
+            BubblePlot bubble = makeBubble(bp);
             resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
             reliabilityScr.addWidget(bubble);
         }
@@ -290,7 +290,7 @@ void AppMain()
         }
         resetScreen(mapScr, background);
         new Thread(() -> {
-            MapWidget map = demoMap();
+            MapWidget map = makeMap();
             mapScr.addWidget(map);
         }
         ).start();
@@ -336,7 +336,7 @@ void AppMain()
         new Thread(() -> {
             resetScreen(reliabilityScr, background);
             HeatMapParams params = generateFlightVolumeHeatmap();
-            HeatMap hm = demoHeatMap(params);
+            HeatMap hm = makeHeatMap(params);
             heatMapScr.addWidget(hm);
         }
         ).start();
@@ -362,8 +362,8 @@ void AppMain()
 
         resetScreen(flightVolScr, background);
         new Thread(() -> {
-            ScatterPlotData params = populateScatterPlot();
-            ScatterPlot s1 = demoScatterPlot(params);
+            ScatterParams params = populateScatterPlot();
+            ScatterPlot s1 = makeScatterPlot(params);
             resetScreen(flightVolScr, background);    // reset one more time in case the user has spammed the exit button
             flightVolScr.addWidget(s1);
         }
@@ -386,8 +386,7 @@ void AppMain()
         }
         resetScreen(barPlotScr, background);
         new Thread(() -> {
-            //InteractiveBarPlot b1 = demoBarPlot();
-            CategoricalParams params = populateBarParamsRefined();
+            CategoricalParams params = populateBarParams();
             InteractiveBarPlot b1 = barPlotPopulate(params);
             barPlotScr.addWidget(b1);
         }
@@ -411,7 +410,7 @@ void AppMain()
 
         resetScreen(linePlotScr, background);
         new Thread(() -> {
-            ScatterPlot linePlot = demoLinePlot(db);
+            ScatterPlot linePlot = makeLinePlot(db);
             linePlotScr.addWidget(linePlot);
         }
         ).start();
@@ -434,120 +433,6 @@ void resetScreen(Screen s, Widget background)
         s.addWidget(s.getNamedChild("Title Button"));
     }
 }
-
-MapWidget demoMap() {
-    PImage mapImage = loadImage("map2.jpeg");
-    ArrayList<FlightPath> paths = getFlightPaths("flights10k", getAirportCode(), getDates());
-    float mapW = (width/1.25);
-    float mapH = mapW * (float) mapImage.height / (float) mapImage.width;
-    return new MapWidget(width/2, height/2, (int)mapW, (int)mapH, mapImage, paths);
-}
-
-
-ScatterPlot demoLinePlot(SQLite db)
-{  
-    LinePlotParams testParams = getLinePlotData(getTable(), db, getAirportCode(), getDates());
-    ScatterPlot s1 = new ScatterPlot(width / 2, height / 2, 400, 400,
-        "Flights per day of the month",
-        "Day of month", "Count of flights",
-        testParams.valuesX, testParams.valuesY, testParams.axisRangeX, testParams.axisRangeY);
-    s1.fontSize = 12;
-
-    s1.labelFormatStringY = "%,.0f";
-    s1.numAxisTicksY = 10;
-    s1.numAxisTicksX = testParams.valuesX.length;
-    s1.makeLinePlot();
-    return s1;
-}
-
-PieChart demoPie()
-{
-    PieParams test = getPieChartData();
-    return new PieChart(
-        width/2, height/2, width/2, height/2,
-        "Market Share by Airline",
-        test.valuesY, test.categories
-        );
-}
-
-BubblePlot demoBubble(BubbleParams params)
-{
-    // doing some norming for our axes
-    float xMax = max(0.5, round(12*max(params.valuesX)) / 10.0);
-    float yMax = max(0.5, round(12*max(params.valuesY)) / 10.0);
-
-    BubblePlot bubble = new BubblePlot(width/2, height/2, 470, 470,
-        "Airline Reliability vs Market Share", "% Flights Cancelled", "% Flights Diverted",
-        params.valuesX, params.valuesY, params.valuesZ, params.categories, new float[]{0, xMax}, new float[]{0, yMax}
-        );
-    bubble.maxSize = 90;
-    bubble.labelFormatStringY = "%.2f";
-
-    return bubble;
-}
-
-HeatMap demoHeatMap(HeatMapParams params)
-{
-    HeatMap hm = new HeatMap(
-        width/2, height/2, 420, 480,
-        "Flight Volume by Day of Week/Time of Day",
-        params.data, VIRIDIS_CG
-        );
-    return hm;
-}
-
-Histogram demoHistogram(HistParams histParams)
-{
-    Histogram h = new Histogram(width/2, height/2, 480, 480,
-        "Flight Departure Delay (Minutes, negative delays represent early departures)",
-        "Delay", "Frequency",
-        histParams.bins, histParams.freqs, histParams.maxFreq
-        );
-
-    h.fontSize = 12;
-    h.labelFormatStringY = "%,.0f";
-    h.numAxisTicksY = 6;
-    return h;
-}
-
-
-ScatterPlot demoScatterPlot(ScatterPlotData theScatterPlotData)
-{
-
-    float xMax = theScatterPlotData.xMax;
-    float yMax = theScatterPlotData.yMax;
-    ScatterPlot s1 = new ScatterPlot(width/2, height/2, 400, 400,
-        "Total Flight Distance Vs Volume by Carrier", "Total Volume by Carrier", "Total Flight Distance (Miles)",
-        theScatterPlotData.flightVolume, theScatterPlotData.flightDuration, new float[] {0, xMax + 50}, new float[]{0, yMax + 50}
-        );
-    s1.setLabels(theScatterPlotData.carriersName);
-    s1.fontSize = 12;
-    s1.labelFormatStringY = "%.0f";
-    s1.labelFormatStringX = "%.0f";
-    return s1;
-}
-
-
-InteractiveBarPlot barPlotPopulate(CategoricalParams params)
-{
-    InteractiveBarPlot b1 = new InteractiveBarPlot(
-        width/2, height/2, 450, 450,
-        "Volume of Flights by Airports in a State", "Airports", "Number of Flights",
-        params.categories, params.valuesY,
-        int(1.05 * Math.round(max(params.valuesY))),
-        50, height - 40, 30, 30
-        );
-    return b1;
-}
-ScrollTable scrollTablePopulate(ScrollTableParams params)
-{
-    ScrollTable sT1 = new ScrollTable(
-        width/2, height/2, 450, 450, params.dates, params.carriers, params.origins, params.dests, #ef6b6b
-        );
-    return sT1;
-}
-
-  
 
 String[] getDates()
 {

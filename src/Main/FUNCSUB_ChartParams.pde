@@ -49,41 +49,40 @@ class HistParams
 }
 
 // TT - created class to use to return line plot data for a query 26/3/24 9AM
-class LinePlotParams {
-      float[] valuesX;
-      float[] valuesY;
-      float[] axisRangeX;
-      float[] axisRangeY;
+class LinePlotParams extends NumericalParams
+{
+    float[] axisRangeX;
+    float[] axisRangeY;
 
-      public LinePlotParams(float[] valuesX, float[] valuesY, float[] axisRangeX, float[] axisRangeY) {
-          this.valuesX = valuesX;
-          this.valuesY = valuesY;
-          this.axisRangeX = axisRangeX;
-          this.axisRangeY = axisRangeY;
-      }
+    public LinePlotParams(float[] valuesX, float[] valuesY, float[] axisRangeX, float[] axisRangeY)
+    {
+        super(valuesX, valuesY);
+        this.axisRangeX = axisRangeX;
+        this.axisRangeY = axisRangeY;
+    }
 }
  
 // macnalll - added class to return categorical parameters as type float[] instead of int 26/3/24
-class PieParams
+class PieParams extends ChartParams
 {
-    float[] valuesY;
     String[] categories;
     
     PieParams(float[] valuesY, String[] categories)
     {
-        this.valuesY = valuesY;
+        super(valuesY);
         this.categories = categories;
     }
 }
+
 // Kilian - created ScatterPlotData Class - 25/03/24 changed to work with floats 28/03, 04/04 added labels
-class ScatterPlotData
+class ScatterParams
 {
    float[] flightVolume;
    float[] flightDuration;
    int xMax;
    int yMax;
    String[] carriersName;
-   ScatterPlotData(float[] flightVolume, float[] flightDuration, int xMax, int yMax, String[] carriersName)
+   ScatterParams(float[] flightVolume, float[] flightDuration, int xMax, int yMax, String[] carriersName)
    {
      this.flightVolume = flightVolume;
      this.flightDuration = flightDuration;
@@ -93,6 +92,7 @@ class ScatterPlotData
    }
 }
 
+// CSF
 class BubbleParams extends NumericalParams
 {
     float[] valuesZ;
@@ -122,6 +122,8 @@ class ScrollTableParams
   }
   
 }
+
+// CSF
 class HeatMapParams
 {
     float[][] data;

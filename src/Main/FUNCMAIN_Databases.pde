@@ -127,9 +127,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
             "' AND Origin LIKE '%" + airport + "%'";
 
     
-    db.query(query); //<>//
-     //<>//
-    try { //<>//
+    db.query(query);
+
+    try {
         while (db.next()) {
             String flightDate = db.getString("FlightDate");
             int day = Integer.parseInt(flightDate.substring(8, 10));
@@ -155,11 +155,11 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
         if (i > maxFlights) {
             maxFlights = i;
         } 
-    } //<>//
+    }
     float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)}; //<>// //<>//
     return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>// //<>//
-} //<>//
- //<>//
+}
+
 // RSR - created method to populate Histogram with following bins - 19/3/24 8PM
 public HistParams populateHistFreqs(int minBin, int step, int lastBin)
 {
@@ -260,7 +260,7 @@ public BubbleParams makeBubbleParams()
 }
 
 //Will S finds all airports within a select state from the scroll bar 27/3/24
-CategoricalParams populateBarParamsRefined()
+CategoricalParams populateBarParams()
 {
     String query = """SELECT Origin as airport,
     COUNT(Origin) as num_flights
@@ -287,6 +287,7 @@ CategoricalParams populateBarParamsRefined()
     }
     return new CategoricalParams(numFlights, airports);
 }
+
 //WS
 ScrollTableParams populateDataList()
 {
@@ -309,11 +310,11 @@ ScrollTableParams populateDataList()
 //Kilian 27/03/24 - created function to fill ScatterPlot,
 //       04/04    - fixed to use actual data and populate delayed to start of program,
 //                  also added ability to query data also now has real time labels
-public ScatterPlotData populateScatterPlot()
+public ScatterParams populateScatterPlot()
 {
    
-    int carriers;  //<>//
-    int numberOfQueries; //<>//
+    int carriers;
+    int numberOfQueries;
     String table = getTable();
     String selectedAirport = getAirportCode();
    
@@ -327,7 +328,7 @@ public ScatterPlotData populateScatterPlot()
     {
         query += " AND OriginState = '" + getAirportState() + "'";
     }
-     //<>//
+
     float[] flightVolume = new float[0];
     float[] flightDuration = new float[0];
 
@@ -337,7 +338,7 @@ public ScatterPlotData populateScatterPlot()
 
     db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
     int yMax = db.getInt("HighestFlightDuration");
-    print(yMax + " "); //<>//
+    print(yMax + " ");
     
     db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table + query +" GROUP BY IATA_Code_Marketing_Airline");
     while (db.next())
@@ -356,7 +357,7 @@ public ScatterPlotData populateScatterPlot()
     {
       carriersName = append(carriersName, db.getString("airline"));
     }
-    return new ScatterPlotData(flightVolume, flightDuration, xMax, yMax, carriersName);
+    return new ScatterParams(flightVolume, flightDuration, xMax, yMax, carriersName);
 }
 
 public String dateToLocalDate(String stringDate) {

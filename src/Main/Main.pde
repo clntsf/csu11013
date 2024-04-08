@@ -28,6 +28,7 @@ void setup()
         println("Connected to DB!");
     } else println("ERROR connecting to DB!");
     coordTable = loadTable("states.csv", "header");
+
     AppMain();
 }
 
@@ -59,7 +60,6 @@ void mouseWheel(MouseEvent mev)
 {
     screens.getActiveScreen().handleEvent(mev);
 }
-
 
 void keyPressed(KeyEvent kev)
 {
