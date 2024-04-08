@@ -30,6 +30,10 @@ void AppMain()
     }
     );
 
+    Container baseScreen = new Container();
+    baseScreen.addWidget(background);
+    baseScreen.addWidget(titleButton);
+
     final Screen titleScreen = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(titleScreen, "Title Screen");
     titleScreen.addWidget(background);
@@ -185,9 +189,8 @@ void AppMain()
             if (e.getAction() != MouseEvent.PRESS) {
                 return;
             }
-            if (loadScreenWithArgs(NAME)) {
-                surface.setTitle(NAME);
-            }
+            screens.setActiveScreen(NAME);
+            surface.setTitle(NAME);
         }
         );
 
@@ -198,9 +201,8 @@ void AppMain()
 
     Screen mktShareScr = new Screen(SCREEN_COLOR);        // these 5 lines should go more or less unchanged at the beginning of each screen
     screens.addNamedScreen(mktShareScr, "Market Share by Airline");    // except of course change 'mktShareScr' for the name of the screen
-    mktShareScr.addWidget(background);
-    mktShareScr.addWidget(titleButton);
-    mktShareScr.addNamedChild(titleButton, "Title Button");
+    mktShareScr.addWidget(baseScreen);
+    mktShareScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget mktShareButton = (ReactiveWidget) titleScreen.getNamedChild("button: Market Share by Airline");
     mktShareButton.addListener((e, w) -> {
@@ -220,9 +222,8 @@ void AppMain()
 
     Screen histScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(histScr, "Departure Delay Times");
-    histScr.addWidget(background);
-    histScr.addWidget(titleButton);
-    histScr.addNamedChild(titleButton, "Title Button");
+    histScr.addWidget(baseScreen);
+    histScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     // RSR - if button pressed, chart is loaded. - 20/3/24 4PM
     ReactiveWidget histBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Departure Delay Times");
@@ -253,9 +254,8 @@ void AppMain()
 
     Screen reliabilityScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(reliabilityScr, "Reliability vs Market Share");
-    reliabilityScr.addWidget(background);
-    reliabilityScr.addWidget(titleButton);
-    reliabilityScr.addNamedChild(titleButton, "Title Button");
+    reliabilityScr.addWidget(baseScreen);
+    reliabilityScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget bubbleBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Reliability vs Market Share");
     bubbleBtn.addListener((e, w) -> {
@@ -278,9 +278,8 @@ void AppMain()
 
     Screen mapScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(mapScr, "Flight Map");
-    mapScr.addWidget(background);
-    mapScr.addWidget(titleButton);
-    mapScr.addNamedChild(titleButton, "Title Button");
+    mapScr.addWidget(baseScreen);
+    mapScr.addNamedChild(baseScreen, "BASE_SCREEN");
     
     
     ReactiveWidget mapBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Map");
@@ -301,9 +300,8 @@ void AppMain()
 
     Screen dataScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(dataScr, "Data Display");
-    dataScr.addWidget(background);
-    dataScr.addWidget(titleButton);
-    dataScr.addNamedChild(titleButton, "Title Button");
+    dataScr.addWidget(baseScreen);
+    dataScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget displayBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Data Display");
     displayBtn.addListener((e, w) -> {
@@ -324,9 +322,8 @@ void AppMain()
 
     Screen heatMapScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(heatMapScr, "Flight Volume Heatmap");
-    heatMapScr.addWidget(background);
-    heatMapScr.addWidget(titleButton);
-    heatMapScr.addNamedChild(titleButton, "Title Button");
+    heatMapScr.addWidget(baseScreen);
+    heatMapScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget heatmapButton = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Volume Heatmap");
     heatmapButton.addListener((e, w) -> {
@@ -348,9 +345,8 @@ void AppMain()
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(flightVolScr, "Flight Distance vs Volume");
-    flightVolScr.addWidget(background);
-    flightVolScr.addWidget(titleButton);
-    flightVolScr.addNamedChild(titleButton, "Title Button");
+    flightVolScr.addWidget(baseScreen);
+    flightVolScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
 
     //  Kilian implemented listeners in main ui screen to load data once button for this graph is pressed 02/04
@@ -375,9 +371,8 @@ void AppMain()
 
     Screen barPlotScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(barPlotScr, "Volume of State Flights");
-    barPlotScr.addWidget(background);
-    barPlotScr.addWidget(titleButton);
-    barPlotScr.addNamedChild(titleButton, "Title Button");
+    barPlotScr.addWidget(baseScreen);
+    barPlotScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget barPlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Volume of State Flights");
     barPlotBtn.addListener((e, w) -> {
@@ -398,9 +393,8 @@ void AppMain()
 
     Screen linePlotScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(linePlotScr, "Flights per Day");
-    linePlotScr.addWidget(background);
-    linePlotScr.addWidget(titleButton);
-    linePlotScr.addNamedChild(titleButton, "Title Button");
+    linePlotScr.addWidget(baseScreen)
+    linePlotScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flights per Day");
     linePlotBtn.addListener((e, w) -> {
@@ -418,19 +412,13 @@ void AppMain()
     );
 }
 
-boolean loadScreenWithArgs(String screenName)
-{
-    boolean success = screens.setActiveScreen(screenName);
-    return success;
-}
-
 // RSR - resets screen - 26/3/24 2PM
 void resetScreen(Screen s, Widget background)
 {
     if (!s.widgets.isEmpty()) {
-        s.widgets = new ArrayList<>();
-        s.addWidget(background);
-        s.addWidget(s.getNamedChild("Title Button"));
+        ArrayList<Widget> newWidgets = new ArrayList<>();
+        newWidgets.add(s.getNamedChild("BASE_SCREEN"));
+        s.widgets = newWidgets;
     }
 }
 
