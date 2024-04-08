@@ -74,7 +74,10 @@ class PieParams extends ChartParams
     }
 }
 
-// Kilian - created ScatterPlotData Class - 25/03/24 changed to work with floats 28/03, 04/04 added labels
+// Kilian 
+// 25/03  - created ScatterPlotData Class 
+// 28/03  - changed to work with floats  
+// 04/04  - added carrier labels 
 class ScatterParams
 {
    float[] flightVolume;

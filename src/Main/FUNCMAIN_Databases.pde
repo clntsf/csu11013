@@ -306,9 +306,10 @@ ScrollTableParams populateDataList()
   return new ScrollTableParams(dates, carriers, origins, dests);
 }
 
-//Kilian 27/03/24 - created function to fill ScatterPlot,
+//Kilian 27/03/24 - created function to retrieve data from database to populate the graph
 //       04/04    - fixed to use actual data and populate delayed to start of program,
 //                  also added ability to query data also now has real time labels
+//       08/04    - fixed issue with x and y scale when restricting data
 public ScatterParams populateScatterPlot()
 {
    
@@ -331,11 +332,11 @@ public ScatterParams populateScatterPlot()
     float[] flightVolume = new float[0];
     float[] flightDuration = new float[0];
 
-    db.query("SELECT MAX(flight_volume) AS HighestFlightVolume FROM(SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM "+ table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
+    db.query("SELECT MAX(flight_volume) AS HighestFlightVolume FROM(SELECT IATA_Code_Marketing_Airline, COUNT(*) AS flight_volume FROM "+ table + query +" GROUP BY IATA_Code_Marketing_Airline) AS subquery");
     int xMax = db.getInt("HighestFlightVolume");
     print(xMax + " ");
 
-    db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
+    db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + query +" GROUP BY IATA_Code_Marketing_Airline) AS subquery");
     int yMax = db.getInt("HighestFlightDuration");
     print(yMax + " "); //<>//
     

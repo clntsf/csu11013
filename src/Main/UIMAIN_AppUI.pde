@@ -341,7 +341,7 @@ void AppMain()
     );
 
 
-    // --- Screen 7 - Kilian's Scatter Plot Screen  --- //
+    // --- Screen 7 - Kilian's Scatter Plot Screen  23/03 --- //
 
     Screen flightVolScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(flightVolScr, "Flight Distance vs Volume");
@@ -349,7 +349,8 @@ void AppMain()
     flightVolScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
 
-    //  Kilian implemented listeners in main ui screen to load data once button for this graph is pressed 02/04
+    //  Kilian 
+    //  02/04  - implemented listeners in main ui screen to load data once button for this graph is pressed 
     ReactiveWidget scatterBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flight Distance vs Volume");
     scatterBtn.addListener((e, w) -> {
         if (e.getAction() != MouseEvent.PRESS) {

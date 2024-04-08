@@ -19,7 +19,7 @@ ScatterPlot makeLinePlot(SQLite db)
 
     s1.labelFormatStringY = "%,.0f";
     s1.numAxisTicksY = 10;
-    s1.numAxisTicksX = testParams.valuesX.length;
+    s1.numAxisTicksX =  testParams.valuesX.length;
     s1.makeLinePlot();
     return s1;
 }
@@ -88,7 +88,7 @@ ScatterPlot makeScatterPlot(ScatterParams params)
         );
 
     s1.setLabels(params.carriersName);
-    s1.fontSize = 12;
+    s1.fontSize = 8;
     s1.labelFormatStringY = "%.0f";
     s1.labelFormatStringX = "%.0f";
     return s1;
