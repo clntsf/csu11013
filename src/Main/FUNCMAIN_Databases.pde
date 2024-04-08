@@ -44,7 +44,7 @@ public String getStateFromAirport(String airport)
 {
     String query;
     if (airport.equals("ALL")) {
-        System.out.println("Cannot attribute ALL to a state");
+        println("Cannot attribute ALL to a state");
         return "NY";
     }
     else {
@@ -63,10 +63,6 @@ public String getStateFromAirport(String airport)
 
 float[] getCoordinates(String state)
 {
-    for (String columnName : coordTable.getColumnTitles())
-    {
-        println(columnName);
-    }
     TableRow row = coordTable.findRow(state, "state");
     float x = row.getFloat(" x");
     float y = row.getFloat(" y");
@@ -109,10 +105,12 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     int minDate = Integer.valueOf(dates[0].substring(8, 10));
     int maxDate = Integer.valueOf(dates[1].substring(8, 10));
     if (table == "flights10k" && maxDate >= 07) maxDate = 6;
-    if (table == "flights2k" && maxDate >= 01) maxDate = 1;
-    System.out.println("" + minDate + " to " + maxDate);
+    else if (table == "flights2k" && maxDate >= 01) maxDate = 1;
+
+    // println("" + minDate + " to " + maxDate);
     float[] datesXAxis = new float[maxDate-minDate+1];
     float[] numFlightsYAxis = new float[maxDate-minDate+1];
+
     for (int i = minDate; i <= maxDate; i++) {
         datesXAxis[i-minDate] = i;
         numFlightsYAxis[i-minDate] = 0;
@@ -181,7 +179,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
             ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
         //println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
-        println(freqs[i]);
+        // println(freqs[i]);
     }
     
     int max = 0;

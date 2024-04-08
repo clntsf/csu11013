@@ -31,8 +31,8 @@ void AppMain()
     );
 
     Container baseScreen = new Container();
-    baseScreen.addWidget(background);
-    baseScreen.addWidget(titleButton);
+    baseScreen.addChild(background);
+    baseScreen.addChild(titleButton);
 
     final Screen titleScreen = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(titleScreen, "Title Screen");
@@ -209,7 +209,7 @@ void AppMain()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        resetScreen(mktShareScr, background);
+        resetScreen(mktShareScr);
         new Thread(() -> {
             PieChart p1 = makePie();
             mktShareScr.addWidget(p1);
@@ -231,18 +231,18 @@ void AppMain()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        resetScreen(histScr, background);
+        resetScreen(histScr);
         new Thread(() -> {
             if (getTable() == "flights_full")
             {
                 HistParams hp = populateHistFreqs(-60, 10, 70);
                 Histogram h = makeHistogram(hp);
-                resetScreen(histScr, background);
+                resetScreen(histScr);
                 histScr.addWidget(h);
             }
             else
             {
-                resetScreen(histScr, background);
+                resetScreen(histScr);
                 histScr.addWidget(new Label(220, 320, "No data available for this table.", new ThemedColor(themes, "text")));
             }
         }
@@ -263,11 +263,11 @@ void AppMain()
             return;
         }
 
-        resetScreen(reliabilityScr, background);
+        resetScreen(reliabilityScr);
         new Thread(() -> {
             BubbleParams bp = makeBubbleParams();
             BubblePlot bubble = makeBubble(bp);
-            resetScreen(reliabilityScr, background);    // reset one more time in case the user has spammed the exit button
+            resetScreen(reliabilityScr);    // reset one more time in case the user has spammed the exit button
             reliabilityScr.addWidget(bubble);
         }
         ).start();
@@ -287,7 +287,7 @@ void AppMain()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        resetScreen(mapScr, background);
+        resetScreen(mapScr);
         new Thread(() -> {
             MapWidget map = makeMap();
             mapScr.addWidget(map);
@@ -308,7 +308,7 @@ void AppMain()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        resetScreen(dataScr, background);
+        resetScreen(dataScr);
         new Thread(() -> {
             ScrollTableParams params = populateDataList();
             ScrollTable sT1 = scrollTablePopulate(params);
@@ -331,7 +331,7 @@ void AppMain()
             return;
         }
         new Thread(() -> {
-            resetScreen(reliabilityScr, background);
+            resetScreen(reliabilityScr);
             HeatMapParams params = generateFlightVolumeHeatmap();
             HeatMap hm = makeHeatMap(params);
             heatMapScr.addWidget(hm);
@@ -356,11 +356,11 @@ void AppMain()
             return;
         }
 
-        resetScreen(flightVolScr, background);
+        resetScreen(flightVolScr);
         new Thread(() -> {
             ScatterParams params = populateScatterPlot();
             ScatterPlot s1 = makeScatterPlot(params);
-            resetScreen(flightVolScr, background);    // reset one more time in case the user has spammed the exit button
+            resetScreen(flightVolScr);    // reset one more time in case the user has spammed the exit button
             flightVolScr.addWidget(s1);
         }
         ).start();
@@ -379,7 +379,7 @@ void AppMain()
         if (e.getAction() != MouseEvent.PRESS) {
             return;
         }
-        resetScreen(barPlotScr, background);
+        resetScreen(barPlotScr);
         new Thread(() -> {
             CategoricalParams params = populateBarParams();
             InteractiveBarPlot b1 = barPlotPopulate(params);
@@ -393,7 +393,7 @@ void AppMain()
 
     Screen linePlotScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(linePlotScr, "Flights per Day");
-    linePlotScr.addWidget(baseScreen)
+    linePlotScr.addWidget(baseScreen);
     linePlotScr.addNamedChild(baseScreen, "BASE_SCREEN");
 
     ReactiveWidget linePlotBtn = (ReactiveWidget) titleScreen.getNamedChild("button: Flights per Day");
@@ -402,7 +402,7 @@ void AppMain()
             return;
         }
 
-        resetScreen(linePlotScr, background);
+        resetScreen(linePlotScr);
         new Thread(() -> {
             ScatterPlot linePlot = makeLinePlot(db);
             linePlotScr.addWidget(linePlot);
@@ -413,13 +413,12 @@ void AppMain()
 }
 
 // RSR - resets screen - 26/3/24 2PM
-void resetScreen(Screen s, Widget background)
+// CSF - reworked this func so it's less of a blunt implement (see above Container baseScreen)
+void resetScreen(Screen s)
 {
-    if (!s.widgets.isEmpty()) {
-        ArrayList<Widget> newWidgets = new ArrayList<>();
-        newWidgets.add(s.getNamedChild("BASE_SCREEN"));
-        s.widgets = newWidgets;
-    }
+    ArrayList<Widget> newWidgets = new ArrayList<>();
+    newWidgets.add(s.getNamedChild("BASE_SCREEN"));
+    s.widgets = newWidgets;
 }
 
 String[] getDates()
