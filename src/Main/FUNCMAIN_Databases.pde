@@ -14,7 +14,7 @@ public PieParams getPieChartData()
     if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+
         " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " +column);
     else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate +  
-        "' AND '" + endDate + "' AND Origin = '" +selectedAirport+ "' GROUP BY " +column); //<>// //<>// //<>//
+        "' AND '" + endDate + "' AND Origin = '" +selectedAirport+ "' GROUP BY " +column); //<>//
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
     {
@@ -127,9 +127,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     
     db.query(query);
 
-    try {
-        while (db.next()) {
-            String flightDate = db.getString("FlightDate");
+    try { //<>//
+        while (db.next()) { //<>//
+            String flightDate = db.getString("FlightDate"); //<>//
             int day = Integer.parseInt(flightDate.substring(8, 10));
             int cancelled = db.getInt("Cancelled");
             if (day >= minDate && day <= maxDate && cancelled == 0) {
@@ -154,12 +154,12 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
             maxFlights = i;
         } 
     }
-    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)}; //<>// //<>//
-    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>// //<>//
-}
-
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM
-public HistParams populateHistFreqs(int minBin, int step, int lastBin)
+    float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)};
+    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>//
+} //<>//
+ //<>//
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
 {
     String[] dateRange = getDates();
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
@@ -177,11 +177,12 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin)
             ( (i == freqs.length-1)? "" : " AND Delay < "+(minBin+step+step*i) )+
             " AND \"Date\" BETWEEN \""+dateRange[0]+"\" AND \""+dateRange[1]+"\""+
             ( (getAirportCode().equals("ALL")) ? "" : " AND Origin = \""+getAirportCode()+"\"" )+";");
-        //println((minBin+step*i)+" --- "+(i==lastBin));
+        // println((minBin+step*i)+" --- "+(i==lastBin));
         freqs[i] = db.getInt("freq");
         // println(freqs[i]);
     }
     
+    // Resizes y-axis accordingly
     int max = 0;
     for (int i = 0; i < freqs.length; i++) {
         if (freqs[i] > max) {
@@ -311,8 +312,8 @@ ScrollTableParams populateDataList()
 public ScatterParams populateScatterPlot()
 {
    
-    int carriers;
-    int numberOfQueries;
+    int carriers; //<>//
+    int numberOfQueries; //<>//
     String table = getTable();
     String selectedAirport = getAirportCode();
    
@@ -326,7 +327,7 @@ public ScatterParams populateScatterPlot()
     {
         query += " AND OriginState = '" + getAirportState() + "'";
     }
-
+ //<>//
     float[] flightVolume = new float[0];
     float[] flightDuration = new float[0];
 
@@ -336,7 +337,7 @@ public ScatterParams populateScatterPlot()
 
     db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + " GROUP BY IATA_Code_Marketing_Airline) AS subquery");
     int yMax = db.getInt("HighestFlightDuration");
-    print(yMax + " ");
+    print(yMax + " "); //<>//
     
     db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table + query +" GROUP BY IATA_Code_Marketing_Airline");
     while (db.next())
@@ -366,18 +367,21 @@ public String dateToLocalDate(String stringDate) {
 }
 
 public LocalTime timeToLocalTime(String stringTime) {
+    // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
     try
     {
         String paddedTime = String.format("%04d", Integer.parseInt(stringTime));
         String formattedTime = paddedTime.substring(0, 2) + ":" + paddedTime.substring(2, 4);
         return LocalTime.parse(formattedTime, DateTimeFormatter.ofPattern("HH:mm"));
     }
-    catch( NumberFormatException e ) {
+    catch (NumberFormatException e)
+    {
         return null;
     }
-    // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
 }
 
-/* RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
- and to populate the database with that ArrayList. (Since removed because DataPoint was scrapped)
- */
+/*
+ RSR - methods to create an ArrayList of DataPoints from the loaded table  - 12/3/24 9PM
+ and to populate the database with that ArrayList.
+   (Since removed because DataPoint, which was made by Tim, was scrapped)
+*/
