@@ -11,10 +11,16 @@ public PieParams getPieChartData()
     String startDate = date[0];
     String endDate = date[1];
     String column = "IATA_Code_Marketing_Airline";
-    if (selectedAirport.equals("ALL")) db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+
-        " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " +column);
-    else db.query("SELECT " +column+ ", COUNT(*) AS frequency FROM " +table+ " WHERE FlightDate BETWEEN '" + startDate +  
-        "' AND '" + endDate + "' AND Origin = '" +selectedAirport+ "' GROUP BY " +column); //<>//
+    if (selectedAirport.equals("ALL")) 
+    {
+        db.query("SELECT " + column + ", COUNT(*) AS frequency FROM " + table +
+            " WHERE FlightDate BETWEEN '" + startDate + "' AND '" + endDate + "' GROUP BY " + column);
+    }
+    else 
+    {
+        db.query("SELECT " + column + ", COUNT(*) AS frequency FROM " + table + " WHERE FlightDate BETWEEN '" + startDate +  
+            "' AND '" + endDate + "' AND Origin = '" + selectedAirport + "' GROUP BY " + column); //<>//
+    }
     Map<String, Integer> frequencyMap = new HashMap<>();
     while (db.next())
     {
