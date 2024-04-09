@@ -11,7 +11,7 @@ abstract class ChartParams
     }
 }
 
-class CategoricalParams extends ChartParams // bar charts and pie charts
+class CategoricalParams extends ChartParams // parameters for bar charts and pie charts
 {
     String[] categories;
 
@@ -22,7 +22,7 @@ class CategoricalParams extends ChartParams // bar charts and pie charts
     }
 }
 
-class NumericalParams extends ChartParams   // scatter plots and histograms
+class NumericalParams extends ChartParams   // parameters for scatter plots and histograms
 {
     float[] valuesX;
     
@@ -85,6 +85,7 @@ class ScatterParams
    int xMax;
    int yMax;
    String[] carriersName;
+   
    ScatterParams(float[] flightVolume, float[] flightDuration, int xMax, int yMax, String[] carriersName)
    {
      this.flightVolume = flightVolume;

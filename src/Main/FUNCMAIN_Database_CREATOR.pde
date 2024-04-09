@@ -1,5 +1,4 @@
 // RSR - If .db does not exist in data folder, it will be created and filled. - 21/3/24 10PM
-
 public void initDB()
 {
     String[] flightTableNames = {"flights2k", "flights10k", "flights_full"};
@@ -7,7 +6,9 @@ public void initDB()
     if (db.connect())
     {
         initSchema(flightTableNames);
-        populateWacDB(); // must populate this before flights!!!
+        populateWacDB();
+        // must populate wac_codes table before flights tables!!!
+        // Else foreign key check will fail for flight tables.
         populateFlightDBs(flightTableNames);
         populateDelays();
     }
@@ -20,12 +21,21 @@ public boolean createDBFile()
     try
     {
         return dbFile.createNewFile();
-    } catch (IOException e) {e.printStackTrace(); return false;}
+    }
+    catch (IOException e)
+    {
+        e.printStackTrace();
+        return false;
+    }
 }
 
+// Create all tables with following schemas
 public void initSchema(String[] flightTableNames)
 {
+    // delays table schema
     db.query("CREATE TABLE \"delays\" (\"Date\" TEXT NOT NULL, \"Origin\" TEXT NOT NULL, \"Delay\"  INTEGER)");
+    
+    // wac_codes table schema
     db.query("""CREATE TABLE "wac_codes" (
                   "WAC"  INTEGER NOT NULL,
                   "WAC_Name"  TEXT NOT NULL,
@@ -34,6 +44,8 @@ public void initSchema(String[] flightTableNames)
                   "State_Code"  TEXT,
                   PRIMARY KEY("WAC")
     )""");
+    
+    // flight2k, flight10k, flights_full schema
     String flightSchema = """(
             "FlightDate"  TEXT NOT NULL,
             "IATA_Code_Marketing_Airline"  TEXT NOT NULL,
@@ -63,7 +75,7 @@ public void initSchema(String[] flightTableNames)
 }
 
 
-
+// populate wac_codes table
 public void populateWacDB()
 {
     Table table = loadTable("wac_codes.csv", "header");
@@ -81,6 +93,8 @@ public void populateWacDB()
 
 // RSR - created method to populate the SQLite database I made. See commented   - 12/3/24 10PM
 //       below the old methods that used an ArrayList of DataPoints.
+
+// populate flight2k, flight10k, flights_full table
 public void populateFlightDBs(String[] flightTableNames)
 {
     for (int i = 0; i < flightTableNames.length; i++)
@@ -89,7 +103,7 @@ public void populateFlightDBs(String[] flightTableNames)
         println("Started to populate database "+flightTableNames[i]);
         String columns = "FlightDate, IATA_Code_Marketing_Airline, Flight_Number_Marketing_Airline, Origin, OriginCityName, "+
                          "OriginState, OriginWac, Dest, DestCityName, DestState, DestWac, CRSDepTime, DepTime, CRSArrTime, ArrTime, Cancelled, Diverted, Distance";
-        // RSR - updated method to be a lot more efficient - 20/3/24 2PM
+        // RSR - updated method to be a lot more efficient by using BEGIN TRANSACTION and COMMIT - 20/3/24 2PM
         db.query("BEGIN TRANSACTION;");
         for (int j = 0; j < table.getRowCount(); j++)
         {
@@ -110,6 +124,8 @@ public void populateFlightDBs(String[] flightTableNames)
 }
 
 // RSR - demo function to populate a delay table in the database - 19/3/24 7PM
+
+// populate delays table
 public void populateDelays()
 {
     Table table = loadTable("delaysdemo.csv", "header");
@@ -118,7 +134,9 @@ public void populateDelays()
     {
         if (i%1000 == 0) { println("delays, row: "+i); }
         TableRow currentRow = table.getRow(i);
-        db.query("INSERT INTO delays (\"Date\",\"Origin\", \"Delay\") VALUES(\"%s\", \"%s\", %d);", dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("ORIGIN"), currentRow.getInt("DEP_DELAY"));
+        db.query("INSERT INTO delays (\"Date\",\"Origin\", \"Delay\") VALUES(\"%s\", \"%s\", %d);",
+                  dateToLocalDate(currentRow.getString("FL_DATE")), currentRow.getString("ORIGIN"), currentRow.getInt("DEP_DELAY")
+        );
     }
     db.query("COMMIT;");
     print("delays successfully populated!");

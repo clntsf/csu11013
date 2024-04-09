@@ -45,12 +45,14 @@ class Widget
         this.textColor = textColor;
     }
     
+    // set the stroke of the widget to the color provided (see ColorUtil.pde for Color subclasses)
     void setStroke(Color strokeColor)
     {
         this.strokeColor = strokeColor;
         this.hasStroke = true;
     }
     
+    // deals with widget stroke during .draw()
     void applyStroke()
     {
         if (!hasStroke) { noStroke(); }
@@ -60,16 +62,20 @@ class Widget
         }
     }
     
+    // deals with widget fill during .draw(), done this way to allow subclasses to change this behavior
     void applyFill()
     {
         fill(backgroundColor.getColor());
     }
     
+    // add a child widget to this widget
     void addChild(Widget child)
     {
         children.add(child);
     }
     
+    // check if the widget or its children are hovered recursively
+    // (mainly used by ReactiveWidgets, but done here so the recursion can traverse the whole tree)
     void updateHover()
     {
         for (Widget child : children)
@@ -78,6 +84,8 @@ class Widget
         }
     }
     
+    // respond to an event of type Processing.Event (MouseEvent, KeyEvent are the principal ones)
+    // again, done here so the recursion can traverse the whole tree of widgets
     void onEvent(Event e)
     {
         for (Widget child : children)
@@ -86,6 +94,7 @@ class Widget
         }
     }
     
+    // draw each child of this widget (this function will be called in the child widgets as well)
     void drawChildren()
     {
         for (Widget w : children)
@@ -94,6 +103,7 @@ class Widget
         }
     }
     
+    // draw this widget to the screen.
     void draw()
     {
         textFont(font);

@@ -427,6 +427,7 @@ void resetScreen(Screen s)
     s.widgets = newWidgets;
 }
 
+// returns dates inputted by user
 String[] getDates()
 {
     Screen title = screens.getNamedScreen("Title Screen");
@@ -442,6 +443,7 @@ String[] getDates()
     return new String[] {start, end};
 }
 
+// returns airport code selected by user in ScrollSelector
 String getAirportCode()
 {
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
@@ -449,12 +451,14 @@ String getAirportCode()
     return selectedEntry.substring(0, 3);
 }
 
+// returns table selected by user to use
 String getTable()
 {
     RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
     return tbl.boxes.get(tbl.selected).text;
 }
 
+// returns state that the airport selected by the user is in
 String getAirportState()
 {
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
