@@ -544,7 +544,7 @@ class ScatterPlot extends Plot
                 text(labels[i], sx+2, sy+2);
             }
         }
-        if ((axisRangeX[1] - axisRangeX[0] == 0) && connect == true) 
+        if ((axisRangeX[1] - axisRangeX[0] == 0)) 
         {
             fill(textColor.getColor());
             textSize(fontSize+2);
