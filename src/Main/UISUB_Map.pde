@@ -1,3 +1,5 @@
+//TT - class to display flights on a map from a certain origin state to all destination states as lines representing paths
+
 class MapWidget extends Image
 {
     float originalAspectRatio;
@@ -37,7 +39,7 @@ class MapWidget extends Image
     }
 }
 
-
+//TT - class to represent flight paths as coordinates for plotting
 class FlightPath
 {
     float originX, originY, destX, destY;

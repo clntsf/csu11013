@@ -68,7 +68,7 @@ float[] getCoordinates(String state)
     float y = row.getFloat(" y");
     return new float[]{x, y};
 }
-
+// TT - query function for MapWidget which takes in an ArrayList of FlightPath objects 
 public ArrayList<FlightPath> getFlightPaths(String table, String airport, String[] dates)
 {
     String query; String destState; float[] destCoords;
@@ -98,7 +98,7 @@ public ArrayList<FlightPath> getFlightPaths(String table, String airport, String
     return paths;
 }
 
-// TT - created basic lineplot query function for flights per day of month 26/3/24 10AM
+// TT - created lineplot query function for flights per day of month 26/3/24 10AM
 public LinePlotParams getLinePlotData(String table, SQLite db, String airport, String[] dates)
 {
 
@@ -359,14 +359,14 @@ public ScatterParams populateScatterPlot()
     }
     return new ScatterParams(flightVolume, flightDuration, xMax, yMax, carriersName);
 }
-
+// TT - wrote initial version within DataPoint class which was then updated by RSR as seen below
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
     String[] split = stringDate.split("\\s+", 2);
     LocalDate date = LocalDate.parse(split[0], DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy]"));
     return date.toString();
 }
-
+// TT - wrote initial version within DataPoint class which was then updated by RSR as seen below
 public LocalTime timeToLocalTime(String stringTime) {
     // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
     try

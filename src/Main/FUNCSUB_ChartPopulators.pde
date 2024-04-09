@@ -7,7 +7,7 @@ MapWidget makeMap()
     return new MapWidget(width/2, height/2, (int)mapW, (int)mapH, mapImage, paths);
 }
 
-
+//TT - wrote function to instantiate a ScatterPlot as a line plot with appropriate user restrictred data by calling the getLinePlotData() function within
 ScatterPlot makeLinePlot(SQLite db)
 {  
     LinePlotParams testParams = getLinePlotData(getTable(), db, getAirportCode(), getDates());
