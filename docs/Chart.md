@@ -8,8 +8,9 @@ C. Simon-Fellowes, L. MacNally, R. Riggi
 4. [`BarPlot`](#4-barplot)
 5. [`Histogram`](#5-histogram)
 6. [`ScatterPlot`](#6-scatterplot)
-7. [`MapWidget`](#7-mapwidget)
-8. [`HeatMap`](#8-heatmap)
+7. [`BubblePlot`](#7-bubbleplot)
+8. [`MapWidget`](#7-mapwidget)
+9. [`HeatMap`](#8-heatmap)
 
 ---
 
@@ -274,7 +275,51 @@ ScatterPlot(int x,
 |markers|`boolean`|whether to draw markers at each<br>point|true|
 |numAxisTicksX|`int`|see y-axis [counterpart](#plot-nCons) in `Plot`|5|
 
-## 7. `MapWidget`
+## 7. `BubblePlot`
+
+```java
+class BubblePlot
+extends ScatterPlot
+implements None
+```
+
+> A standard bubble plot with three numerical dimensions.
+
+A derived form of a scatter-plot which allows for a third data dimension, represented graphically through the sizes of the points displayed.
+
+### Constructor Summary:
+```java
+BubblePlot(int x,
+    int y,
+    int w,
+    int h,
+    String title,
+    String axisLabelX,
+    String axisLabelY,
+    float[] valuesX,
+    float[] valuesY,
+    float[] valuesZ,
+    String[] labels,
+    float[] axisRangeX,
+    float[] axisRangeY
+)
+```
+
+### Constructor Parameters not inherited from parent (`Plot`) constructor(s):
+
+|Name|Type|Description|
+|----|----|-----------|
+|valuesZ|`double[]`|A list of z-values (sizes) for the plot|
+|labels|`String[]`|a list of labels for the bubbles|
+
+### Non-Constructor fields:
+
+|Name|Type|Description|Default|
+|----|----|-----------|-------|
+|maxSize|`int`|the radius of the largest bubble, relative to which all others are scaled|60px|
+
+
+## 8. `MapWidget`
 
 ```java
 class MapWidget
@@ -292,7 +337,7 @@ MapWidget(int x,
 )
 ```
 
-### Constructor Parameters not inherited from parent (`Widget`) constructor(s):
+### Constructor Parameters not inherited from parent (`Image`) constructor(s):
 
 |Name|Type|Description|
 |----|----|-----------|
@@ -307,7 +352,7 @@ MapWidget(int x,
 |displayWidth|`float`|Display width|If `originalAspectRatio > w/h`: equal to `w`. Else: equal to `h * originalAspectRatio`|
 |displayHeight|`float`|Display height|If `originalAspectRatio > w/h`: equal to `w / originalAspectRatio`. Else: equal to `h`|
 
-## 8. `HeatMap`
+## 9. `HeatMap`
 
 ```java
 class HeatMap

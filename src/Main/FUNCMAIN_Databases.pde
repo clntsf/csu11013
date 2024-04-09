@@ -169,6 +169,8 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
 {
     String[] dateRange = getDates();
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
+    
+    // Generates bins to display using minBin, lastBin, and step
     for (int i = 0; i < bins.length; i++)
     {
         if (i == bins.length-1) bins[i] = null;
@@ -176,6 +178,7 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
     }
     
     // RSR - improved method with extra parameters and loop - 20/3/24 5PM
+    // Gets frequencies for each bin from db and stores them in float[] freqs
     float[] freqs = new float[bins.length-1];
     for (int i = 0; i < freqs.length; i++)
     {
@@ -188,14 +191,13 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
         // println(freqs[i]);
     }
     
-    // Resizes y-axis accordingly
+    // Resizes y-axis depending on frequency range
     int max = 0;
     for (int i = 0; i < freqs.length; i++) {
         if (freqs[i] > max) {
             max = (int) freqs[i];
         }
     }
-    
     int mag = 1;
     while (max > mag*10)
     {
@@ -265,6 +267,7 @@ public BubbleParams makeBubbleParams()
 }
 
 //Will S finds all airports within a select state from the scroll bar 27/3/24
+//Queries database to find number of flights in a state from a database and returns it in a parameter class
 CategoricalParams populateBarParams()
 {
     String query = """SELECT Origin as airport,
@@ -293,7 +296,8 @@ CategoricalParams populateBarParams()
     return new CategoricalParams(numFlights, airports);
 }
 
-//WS
+//Will S
+//Queries database for 4 columns for a scrollTable and returns them in the appropriate parameter class
 ScrollTableParams populateDataList()
 {
   String query = "SELECT FlightDate, IATA_Code_Marketing_Airline, OriginCityName, DestCityName FROM "+getTable();
@@ -366,6 +370,8 @@ public ScatterParams populateScatterPlot()
     return new ScatterParams(flightVolume, flightDuration, xMax, yMax, carriersName);
 }
 
+// Receives a date from downloaded csv with format: MM/dd/yyyy OR M/d/yyyy
+// and converts it to default format: dd-MM-yyyy
 public String dateToLocalDate(String stringDate) {
     // RSR - updated method to handle different date formats that are found in e.g. flights_full.csv - 13/3/24
     String[] split = stringDate.split("\\s+", 2);
@@ -373,6 +379,8 @@ public String dateToLocalDate(String stringDate) {
     return date.toString();
 }
 
+// Receives a time from downloaded csv with format: HHmm
+// and converts it to HH:mm
 public LocalTime timeToLocalTime(String stringTime) {
     // RSR - updated method to handle empty time values (if flight was e.g. cancelled) - 12/3/24
     try

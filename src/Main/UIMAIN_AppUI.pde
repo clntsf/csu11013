@@ -297,7 +297,10 @@ void AppMain()
     );
 
     // --- Screen 5 - Data Display --- //
-
+    // Will S
+    // Initialises the data display
+    // Adds mouse listeners so the button will display the screen when pressed
+    // creates it within a thread to minimise inital load times and to allow concurrent loading
     Screen dataScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(dataScr, "Data Display");
     dataScr.addWidget(baseScreen);
@@ -369,7 +372,9 @@ void AppMain()
     );
 
     // --- Screen 8 - Will's BarChart --- // Added by Will Sunderland 19/3/24 - updated 20/3/24
-
+    // - initialises a barplot as a screen
+    // - adds the mouse listeners so the button will load the screen
+    // - loads the screen within a thread to minimise load time at the start and allow concurrency
     Screen barPlotScr = new Screen(SCREEN_COLOR);
     screens.addNamedScreen(barPlotScr, "Volume of State Flights");
     barPlotScr.addWidget(baseScreen);
@@ -422,6 +427,7 @@ void resetScreen(Screen s)
     s.widgets = newWidgets;
 }
 
+// returns dates inputted by user
 String[] getDates()
 {
     Screen title = screens.getNamedScreen("Title Screen");
@@ -437,6 +443,7 @@ String[] getDates()
     return new String[] {start, end};
 }
 
+// returns airport code selected by user in ScrollSelector
 String getAirportCode()
 {
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
@@ -444,12 +451,14 @@ String getAirportCode()
     return selectedEntry.substring(0, 3);
 }
 
+// returns table selected by user to use
 String getTable()
 {
     RadioButtonList tbl = (RadioButtonList) (screens.getNamedScreen("Title Screen").getNamedChild("Table Selector"));
     return tbl.boxes.get(tbl.selected).text;
 }
 
+// returns state that the airport selected by the user is in
 String getAirportState()
 {
     ScrollSelector sel = (ScrollSelector) (screens.getNamedScreen("Title Screen").getNamedChild("Airport Selector"));
