@@ -380,7 +380,12 @@ class ScrollSelector extends ReactiveWidget
         rect(BLEFT, BBOTTOM, BRIGHT, BBOTTOM+LINE_HEIGHT);
     }
 }
-//WS cooking a storm 3/4/24
+//WS sculpting an art piece 3/4/24
+//creates a class ScrollTable based upon ScrollSelector
+// - initalises buttons to allow the user to sort data
+// - places data into a table format
+// - adds mouse listener to allow user to interactive with buttons
+// - draws the scroll table
 class ScrollTable extends ScrollSelector
 {
     ReactiveWidget[] sortButtons;

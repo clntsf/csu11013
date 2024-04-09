@@ -264,7 +264,10 @@ class BarPlot extends Plot
     }
 }
 
-// Will S made minor changes to allow interactive barPlot;
+// Will S 
+// same functionality as barplot but updated to help interactivity
+// adds use of pastel colours
+// allows bar location to be set
 class ColorBar extends BarPlot
 {
 
@@ -324,6 +327,12 @@ class ColorBar extends BarPlot
 }
 
 //Will S cooked a storm in here and made Gordon Ramsay proud 20/3/24
+// Creates an interactive bar which contains a color bar and reactive widgets
+// - initialises a color bar plot and a handle under each bar plot
+// - adds a mouse listener to each handle for being dragged and released
+// - updates handle location due to mouse interaction
+// - reorders bars based on handle location
+// - draws everything appropriately
 class InteractiveBarPlot extends Container
 {
     ColorBar bar;

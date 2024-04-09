@@ -109,7 +109,8 @@ class BubbleParams extends NumericalParams
     }
 }
 
-//WS
+//Will S
+// created paramater class that holds the appropriate information to fill the scrollTableClass
 class ScrollTableParams
 {
   String[] dates;

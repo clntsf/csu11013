@@ -259,6 +259,7 @@ public BubbleParams makeBubbleParams()
 }
 
 //Will S finds all airports within a select state from the scroll bar 27/3/24
+//Queries database to find number of flights in a state from a database and returns it in a parameter class
 CategoricalParams populateBarParams()
 {
     String query = """SELECT Origin as airport,
@@ -287,7 +288,8 @@ CategoricalParams populateBarParams()
     return new CategoricalParams(numFlights, airports);
 }
 
-//WS
+//Will S
+//Queries database for 4 columns for a scrollTable and returns them in the appropriate parameter class
 ScrollTableParams populateDataList()
 {
   String query = "SELECT FlightDate, IATA_Code_Marketing_Airline, OriginCityName, DestCityName FROM "+getTable();
