@@ -1,6 +1,10 @@
 // CSF 14/3/2024 5PM - Implemented charts, plots, and their children (Bar, Histogram, Scatter (includes line plots))
 
-/**
+
+///// ***  For more detailed documentation of all of these classes check docs/Chart.md  *** //////
+
+
+/*
  * A Chart only has the minimum standard functionality - a frame and a title.
  * This is to allow for non-plot charts (see below for Plot), such as a pie chart, which
  * do not avail of axis labels, ticks, etc. and instead just need the above. This class is
@@ -108,8 +112,8 @@ class PieChart extends Chart
 }
 
 /*
-Plots have somewhat more functionality, supporting axis labels and a y-axis limit.
- Again, Plot is abstract because it should not be used in favor of one of its subclasses
+ * Plots have somewhat more functionality, supporting axis labels and a y-axis limit.
+ * Again, Plot is abstract because it should not be used in favor of one of its subclasses
  */
 abstract class Plot extends Chart
 {
@@ -202,6 +206,9 @@ abstract class Plot extends Chart
 
 
 // CSF - Trying to fix hierarchy and Histogram 21 Mar 3:45PM
+
+// A typical Bar Plot, with categorical labels on the x-axis
+// and quantities on the y-axis.
 class BarPlot extends Plot
 {
     String[] categories;
@@ -264,7 +271,10 @@ class BarPlot extends Plot
     }
 }
 
-// Will S made minor changes to allow interactive barPlot;
+// Will S 
+// same functionality as barplot but updated to help interactivity
+// adds use of pastel colours
+// allows bar location to be set
 class ColorBar extends BarPlot
 {
 
@@ -324,6 +334,12 @@ class ColorBar extends BarPlot
 }
 
 //Will S cooked a storm in here and made Gordon Ramsay proud 20/3/24
+// Creates an interactive bar which contains a color bar and reactive widgets
+// - initialises a color bar plot and a handle under each bar plot
+// - adds a mouse listener to each handle for being dragged and released
+// - updates handle location due to mouse interaction
+// - reorders bars based on handle location
+// - draws everything appropriately
 class InteractiveBarPlot extends Container
 {
     ColorBar bar;
@@ -427,6 +443,14 @@ class InteractiveBarPlot extends Container
     }
 }
 
+/*
+ *  A standard histogram, with a series of bins on the x-axis and frequency on the y-axis.
+ * 
+ * A closely-derived subclass of BarPlot, Histogram's only unique behaviors are different
+ * values for its non-constructor fields (see below) and its makeCategories function, which
+ * turns the Integer[] provided in the constructor (see below) to String[] (see BarPlot.categories)
+ * allowing for open-ended bins (i.e. a...inf). 
+ */
 class Histogram extends BarPlot
 {
     Histogram(
@@ -435,7 +459,7 @@ class Histogram extends BarPlot
         Integer[] binStarts, float[] valuesY, int axisMaxY
         )
     {
-        // we'll take responsibility for setting categories ourself
+        // we'll take responsibility for setting categories ourselves as we have to convert the bins into String[]
         super( x, y, w, h, title, axisLabelX, axisLabelY, null, valuesY, axisMaxY);
         this.categories = makeCategories(binStarts);
         this.barWidth = (int)((float)w/valuesY.length);
@@ -454,6 +478,17 @@ class Histogram extends BarPlot
     }
 }
 
+/*
+ *  A standard scatter plot, with numerical axes for both x and y.
+ * 
+ * Despite being nominally a scatter-plot (as this is the simplest form
+ * of this chart), instances of `ScatterPlot` can have a variety of
+ * appearances depending on the values of their non-constructor fields
+ * (see below). The most common use-case for this is setting `markers=false`
+ * and `connect=true` to create a line plot, but `markers` can also be
+ * left as true for a dotted line. In the case both are turned to false
+ * no values will render, so this configuration is discouraged.
+ */
 class ScatterPlot extends Plot
 {
     float[] valuesX;
@@ -544,7 +579,7 @@ class ScatterPlot extends Plot
                 text(labels[i], sx+2, sy+2);
             }
         }
-        if ((axisRangeX[1] - axisRangeX[0] == 0) && connect == true) 
+        if ((axisRangeX[1] - axisRangeX[0] == 0)) 
         {
             fill(textColor.getColor());
             textSize(fontSize+2);
@@ -559,6 +594,13 @@ class ScatterPlot extends Plot
     }
 }
 
+/*
+ * A standard bubble plot with three numerical dimensions
+ * 
+ * A derived form of a scatter-plot which allows for a third
+ * data dimension, represented graphically through the sizes
+ * of the points displayed.
+ */
 class BubblePlot extends ScatterPlot
 {
     float[] valuesZ;
@@ -600,6 +642,13 @@ class BubblePlot extends ScatterPlot
     }
 }
 
+/*
+ * A standard heatmap to display tabular data
+ *
+ * a three-dimensional data representation which displays data
+ * in a 2D tabular form with a third color dimension. supports
+ * customizeable color gradients through the CustomGradient class.
+ */
 class HeatMap extends Chart
 {
     float[][] data;

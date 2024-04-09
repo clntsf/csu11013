@@ -94,7 +94,8 @@ ScatterPlot makeScatterPlot(ScatterParams params)
     return s1;
 }
 
-
+// Will S 
+// initialises an interactive barplot based on the appropriate parameter class being fed in
 InteractiveBarPlot barPlotPopulate(CategoricalParams params)
 {
     InteractiveBarPlot b1 = new InteractiveBarPlot(
@@ -106,7 +107,8 @@ InteractiveBarPlot barPlotPopulate(CategoricalParams params)
         );
     return b1;
 }
-
+// Will S
+// initialises a scroll table based on the appropriate parameter class being fed in
 ScrollTable scrollTablePopulate(ScrollTableParams params)
 {
     ScrollTable sT1 = new ScrollTable(
