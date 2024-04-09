@@ -57,6 +57,7 @@ HeatMap makeHeatMap(HeatMapParams params)
         "Flight Volume by Day of Week/Time of Day",
         params.data, VIRIDIS_CG
         );
+    hm.formatString = "%.0f";
     return hm;
 }
 

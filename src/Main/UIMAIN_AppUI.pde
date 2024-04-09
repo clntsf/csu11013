@@ -334,8 +334,8 @@ void AppMain()
             return;
         }
         new Thread(() -> {
-            resetScreen(reliabilityScr);
-            HeatMapParams params = generateFlightVolumeHeatmap();
+            resetScreen(heatMapScr);
+            HeatMapParams params = makeHeatMapParams();
             HeatMap hm = makeHeatMap(params);
             heatMapScr.addWidget(hm);
         }

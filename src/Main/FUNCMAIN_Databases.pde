@@ -133,9 +133,9 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
     
     db.query(query);
 
-    try { //<>//
-        while (db.next()) { //<>//
-            String flightDate = db.getString("FlightDate"); //<>//
+    try { 
+        while (db.next()) { 
+            String flightDate = db.getString("FlightDate"); 
             int day = Integer.parseInt(flightDate.substring(8, 10));
             int cancelled = db.getInt("Cancelled");
             if (day >= minDate && day <= maxDate && cancelled == 0) {
@@ -161,11 +161,11 @@ public LinePlotParams getLinePlotData(String table, SQLite db, String airport, S
         } 
     }
     float[] flightRangeY = new float[]{0, (float)maxFlights+(float)(maxFlights/10)};
-    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); //<>//
-} //<>//
- //<>//
-// RSR - created method to populate Histogram with following bins - 19/3/24 8PM //<>//
-public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
+    return new LinePlotParams(datesXAxis, numFlightsYAxis, datesRangeX, flightRangeY); 
+} 
+ 
+// RSR - created method to populate Histogram with following bins - 19/3/24 8PM 
+public HistParams populateHistFreqs(int minBin, int step, int lastBin) 
 {
     String[] dateRange = getDates();
     Integer[] bins = new Integer[(lastBin-minBin)/step+2];
@@ -206,19 +206,6 @@ public HistParams populateHistFreqs(int minBin, int step, int lastBin) //<>//
     max = (max/mag + 1) * mag;
     
     return new HistParams(bins, freqs, max);
-}
-
-public HeatMapParams generateFlightVolumeHeatmap()
-{
-    float[][] data = new float[12][7];
-    for (float[] row : data)
-    {
-        for (int i=0; i<row.length; i++)
-        {
-            row[i] = random(400);
-        }
-    }
-    return new HeatMapParams(data);
 }
 
 // CSF - wrote the back-end for the bubble chart
@@ -316,6 +303,38 @@ ScrollTableParams populateDataList()
   return new ScrollTableParams(dates, carriers, origins, dests);
 }
 
+public HeatMapParams makeHeatMapParams()
+{
+    String query = """SELECT
+        DepTime/2 as timeBin,
+        strftime('%w', flightDate) as dayOfWeek,
+        COUNT(*) as flightVolume
+    FROM flights_full
+        WHERE CANCELLED = 0
+    """;
+
+    String[] dates = getDates();
+    query += " AND FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";
+
+    String airport = getAirportCode();
+    if (!airport.equals("ALL"))
+    {
+        query += " AND Origin = '" + airport + "'";
+    }
+    query += "\nGROUP BY timeBin, dayOfWeek";
+    println(query);
+    db.query(query);
+
+    float[][] data = new float[12][7];
+    while (db.next())
+    {
+        int timeBin = db.getInt("timeBin");
+        int dayOfWeek = db.getInt("dayOfWeek");
+        data[timeBin][dayOfWeek] = db.getInt("flightVolume");
+    }
+    return new HeatMapParams(data);
+}
+
 //Kilian 27/03/24 - created function to retrieve data from database to populate the graph
 //       04/04    - fixed to use actual data and populate delayed to start of program,
 //                  also added ability to query data also now has real time labels
@@ -323,8 +342,8 @@ ScrollTableParams populateDataList()
 public ScatterParams populateScatterPlot()
 {
    
-    int carriers; //<>//
-    int numberOfQueries; //<>//
+    int carriers;
+    int numberOfQueries;
     String table = getTable();
     String selectedAirport = getAirportCode();
    
@@ -338,7 +357,7 @@ public ScatterParams populateScatterPlot()
     {
         query += " AND OriginState = '" + getAirportState() + "'";
     }
- //<>//
+
     float[] flightVolume = new float[0];
     float[] flightDuration = new float[0];
 
@@ -348,7 +367,7 @@ public ScatterParams populateScatterPlot()
 
     db.query("SELECT MAX(TotalDistance) AS HighestFlightDuration FROM (SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM " + table + query +" GROUP BY IATA_Code_Marketing_Airline) AS subquery");
     int yMax = db.getInt("HighestFlightDuration");
-    print(yMax + " "); //<>//
+    print(yMax + " ");
     
     db.query("SELECT IATA_Code_Marketing_Airline, SUM(Distance) AS TotalDistance FROM "+table + query +" GROUP BY IATA_Code_Marketing_Airline");
     while (db.next())

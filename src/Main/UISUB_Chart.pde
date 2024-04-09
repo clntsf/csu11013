@@ -658,6 +658,7 @@ class HeatMap extends Chart
     int tileWidth;
     int tileHeight;
     CustomGradient grad;
+    String formatString;
 
     HeatMap(int x, int y, int w, int h, String title, float[][] data, CustomGradient grad)
     {
@@ -666,6 +667,7 @@ class HeatMap extends Chart
         this.tileHeight = h/data.length;
         this.data = data;
         this.grad = grad;
+        formatString = "%.1f";
         
         dataMin = min(data[0]);
         dataMax = max(data[0]);
@@ -699,7 +701,7 @@ class HeatMap extends Chart
                 rect( centerX, centerY, tileWidth, tileHeight );
                 
                 fill(complement(dataColor));
-                text( String.format("%.2f", dataPoint), centerX, centerY); 
+                text( String.format(formatString, dataPoint), centerX, centerY); 
             }
         }
         
