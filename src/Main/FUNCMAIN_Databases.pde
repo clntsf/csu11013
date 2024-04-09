@@ -309,9 +309,9 @@ public HeatMapParams makeHeatMapParams()
         DepTime/2 as timeBin,
         strftime('%w', flightDate) as dayOfWeek,
         COUNT(*) as flightVolume
-    FROM flights_full
-        WHERE CANCELLED = 0
-    """;
+    FROM
+    """
+    + getTable() + " WHERE CANCELLED = 0 \n";
 
     String[] dates = getDates();
     query += " AND FlightDate BETWEEN '" + dates[0] + "' AND '" + dates[1] + "'";

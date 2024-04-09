@@ -21,7 +21,7 @@ class Widget
         this.y = y;
         this.w = w;
         this.h = h;
-        textColor = new StaticColor(0);
+        textColor = new ThemedColor(themes, "text");
         this.isHovered = false;
         this.children = new ArrayList<>();
     }

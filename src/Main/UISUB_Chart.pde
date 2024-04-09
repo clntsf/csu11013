@@ -652,6 +652,8 @@ class BubblePlot extends ScatterPlot
 class HeatMap extends Chart
 {
     float[][] data;
+    String[] axisLabelsX, axisLabelsY;
+    String axisTitleX, axisTitleY;
     float dataMin;
     float dataMax;
     float dataRange;
@@ -660,9 +662,19 @@ class HeatMap extends Chart
     CustomGradient grad;
     String formatString;
 
-    HeatMap(int x, int y, int w, int h, String title, float[][] data, CustomGradient grad)
+    HeatMap(
+        int x, int y, int w, int h,
+        String title, float[][] data, CustomGradient grad,
+        String axisTitleX, String axisTitleY,
+        String[] axisLabelsX, String[] axisLabelsY
+    )
     {
         super(x,y,w,h,title,null);
+        this.axisTitleX = axisTitleX;
+        this.axisTitleY = axisTitleY;
+        this.axisLabelsX = axisLabelsX;
+        this.axisLabelsY = axisLabelsY;
+
         this.tileWidth = w/data[0].length;
         this.tileHeight = h/data.length;
         this.data = data;
@@ -684,6 +696,35 @@ class HeatMap extends Chart
         rectMode(CENTER);
         textAlign(CENTER, CENTER);
         
+        // axis labels / title
+        fill(textColor.getColor());
+        textSize(20);
+        text(title, x, y-h/2 - 45);
+
+        textSize(18);
+        text(axisTitleX, x, y-h/2-25);
+
+        textSize(14);
+        for (int i=0; i<axisLabelsX.length; i++)
+        {
+            text(axisLabelsX[i], x-w/2+ w * ((i+0.5)/axisLabelsX.length), y-h/2-10);
+        }
+
+        pushMatrix();
+        translate(x-w/2-25, y);
+        rotate(3*PI/2);
+
+        textSize(18);
+        text(axisTitleY, 0, 0);
+
+        textSize(14);
+        for (int i=0; i<axisLabelsY.length; i++)
+        {
+            text(axisLabelsY[axisLabelsY.length-i-1], -h/2+ h * ((i+0.5)/axisLabelsY.length), 15);
+        }
+
+        popMatrix();
+
         int marg = 2;
         fill(0);
         noStroke();
@@ -709,6 +750,12 @@ class HeatMap extends Chart
         float legendMax = 100.0, legendBarW = 20;
         rectMode(CORNER); fill(0);
         rect(x + w/2 + legendBarW - marg, y - h/2 - marg, legendBarW + 2*marg, legendMax + 2*marg);
+        
+        // legend text
+        textSize(10);
+        text(String.format(formatString, dataMax), x + w/2 + 2.5*legendBarW, y-h/2);
+        text(String.format(formatString, dataMin), x + w/2 + 2.5*legendBarW, y-h/2+legendMax);
+
         for (float barY=legendMax-1; barY>=0; barY--)
         {
             fill(grad.getColor(1 - barY/legendMax));

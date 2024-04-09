@@ -55,7 +55,10 @@ HeatMap makeHeatMap(HeatMapParams params)
     HeatMap hm = new HeatMap(
         width/2, height/2, 420, 480,
         "Flight Volume by Day of Week/Time of Day",
-        params.data, VIRIDIS_CG
+        params.data, VIRIDIS_CG,
+        "Day of Week", "Time of Day",
+        new String[] {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"},
+        new String[] {"0-2", "2-4", "4-6", "6-8", "8-10", "10-12", "12-14", "14-16", "16-18", "18-20", "20-22", "22-0"}
         );
     hm.formatString = "%.0f";
     return hm;
