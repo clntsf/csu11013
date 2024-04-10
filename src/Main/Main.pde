@@ -27,8 +27,8 @@ void setup()
     {
         println("Connected to DB!");
     } else println("ERROR connecting to DB!");
+    
     coordTable = loadTable("states.csv", "header");
-
     AppMain();
 }
 
