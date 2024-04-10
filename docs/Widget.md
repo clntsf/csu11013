@@ -1,13 +1,15 @@
 # Documentation: `ScreenList`, `Screen`, `Widget` and its Descendants
-C. Simon-Fellowes
+C. Simon-Fellowes, R. Riggi
 
 ## Table of Contents:
 1. [Toplevel Organisation of Program UI: `ScreenList`](#1-toplevel-organisation-of-program-ui-screenlist)
 2. [The `Screen` Class](#2-the-screen-class)
 3. [The `Widget` Class](#3-the-widget-class)
-    1. [`ReactiveWidget`](#3ii-reactivewidget)
+    1. [`ReactiveWidget`](#3i-reactivewidget)
         1. [The `MouseEventListener` interface](#3ia-the-mouseeventlistener-interface)
         2. [`Checkbox`, `CheckBoxList` and `RadioButtonList`](#3ib-checkbox-checkboxlist-and-radiobuttonlist)
+        3. [`ScrollSelector`](#3ic-scrollselector)
+        4. [`ScrollTable`](#3id-scrolltable)
     2. [Static Children](#3ii-static-children)
         1. [`Label`](#3iia-label)
         2. [`Shape`](#3iib-shape)
@@ -18,7 +20,7 @@ C. Simon-Fellowes
 
 ## 1. Toplevel Organisation of Program UI: `ScreenList`
 
-```
+```java
 class ScreenList
 extends None
 implements None
@@ -29,7 +31,7 @@ A class to hold, manage and keep track of the screens for a UI application
 A program utilizing these classes should have an instance of `ScreenList` declared in global scope, preferably at the start of the main file (the one containing setup() and draw()).
 
 ### Constructor Summary:
-```
+```java
 ScreenList()
 ```
 
@@ -98,7 +100,7 @@ They are ordered in the program by their order here.
 > - successful: whether the operation was successful (i.e. valid name)
 
 ## 2. The `Screen` Class
-```
+```java
 class Screen
 extends None
 implements None
@@ -109,7 +111,7 @@ A midlevel container class directly corresponding to one screen of the program U
 A `Screen` is the second level of organization for program UI, corresponding to the group of widgets that will be drawn on-screen at a given time (if that `Screen` is active). `Screen` in fact has very similar functionality to its enclosing `ScreenList`, as it allows the user to add and track named widgets. Beyond this, each `Screen` is responsible for drawing and updating its child widgets
 
 ### Constructor Summary:
-```
+```java
 Screen(color bgColor)
 ```
 
@@ -152,14 +154,14 @@ All direct child widgets of this object (**NB**: since widgets can have children
 
 
 ## 3. The `Widget` Class
-```
+```java
 class Widget
 extends None
 implements None
 ```
 
 ### 3.i. `ReactiveWidget`
-```
+```java
 class ReactiveWidget
 extends Widget
 implements None
@@ -171,7 +173,7 @@ implements None
 
 The interface's signature is as follows:
 
-```
+```java
 interface MouseListener
 {
     void performAction(MouseEvent e, ReactiveWidget widget);
@@ -185,7 +187,7 @@ These two arguments allow virtually limitless functionality to stem from a callb
 
 Some examples for the use of lambda expressions implementing `MouseEventListener` in code  
 (See the [above link][func-inter] for information on how to format lambda expressions)
-```
+```java
 ReactiveWidget btn = new ReactiveWidget(...); // initialize our button
 
 // print a message whenever a mouse event targets the button
@@ -200,18 +202,55 @@ btn.addListener((e,w) -> {
 ```
 (see [here][github-mevent] for a list of MouseEvent events)
 
-#### 3.i.b. `Checkbox`, `CheckBoxList` and `RadioButtonList`
+#### 3.i.b. `Checkbox`, `CheckBoxList`, `RadioButtonList`, `TextEntry`
 
+##### Constructor Summary:
+```java
+CheckBox(int x, int y, String text)
+CheckBox(int x, int y, String text, boolean checked)
+```
+```java
+CheckBoxList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
+```
+```java
+RadioButtonList(int x, int y, String labelText, String[] options, int labelFontSize, int boxFontSize)
+```
+```java
+TextEntry(int x, int y, int w, int h)
+```
 
+#### 3.i.c. `ScrollSelector`
+```java
+class ScrollSelector
+extends ReactiveWidget
+implements none
+```
+
+##### Constructor Summary:
+```java
+ScrollSelector(int x, int y, int w, int h, String[] entries)
+```
+
+#### 3.i.d. `ScrollTable`
+```java
+class ScrollTable
+extends ScrollSelector
+implements none
+```
+
+##### Constructor Summary:
+```java
+ScrollTable(int x, int y, int w, int h, String[] dates, String[] carriers, String[] origins, String[] dests, color buttonColor)
+```
 
 ### 3.ii. Static Children
 
-There are several compelling use cases for widgets even without reactive functionality, and so several 'static' (in the english sense, not the java sense) subclasses of `Widget` exist. They are outlined below:
+There are several compelling use cases for widgets even without reactive functionality, and so several 'static' (in the English sense, not the Java sense) subclasses of `Widget` exist. They are outlined below:
 
 
 #### 3.ii.a. Label
 
-```
+```java
 class Label
 extends Widget
 implements None
@@ -220,7 +259,7 @@ implements None
 Labels are perhaps the easiest imaginable use case for a widget without mouse functionality. these are simple text displays with few configuration options.
 
 ##### Constructor Summary:
-```
+```java
 Label(int x, int y, String text)
 Label(int x, int y, String text, color textColor)
 ```
@@ -232,7 +271,7 @@ It is worth noting that despite their designation as 'static', these widgets' at
 
 #### 3.ii.b. Shape
 
-```
+```java
 class Shape
 extends Widget
 implements None
@@ -241,7 +280,7 @@ implements None
 Shapes are another simple use case for unreactive widgets, providing the user the ability to draw arbitrary geometry by way of passing in a lambda expression adhering to the `Runnable` interface (no params, no returns) to the constructor
 
 ##### Constructor Summary:
-```
+```java
 Shape(int x, int y, color backgroundColor, Runnable onDraw)
 ```
 
@@ -250,7 +289,7 @@ Shape(int x, int y, color backgroundColor, Runnable onDraw)
 
 #### 3.ii.c. Image
 
-```
+```java
 class Image
 extends Shape
 implements None
@@ -259,7 +298,7 @@ implements None
 Similar to `Shape`, there are many reasons a user might want to draw an image on-screen, and so this class allows such behavior by passing a `PImage` through its constructor. This class subclasses `Shape` to take advantage of its `onDraw` functionality.
 
 ##### Constructor Summary:
-```
+```java
 Image(int x, int y, PImage image)
 Image(int x, int y, int w, int h, PImage image)
 ```
@@ -269,20 +308,22 @@ Images can either be drawn at native size, or at a size (in pixels) determined b
 
 #### 3.ii.d. Container
 
-```
+```java
 class Container
 extends Widget
 implements None
 ```
 
-`Container` strips `Widget` down to the bare-bones, preserving only its functionality as a member of a tree of parent/child widgets. This can be quite useful when the user wants to 'package' a tree of widgets and allow them to be added to mutiple screens (e.g. nav buttons), or just be a reference point as a named child of a screen.
+`Container` strips `Widget` down to the bare-bones, preserving only its functionality as a member of a tree of parent/child widgets. This can be quite useful when the user wants to 'package' a tree of widgets and allow them to be added to multiple screens (e.g. nav buttons), or just be a reference point as a named child of a screen.
 
 ##### Constructor Summary:
-```
+```java
 Container()
 ```
 
 Container takes no arguments, as it has no relevant features other than being a parent/child object.
+
+
 
 [func-inter]: https://www.geeksforgeeks.org/functional-interfaces-java/
 [github-mevent]: https://github.com/processing/processing/blob/master/core/src/processing/event/MouseEvent.java

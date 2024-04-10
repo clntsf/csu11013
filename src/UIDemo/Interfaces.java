@@ -1,4 +1,0 @@
-interface Runnable
-{
-    void run();
-}

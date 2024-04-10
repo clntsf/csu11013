@@ -1,0 +1,26 @@
+{
+    "lightTheme":{
+        "screen": -8943463,
+        "background": -984833,
+        "text": 0,
+        "selectorFrame": -8943463,
+        "chartBackground": -329226,
+        "outline": 0
+    },
+    "darkTheme":{
+        "screen": -14796212,
+        "background": -16646123,
+        "text": -2039584,
+        "selectorFrame": -14796212,
+        "chartBackground": -12566454,
+        "outline": -1
+    },
+    "grapefruitTheme":{
+        "screen": -8225,
+        "background": -16192,
+        "text": -7656124,
+        "selectorFrame": -8225,
+        "chartBackground": -13082,
+        "outline": -7656124
+    }
+}
